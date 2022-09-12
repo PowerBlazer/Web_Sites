@@ -1,0 +1,42 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@model ExplorerViewModel
+
+@{
+    
+    var result = Model.ReturnPath!.Contains("temporary");
+    
+    if (!string.IsNullOrWhiteSpace(Model.ReturnPath))
+    {
+        if(result)
+        {
+            string path = Model.CurrentPath!;
+            string shortPath = path!.Substring(path.IndexOf("UserProjects\\")+"UserProjects\\".Length);
+
+            <button id="return-path-button" value="@Model.ReturnPath" class="folder-navigation-panel">
+                <span class="icon-up-arrow-svgrepo-com"></span>
+                <div class="return-path">@shortPath</div>
+            </button>
+        }
+    }
+}
+@foreach (var item in Model.Folders!)
+{
+    <div class="explorer-item">
+        <button id="folder-open" value="@item.Path" class="explorer-item-name-folder">
+            <span class="icon-folder-svgrepo-com-2"></span>
+            <div>@item.Name</div>
+        </button>
+    </div>
+}
+@foreach (var item in Model.Files!)
+{
+    <div class="explorer-item">
+        <button class="explorer-item-name-file" id="get-info-file" value="@item.Path">
+            <span class="icon-file-svgrepo-com-3"></span>
+            <div>@item.Name</div>
+        </button>
+        <div class="explorer-item-info">
+            <div class="size-explorer-item">(@item.Size)</div>
+        </div>
+    </div>
+}

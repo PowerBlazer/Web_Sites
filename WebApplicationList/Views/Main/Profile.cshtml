@@ -1,0 +1,272 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@model ProfileUserViewModel
+@{
+    ViewData["Title"] = "Настройки";
+}
+
+@section link{
+    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProfilePage/profilestyle.css">
+    <link rel="stylesheet" type="text/css" href="~/MainWeb/icons-2/style.css">
+    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectUpload.css">
+    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectSettingsStyle.css">
+    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProfileSettings/profilesettings.css">
+    <link rel="stylesheet" href="~/iconExplorer/style.css">
+}
+
+<section>  
+    <div class="container">
+        <div class="profile-panel">
+            <div class="avatar-profile-block">
+                <img src="@Model.user!.LinkAvatar" asp-append-version="true" class="avatar-image">
+                <div>
+                    <div>
+                        <div class="profile-user-name">@Model.user!.UserName</div>
+                        <span class="profile-email-user">@Model.user!.Email</span>
+                        <div class="followers-count">
+                            <i style="color:dodgerblue" class="icon-user"></i>
+                            @Model.NumberSubscriber<span>followers</span>
+                        </div>
+                        <div class="followers-count">
+                            <i style="color:red;" class="icon-heart"></i>
+                            @Model.NumberLikes<span>likes</span>
+                        </div>
+                        <button type="button" class="like-avatar">
+                            <i class="icon-heart"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <input type="file" id="input-file-avatar" accept="image/png,image/jpeg"></input>
+                        <label for="input-file-avatar" class="change-avatar">
+                            Сменить аватар
+                        </label>
+                        <div class="message-maxsize-image">Максимальный размер изображения 10MB</div>
+                        <div class="error-message-download-image"></div>
+                    </div>
+                </div>
+            </div>  
+            <div class="profile-info-block">
+                <div class="menu-profile">
+                    <div @if(ViewBag.Page is null)
+                        { 
+                           @:class="menu-profile-item_inner active-profile-item"
+                        }
+                        else{
+                             @:class="menu-profile-item_inner"
+                        }>
+                        <button type="button" class="menu-profile-item" id="profilebutton"><i class="icon-user"></i>Profile</button>
+                    </div>
+                    <div @if(ViewBag.Page=="projects")
+                        {
+                            @:class="menu-profile-item_inner active-profile-item"
+                        }
+                        else
+                        {
+                           @:class="menu-profile-item_inner"
+                        }>
+                        <button data-count="@Model.userProjects!.Count()" type="button" class="menu-profile-item project-count" id="projectbutton"><i class="icon-projexts"></i>Projects</button>
+                    </div>
+                    <div class="menu-profile-item_inner">
+                        <button type="button" class="menu-profile-item favorite-count" id="favoritesbutton"><i class="icon-heart"></i>Favorites</button>
+                    </div>             
+                    <div @if(ViewBag.Page=="settings")
+                        {
+                            @:class="menu-profile-item_inner active-profile-item"
+                        }
+                        else
+                        {
+                           @:class="menu-profile-item_inner"
+                        }>
+                        <button type="button" class="menu-profile-item" id="settingbutton"><i class="icon-setting"></i>Settings</button>
+                    </div>
+                    <div class="menu-profile-item_inner">
+                        <button type="button" class="menu-profile-item" id="add-project"><i class="icon-html-doc"></i>Add Project</button>
+                    </div>
+                </div>
+                <div class="profile-block">
+                    
+                    <div class="profile-info-block_inner" 
+                    @if(ViewBag.Page is null){
+                        @:style="opacity:1; position:relative"
+                    }
+                    else{
+                       @:style="transform: translateX(-100%);"
+                    }>
+                        <div class="user-info-description-panel_inner">
+                            @if(string.IsNullOrEmpty(Model.userInfo!.Description))
+                            {
+                                <div class="header-description">О себе:</div>
+                                <button class="add-description" id="open-modal-description" type="button">Добавить описанию к профилю</button>
+                            }
+                            else
+                            {   
+                                string result = Model.userInfo.Description.Replace("\"","\'");
+
+                                if(result.Contains("<script")||result.Contains("script"))
+                                {
+                                    result = result.Remove(result.IndexOf("<script"));
+                                }
+
+                                <div class="header-description">О себе: 
+                                    <button class="change-description-text" id="change-description">Изменить</button>
+                                </div>                           
+                                <div class="description-profile">
+                                    <iframe class="gener-description"
+                                        scrolling="no" seamless srcdoc="
+                                        @Html.Raw(result)">
+                                    </iframe>
+                                </div> 
+                            }
+                            <div class="error-message-download-desciption"></div>
+                        </div>
+                    </div>
+
+                    <div class="projects-block-profile_inner" 
+                    @if(ViewBag.Page=="projects"){
+                        @:style="transform: translateX(0%); position:relative;opacity:1;"
+                    }
+                    else{
+                        @:style="transform: translateX(-100%);"
+                    }>
+                        @if(Model.userProjects!.Count()!=0)
+                        {
+                            @foreach (var item in Model.userProjects!)
+                            {
+                                <div class="project-item_inner">
+                                    <a href="~/UserProject@(item.Url)" class="project-image">
+                                        <img src="~/@item.UrlImage" alt="img">
+                                    </a>
+                                    <div class="project-item_inner-header">
+                                        <div class="project-logo">
+                                            <img src="~/MainWeb/Images/project-icon.svg">
+                                            <div class="project-logo-text">
+                                                <a href="~/UserProject@(item.Url)">@item.Name</a>
+                                                <span>Added @item.AddedTime.ToShortDateString()</span>
+                                            </div>
+                                        </div>
+                                        <div class="project-setting-buttons">
+                                            <button id="project-setting"><i class="icon-setting"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else{
+                            <div class="null-elements-text">У данного пользователя не добавлено проектов</div>
+                        }
+                    </div>
+
+                    <div class="favorites-block-profile_inner" style="transform: translateX(-100%);">
+                        @if(Model.favoritesProjects!.Count()==0)
+                        {
+                            <div class="null-elements-text">У данного пользователя нету добавленных проектов в изрбранное</div>
+                        }
+                    </div>
+
+                    <div class="settings-block-profile_inner" 
+                    @if(ViewBag.Page=="settings")
+                    {
+                        @:style="transform: translateX(0%); position:relative;opacity:1;"
+                    }
+                    else{
+                        @:style="transform: translateX(-100%);"
+                    }>
+                        <ul class="settings-elements">
+                            <li class="setting-item">
+                                <div class="header-setting-element">Основная  информация</div>
+                                <div class="rename-name-surname-block">
+                                    <div class="name-rename_inner">
+                                        <label>Имя</label>
+                                        <input type="text" id="name-rename" value="@Model.user.UserName">
+                                    </div>
+                                    <div class="name-rename_inner">
+                                        <label>Фамиилия</label>
+                                        <input type="text" id="surname-rename" value="@Model.userInfo.Surname">
+                                    </div>
+                                </div>
+                                <div class="rename-name-surname-block">
+                                    <div class="name-rename_inner">
+                                        <label>Год рождения</label>
+                                        <input type="number" id="proffesion-rename" value="@Model.userInfo.Year">
+                                    </div>
+                                </div>
+                                <div class="rename-name-surname-block">
+                                    <div class="name-rename_inner">
+                                        <label>Профессия</label>
+                                        <input type="text" id="year-rename" value="@Model.userInfo.Profession">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="setting-item">
+                                <div class="header-setting-element">Смена пароля</div>
+                                <div class="rename-name-surname-block">
+                                    <div class="name-rename_inner">
+                                        <label>Предыдущий пароль</label>
+                                        <input type="text" id="previous-password-rename">
+                                    </div>
+                                </div>
+                                <div class="rename-name-surname-block">
+                                    <div class="name-rename_inner">
+                                        <label>Новый пароль</label>
+                                        <input type="password" id="new-password-rename">
+                                    </div>
+                                    <div class="name-rename_inner">
+                                        <label>Подтвердить пароль</label>
+                                        <input type="password" id="confirm-password-rename">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="setting-item">
+                                <div class="header-setting-element">В Интернете</div>
+                                
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="add-project-block-profile_inner" style="transform: translateX(-100%);">
+                        <div class="unput-project-zip-block">
+                            <div class="stages-header-project">Шаг 1/3 - Загрузка архива</div>
+                            <div class="stage_inner-result">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</section>
+
+<div class="add-description-modal" style="visibility:hidden; opacity:0;">
+    <div class="add-description-modal_inner">
+        <div class="description-modal-header">
+            <div>О себе:</div>
+            <span>Можно использовать HTML разметку и CSS для стилизации</span>
+        </div>
+        <div class="description-input">
+            <textarea id="description-info">@Model.userInfo.Description</textarea>
+        </div>
+        <div class="description-modal-send-panel">
+            <button id="clear-textarea-description">Очистить</button>
+            <button id="close-modal-description">Отмена</button>
+            <button id="send-description">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-check-file" id="result-text-file">
+
+</div>
+
+@section Scripts{
+    <script src="~/MainWeb/js/ProfilePage/profilescript.js" asp-append-version="true"></script>
+    <script src="~/MainWeb/js/ProjectSettingScripts/projectSetting.js" asp-append-version="true"></script>
+    <script src="~/MainWeb/js/ProfileSetting/profileSettings.js" asp-append-version="true"></script>
+    <script>
+        @if(ViewBag.Page=="settings")
+        {
+            @:InitSettings();
+        }
+    </script>
+}
+
+

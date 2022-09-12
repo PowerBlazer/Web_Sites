@@ -1,0 +1,67 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@model ExplorerViewModel
+
+<div class="result-explorer-info">
+    <div class="state-project-info">
+        <div class="state-project-name">@Model.ProjectName</div>
+        <div class="state-info">
+            <span></span>
+            <div class="state-text">Не сохранено</div>
+        </div>
+    </div>
+    <div class="explorer-items-panel">
+        <div class="title-explorer">
+            <button class="title-explorer-item" style="color: dodgerblue;" id="file-mamager-title" value="@Model.CurrentPath">Файловый менеджер</button>
+            <button class="title-explorer-item" id="setting-project-title">Настройки проекта</button>
+        </div>
+        <div class="explorer-items_inner">
+            @{
+                if(!string.IsNullOrWhiteSpace(Model.ReturnPath))
+                {
+                    string path = Model.CurrentPath!;
+                    string shortPath = path!.Substring(path.IndexOf("UserProjects")+path.Length);
+
+                    <button id="return-path-button" value="@Model.ReturnPath" class="folder-navigation-panel">
+                        <span class="icon-up-arrow-svgrepo-com"></span>
+                        <div class="return-path">@shortPath</div>
+                    </button>
+                }
+            }
+        
+            @foreach (var item in Model.Folders!)
+            {
+                <div class="explorer-item">
+                    <button id="folder-open" value="@item.Path" class="explorer-item-name-folder">
+                        <span class="icon-folder-svgrepo-com-2"></span>
+                        <div>@item.Name</div>
+                    </button>
+                </div>
+            }
+            @foreach (var item in Model.Files!)
+            {
+                <div class="explorer-item">
+                    <button class="explorer-item-name-file" id="get-info-file" value="@item.Path">
+                        <span class="icon-file-svgrepo-com-3"></span>
+                        <div>@item.Name</div>
+                    </button>
+                    <div class="explorer-item-info">
+                        <div class="size-explorer-item">(@item.Size)</div>      
+                    </div>
+                </div>
+            }
+            
+        </div>
+        <div class="list-button-navigation-explorer">
+             <button id="return-first-page-explorer" class="prev-setting-project">
+                <span class="icon-up-arrow-svgrepo-com"></span>
+                Назад
+            </button>
+            <div class="permision-next"></div>
+        </div>
+        
+    </div>
+</div>
+
+
+
+

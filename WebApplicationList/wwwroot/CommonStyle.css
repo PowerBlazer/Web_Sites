@@ -1,0 +1,105 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+h1,h2,h3,h4{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+li{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul{
+    padding: 0;
+    margin: 0;
+}
+button{
+    background-color: transparent;
+    border:none;
+    padding: 0;
+    cursor: pointer;
+}
+button:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+button:focus-visible{
+    outline: none;
+}
+header{
+    padding: 0;
+    margin: 0;
+}
+span{
+    margin: 0;
+    padding: 0;
+}
+textarea{
+    border: none;
+    outline: none;
+    resize: none;
+}
+:root{
+    --main-text-color:white;
+    --main-back-color:#11161f;
+}
+
+input[type=text]{
+    outline: none;
+    
+}
+input[type=text]:focus{
+    outline: none;
+}
+input[type=number]{
+    outline: none;
+    border: none;
+}
+input[type=number]:focus{
+    outline: none;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+.back-home{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Segoe Ui;
+    font-size: 17px;
+    font-weight: 500;
+    color: white;
+    opacity: 0.5;
+    background-color: #666;
+    transition: all .3s;
+    z-index: 52;
+}
+.back-home:hover{
+    opacity: 1;
+    transform: scale(1.1);
+}

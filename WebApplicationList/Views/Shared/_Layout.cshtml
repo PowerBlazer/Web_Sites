@@ -1,0 +1,30 @@
+﻿<a class="back-home" href="~/Main" class="back-home">Home</a>
+
+@RenderBody()
+
+<style>
+    .back-home{
+        position: fixed;
+        bottom:20px;
+        right:20px;
+        width:70px;
+        height:70px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-family:Segoe Ui;
+        font-size:17px;
+        font-weight:500;
+        color:white;
+        opacity:.5;
+        background-color:#666;
+        transition:all .3s;
+        text-decoration:none;
+        z-index:52;
+    }
+    .back-home:hover{
+        opacity:1;
+        transform: scale(1.07);
+    }
+</style>

@@ -1,0 +1,13 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@model FileItem;
+
+<div class="modal-check-window">
+    <div class="header-name-file">@Model.Name</div>
+    <div class="textarea-content-file">
+        <textarea id="file-content-input">@Model.Content</textarea>
+    </div>
+    <div class="description-modal-send-panel">
+        <button id="close-modal-filecontent">Отмена</button>
+        <button id="send-file-content" value="@Model.Path">Сохранить</button>
+    </div>
+</div>

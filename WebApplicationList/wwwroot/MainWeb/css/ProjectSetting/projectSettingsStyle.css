@@ -1,0 +1,612 @@
+.result-explorer-info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--main-text-color);
+    padding: 20px 10px;
+    gap: 30px;
+}
+.state-project-info{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+.state-project-name{
+    text-transform: uppercase;
+    font-family: Segoe Ui;
+    font-size: 33px;
+    font-weight: 500;
+    color: inherit;
+    letter-spacing: 2px;
+    padding: 0 15px;
+}
+.state-info{
+    display: flex;
+    background-color: red;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    align-items: center;
+}
+.state-info span{
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+}
+.explorer-items-panel{
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    gap: 10px;
+}
+.title-explorer-item{
+    font-family: Segoe Ui;
+    font-size: 20px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: darkgray;
+    transition: all .3s;
+}
+.title-explorer-item:hover{
+    color: dodgerblue;
+}
+.title-explorer{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.explorer-items_inner{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-height: 300px;
+}
+.explorer-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(189, 189, 189, 0.681);
+    padding: 0 10px;
+}
+.explorer-item-info{
+    display: flex;
+    align-items:center;
+    gap: 15px;
+}
+.size-explorer-item{
+    font-family: Segoe Ui;
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.explorer-item button{
+    display: flex;
+    gap: 5px;
+    font-size: 20px;
+    color: var(--main-text-color);
+    padding: 15px 10px;
+    border-radius: 5px;
+    transition: all .3s;
+}
+.explorer-item button:hover{
+    color: dodgerblue;
+}
+.folder-navigation-panel{
+    display: flex;
+    gap: 20px;
+    color: var(--main-text-color);
+    padding: 10px 0;
+    font-size: 20px;
+    transition: all .3s;
+}
+.folder-navigation-panel:hover{
+    color: dodgerblue;
+}
+.next-setting-project{
+    width: min-content;
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    color: var(--main-text-color);
+    font-size: 18px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-radius: 5px;
+    margin: 10px 0;
+    transition: all .3s;
+}
+.next-setting-project span{
+    transform: rotate(90deg);
+}
+.next-setting-project:hover{
+    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
+    transform: scale(1.02);
+}
+.modal-text-change-files_inner{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100vh;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-check-file{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s;
+}
+.modal-check-window{
+    width: 85%;
+    height: 80%;
+    background-color:var(--main-back-color);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: white;
+}
+.textarea-content-file{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
+}
+.textarea-content-file textarea{
+    width: inherit;
+    height: inherit;
+    text-align: start;
+    resize: none;
+    outline: none;
+    font-size: 18px;
+    font-family: "Roboto",sans-serif;
+    color: white;
+    border: none;
+    background-color: transparent;
+}
+.header-name-file{
+    font-size: 25px;
+    padding: 5px 0;
+    letter-spacing: 1px;
+}
+.list-button-navigation-explorer{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+.prev-setting-project{
+    width: min-content;
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-radius: 5px;
+    margin: 10px 0;
+    transition: all .3s;
+}
+.prev-setting-project span{
+    transform: rotate(-90deg);
+}
+.prev-setting-project:hover{
+    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
+    transform: scale(1.02);
+}
+.settings-project-panel{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    gap: 20px;
+}
+.header-text-settings{
+    color:white;
+    font-size: 20px;
+    padding: 10px 0;
+}
+.setting-name-project-block{
+    position: relative;
+}
+.setting-name-project-block input{
+    border: none;
+    min-height: 35px;
+    min-width: 150px;
+    background-color: var(--main-text-color);
+    padding: 5px 10px;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--main-back-color);
+    font-family: 'RaleWay',sans-serif;
+    border-radius: 5px;
+    transition: all .3s;
+}
+.setting-name-project-block input:focus{
+    outline: none;
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+
+.setting-name-project-block label{
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    left: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    color: gray;
+    pointer-events: none;
+}
+.setting-description-project-block{
+    display: flex;
+    flex-direction: column;
+}
+.setting-description-project-block div textarea{
+    min-width: 400px;
+    min-height: 90px;
+    resize: none;
+    border:none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 5px;
+    padding: 10px;
+}
+.setting-description-project-block div textarea:focus{
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.setting-description-project-block div label{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    color: gray;
+    pointer-events: none;
+}
+.error-message-projectname{
+    padding: 5px 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: rgb(237, 52, 52);
+}
+.setting-image-project{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.setting-image-project>div input{
+    display: none;
+}
+.setting-image-project>div label{
+    background-color: dodgerblue;
+    color: white;
+    font-size: 17px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    transition: all .3s;
+    cursor: pointer;
+}
+.setting-image-project>div label:hover{
+    transform: scale(1.02);
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.project-error-image{
+    padding: 5px 0;
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: rgb(237, 52, 52);
+}
+.result-image-project img{
+    width: 300px;
+    height: 145px;
+    object-fit:cover;
+    object-position: center;
+    border-radius: 5px;
+}
+.setting-types-project-block{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.setting-types-project-block>div textarea{
+    min-width: 400px;
+    min-height: 90px;
+    resize: none;
+    border:none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 5px;
+    padding: 10px;
+}
+.setting-types-project-block>div label{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    color: gray;
+    pointer-events: none;
+}
+.setting-types-project-block>div textarea:focus{
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.list-down-select-page-panel{
+    position: relative;
+    display: flex;
+    padding:5px 0;
+    color: white;
+    flex-direction: column;
+    gap: 5px;
+}
+.listdown-button-page{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 10px 15px;
+    gap: 10px;
+    color:gray;
+    font-size: 16px;
+    font-weight: 500;
+    width: fit-content;
+    font-family: 'RaleWay',sans-serif;
+    background-color: white;
+    border-radius: 5px;
+    outline: 1px solid dodgerblue;
+    align-items: center;
+    height: min-content;
+    transition: all .3s;
+}
+.listdown-button-page i{
+    transform: rotate(180deg);
+    font-size: 15px;
+}
+.listdown-button-page:hover{
+    color: dodgerblue;
+}
+.list-down-select-page{
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    z-index: 50;
+    transition: opacity .3s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    color: gray;
+    gap: 10px;
+    border-radius: 5px;
+    width: fit-content;
+    opacity: 0;
+    visibility: hidden;
+    padding: 0;
+}
+.list-down-page-item{
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 17px;
+}
+.list-down-page-item span{
+    transition: all .3s;
+    font-weight: 300;
+    color: gray;
+}
+.list-down-page-item:hover span{
+    color: dodgerblue;
+}
+.info-correction{
+    font-weight: 300;
+    font-size: 16px;
+    padding: 15px 0;
+}
+.info-correction span{
+    font-weight: 500;
+    color: dodgerblue;
+    font-size: 18px;
+}
+.manual-images{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.manual-images>div{
+    display: flex;
+    gap: 10px;
+}
+.manual-images>div span{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.manual-images>div span:nth-child(1){
+    font-weight: 300;
+}
+.manual-images>div span:nth-last-child(1){
+    color: rgb(144, 144, 144);
+}
+.generate-url-project{
+    width:fit-content;
+    border: none;
+    background-color:whitesmoke;
+    color: dodgerblue;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+.generate-url-project:focus{
+    outline: none;
+}
+.generate-url-block{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+.setting-info-format-pages{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.setting-info-format-pages>div:nth-last-child(1){
+    padding: 10px 0;
+}
+.setting-info-format-pages>div:nth-last-child(2) span{
+    color: dodgerblue;
+}
+.list-down-page-item-format{
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 17px;
+}
+.list-down-page-item-format span{
+    transition: all .3s;
+    font-weight: 300;
+    color: gray;
+}
+.list-down-page-item-format:hover span{
+    color: dodgerblue;
+}
+#format-button-active button{
+    background-color: dodgerblue;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    border-radius: 5px;
+    transition: all .3s;
+    margin: 15px 0;
+}
+#format-button-active button:hover{
+    transform: scale(1.02);
+    box-shadow:3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.format-result-panel{
+    width: 700px;
+    height: 400px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+.header-result-format{
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+}
+.list-result-format{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 100%;
+    gap: 10px;
+}
+.list-item-result-format{
+    color: darkgray;
+    font-size: 19px;
+    font-weight: 300;
+}
+.format-result-panel button{
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 5px;
+    width: auto;
+}
+
+
+
+
+@media(max-width:560px){
+    .setting-description-project-block div textarea{
+        min-width: 370px;
+        min-height: 80px;
+    }
+}
+
+@media(max-width:475px){
+    .state-project-name{
+        font-size: 25px;
+    }
+    .state-info{
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+    .title-explorer-item{
+        font-size: 18px;
+    }
+    .explorer-items-panel{
+        padding: 0 ;
+    }
+}
+@media(max-width:440px){
+    .setting-types-project-block>div textarea {
+        min-width: 370px;
+        min-height: 80px;
+    }
+}
+@media(max-width:411px){
+    .state-info{
+        padding: 5px 10px;
+    }
+    .state-project-name{
+        padding: 0 5px;
+    }
+    .state-project-info{
+        flex-wrap: wrap;
+    }
+    .result-explorer-info{
+        padding: 20px 0;
+    }
+    .setting-types-project-block>div textarea {
+        min-width: 100%;
+        min-height: 80px;
+    }
+    .setting-description-project-block div textarea{
+        min-width: 100%;
+        min-height: 80px;
+    }
+}
+@media(max-width:370px){
+    .header-text-settings{
+        font-size: 17px;
+    }
+    .setting-image-project>div label{
+        font-size: 15px;
+    }
+    .info-correction span{
+        font-size: 16px;
+    }
+    .info-correction{
+        font-size: 15px;
+    }
+
+}

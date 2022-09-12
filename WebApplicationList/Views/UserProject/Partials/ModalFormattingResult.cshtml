@@ -1,0 +1,12 @@
+﻿@model IEnumerable<string>
+
+<div class="format-result-panel">
+    <div class="header-result-format">Изменено в файле</div>
+    <div class="list-result-format">
+        @foreach (var item in Model)
+        {
+            <div class="list-item-result-format">@item</div>
+        }
+    </div>
+    <button id="close-modal-filecontent">Закрыть</button>
+</div>

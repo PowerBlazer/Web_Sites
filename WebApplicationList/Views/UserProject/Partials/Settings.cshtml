@@ -1,0 +1,104 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels
+@model IEnumerable<FileItem>;
+
+<div class="settings-project-panel">
+    <div class="setting-name-project-block">
+        <div class="header-text-settings">Название сайта</div>
+        <div style="position:relative;">
+            <label for="project-name-input">ProjectName</label>
+            <input type="text" id="project-name-input">
+        </div>
+        <div class="error-message-projectname" id="error-message-name"></div>
+    </div>
+    <div class="setting-description-project-block">
+        <div class="header-text-settings">Описание сайта</div>
+        <div style="position:relative">
+            <label for="project-description-input">Description</label>
+            <textarea id="project-description-input"></textarea>
+        </div>
+    </div>
+    <div class="setting-types-project-block">
+        <div class="header-text-settings">Указать типы сайта</div>
+        <div style="position:relative">
+            <label>Types</label>
+            <textarea id="project-types-input"></textarea>
+        </div>
+    </div>
+    <div class="select-main-page-project-block">
+        <div class="header-text-settings">Выбрать главную страницу</div>
+        <div class="list-down-select-page-panel">
+            <button class="listdown-button-page">
+                <span>SelectPage</span>
+                <i class="icon-up-arrow-svgrepo-com"></i>
+            </button>
+            <div class="list-down-select-page">
+                @foreach (var item in Model!)
+                {
+                    <button class="list-down-page-item" value="@item.Path">
+                        <i class="icon-uploadgrepo-com"></i>
+                        <span>@item.Name!.Replace(".html","")</span>
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="error-message-projectname" id="error-message-page"></div>
+        <div class="generate-url-block" style="display:none;">
+            <div class="header-text-settings">Сгенерированный URl</div>
+            <div class="generate-url-project"  id="generate-url"></div>
+        </div>
+    </div>
+    <div class="setting-image-project">
+        <div class="header-text-settings">Загрузка изображения</div>
+        <div style="position:relative">
+            <input type="file" id="load-image-project">
+            <label for="load-image-project">
+                <i class="icon-uploadgrepo-com"></i>
+                Загрузить изображение
+            </label>
+        </div>
+        <div class="project-error-image"></div>
+        <div class="result-image-project">
+            <img src="" alt="." id="result-load-image" style="display:none;">
+        </div>
+    </div>
+    <div class="setting-info-format-pages">
+        <div class="header-text-settings">Форматирование ссылок,стилей,скриптов страницы</div>
+        <div class="info-correction">
+            <span>Внимание:</span>Для того ,чтобы стили и скрипты работали корректно, для этого надо менять строку адреса скриптов,стилей,изображении и т.д
+        </div>
+        <div class="manual-images">
+            <div>
+                <span>
+                    <img src="~/MainWeb/Images/success.svg" width="22" height="22" alt="">
+                    Должно
+                </span>
+                <span>&#60;link rel="stylesheet" type="text/css" href="UserProjects/UserName/ProjectName/css/site.css&#62;</span>
+            </div>
+            <div>
+                <span>
+                    <img src="~/MainWeb/Images/error.svg" width="22" height="22" alt="">
+                    Не должно
+                </span>
+                <span>&#60;link rel="stylesheet" type="text/css" href="css/site.css"&#62;</span>
+            </div>
+        </div>
+        <div class="header-text-settings">Попробовать авмтоматическое форматирования <span>(Beta)</span></div>
+        <div class="list-down-select-page-panel">
+            <button class="listdown-button-page">
+                Выбрать файл для форматирование
+                <i class="icon-up-arrow-svgrepo-com"></i>
+            </button>
+            <div class="list-down-select-page">
+                @foreach (var item in Model!)
+                {
+                    <button class="list-down-page-item-format" value="@item.Path">
+                        <i class="icon-uploadgrepo-com"></i>
+                        <span>@item.Name</span>
+                    </button>
+                }
+            </div>
+        </div>
+        <div id="format-button-active"></div>
+        <div class="error-message-projectname" id="error-message-format"></div>
+    </div>    
+</div>

@@ -1,0 +1,54 @@
+.settings-elements{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 600px;
+}
+
+.setting-item{
+    padding: 20px 20px 40px 20px;
+    background-color: white;
+    width: 100%;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+}
+.header-setting-element{
+    text-transform: uppercase;
+    font-size: 17px;
+    letter-spacing: 1px;
+    padding: 5px 0px;
+    font-family: 'RaleWay',sans-serif;
+    color: var(--main-back-color);
+}
+.rename-name-surname-block{
+   display: flex;
+   gap: 10px;
+}
+.name-rename_inner{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+.name-rename_inner input{
+    outline: 1px solid #BBBBBB;
+    padding: 5px 5px;
+    font-size: 17px;
+    transition: all .3s;
+    width: inherit;
+    border-radius: 2px;
+    cursor: text;
+    border: none;
+}
+.name-rename_inner label{
+    color:#888;
+}
+.name-rename_inner input:focus{
+    outline: 1px solid dodgerblue;
+}
+.name-rename_inner input:hover{
+    outline: 1px solid dodgerblue;
+}

@@ -1,0 +1,571 @@
+
+section{
+    padding: 40px 0;
+}
+body{
+    background-color: var(--main-back-color);   
+}
+.menu-profile_inner{
+    width: 100%;
+    padding: 0px 10px 15px 10px;
+    display: flex;
+    justify-content: center;
+}
+.menu-profile{
+    display: flex;
+    gap: 17px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    width: 100%;
+}
+
+.project-count::before{
+    content: attr(data-count);
+    position: absolute;
+    top: -10px;
+    right: -19px;
+    font-size: 15px;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+}
+
+
+.menu-profile-item_inner{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 8px;
+    border-radius: 5px;
+    transition: all.3s;
+    color: var(--main-text-color); 
+}
+.menu-profile-item_inner button{
+    color: inherit;
+}
+.menu-profile-item_inner:hover{
+    background-color: rgba(0,0,0,0.1);
+    color: dodgerblue;
+}
+.menu-profile-item_inner:nth-last-child(1) button i{
+    font-size: 18px;
+}
+
+.menu-profile-item{
+    font-size: 17px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-family: 'Raleway',sans-serif;
+    border-radius: 5px;
+    position: relative;
+    transition: all .1s;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.menu-profile-item i{
+    transition: all .1s;
+    font-size: 20px;
+}
+.menu-profile div:nth-last-child(1) button{
+    width: 130px;
+}
+
+.active-profile-item{
+    color:dodgerblue;
+}
+
+.profile-panel{
+    display: flex;
+    gap: 50px;
+}
+.avatar-profile-block{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+.avatar-profile-block input{
+   display: none;
+}
+
+.avatar-image{
+    border-radius: 50%;
+    object-position: center center;
+    object-fit: cover;
+    width: 225px;
+    height: 225px;
+    box-shadow: 1px 1px 20px 0px rgba(0, 0, 0, 0.7);
+    background-color: white;
+}
+.profile-email-user{
+    font-weight: 300;
+    font-size:17px;
+    color: var(--main-text-color);
+}
+
+.profile-user-name{
+    font-size: 25px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    font-size: 'Raleway',sans-serif;
+    color: var(--main-text-color);
+}
+
+.like-avatar{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    right: 0px;
+    box-shadow: 1px 1px 20px 0px rgba(0, 0, 0, 0.7);
+    transform: translateY(-60px);
+    transition: all .3s;
+    display: none;
+}
+.like-avatar i{
+    font-size: 20px;
+    color: black;
+}
+.like-avatar:hover i{
+    color: red;
+}
+.like-avatar:hover{
+    transform: translateY(-60px) scale(1.1);
+    box-shadow: 1px 4px 20px 0px rgba(223, 70, 70, 0.816);
+}
+
+.change-avatar{
+    background-color:dodgerblue;
+    color: white;
+    font-family: 'RaleWay',sans-serif;
+    font-weight: 500;
+    padding: 10px 35px;
+    width: fit-content;
+    font-size: 17px;
+    border-radius: 5px;
+    transition: all .3s;
+}
+.message-maxsize-image{
+    color:var(--main-text-color);
+    font-size: 13px;
+    font-weight: 300;   
+}
+
+.change-avatar:hover{
+    transform: scale(1.02);
+    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
+}
+.error-message-download-image{
+    color: red;
+    font-size: 13px;
+    font-weight: 300; 
+}
+
+.avatar-profile-block>div{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 10px;
+}
+.avatar-profile-block>div>div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.user-info-description-panel_inner{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+.header-description{
+    font-size: 23px;
+    color: var(--main-text-color);
+    font-family: 'RaleWay',sans-serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.add-description{
+    background-color:dodgerblue;
+    color: white;
+    font-family: 'RaleWay',sans-serif;
+    font-weight: 500;
+    padding: 10px 35px;
+    width: fit-content;
+    font-size: 17px;
+    border-radius: 5px;
+    transition: all .3s;
+}
+.add-description:hover{
+    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
+    transform: scale(1.02);
+}
+.description-profile{
+    color: var(--main-text-color);
+    font-family: 'RaleWay',sans-serif;
+    
+    margin: 10px 0;
+    padding: 15px 0;
+    border-radius:5px;
+}
+.followers-count{
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    font-size: 22px;
+    font-family: 'RaleWay',sans-serif;
+    color: var(--main-text-color);
+}
+.followers-count i{
+    font-size: 20px;
+}
+.followers-count span{
+    font-size: 15px;
+    font-weight: 300;
+    color: grey;
+}
+.add-description-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .5s;
+}
+.add-description-modal_inner{
+    width: 70%;
+    height: 80%;
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.description-input{
+    height: 100%;
+    width: 100%;
+}
+.description-modal-header{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.description-modal-header div{
+    color: #333;
+    font-size: 22px;
+    font-family: 'RaleWay',sans-serif;
+}
+.description-modal-header span{
+    color: dodgerblue;
+    font-size: 15px;
+    font-family: 'RaleWay',sans-serif;
+}
+.description-input textarea{
+    width: inherit;
+    height: inherit;
+    text-align: start;
+    resize: none;
+    outline: none;
+    font-size: 18px;
+    font-family: Segoe Ui;
+}
+.description-modal-send-panel{
+    padding: 5px 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+.description-modal-send-panel button{
+    background-color: dodgerblue;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-family: 'RaleWay',sans-serif;
+    color: white;
+    border-radius: 5px;
+}
+.error-message-download-desciption{
+    color: red;
+    font-size: 13px;
+    font-weight: 300; 
+    font-family: 'Ralewat',sans-serif;
+}
+.change-description-text{
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    font-size: 15px;
+    color: white;
+    border-radius: 5px;
+    font-family: 'RaleWay',sans-serif;
+}
+.gener-description{
+    border: none;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+.profile-block{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 800px;
+}
+.profile-info-block{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+}
+.profile-info-block_inner{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity .5s;
+}
+.add-project-block-profile_inner{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+.favorites-block-profile_inner{
+    position: absolute;
+    width: 100%;
+    top:0;
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: opacity .5s;
+}
+.settings-block-profile_inner{
+    position: absolute;
+    width: 100%;
+    top:0;
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: opacity .5s;
+}
+.projects-block-profile_inner{
+    position: absolute;
+    width: 100%;
+    top:0;
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: opacity .5s;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+}
+.project-item_inner{
+    width: 300px;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    transition: all .3s;
+    box-shadow: 2px 2px 25px 0px rgba(70, 113, 223, 0.4);
+    margin: 5px 0;
+}
+.project-item_inner:hover{
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.project-image img{
+    height: 145px;
+    width: 100%;
+    object-fit:contain;
+    object-position:center center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: rgb(177, 177, 177);
+}
+.project-item_inner-header{
+    display: flex;
+    padding: 5px 10px;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+.project-logo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.project-logo img{
+    width: 40px;
+    height: 50px;
+}
+.project-logo-text{
+    font-family: 'RaleWay',sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.project-logo-text a{
+    font-size: 18px;
+}
+.project-logo-text a:hover{
+    text-decoration: underline;
+}
+.project-logo-text span{
+    font-size: 14px;
+    color: gray;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.project-setting-buttons{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.project-setting-buttons button i{
+    font-size: 22px;
+    transition: all .3s;
+}
+.project-setting-buttons button:hover i{
+    color: dodgerblue;
+}
+.null-elements-text{
+    color: rgb(153, 153, 153);
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+}
+.unput-project-zip-block{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding:5px 0;
+}
+
+.stage_inner-result{
+    display: flex;
+    flex-direction: column;
+}
+.zip-format-error{
+    text-align: center;
+    color: white;
+    font-size: 20px;
+}
+
+
+
+
+
+
+
+
+@media(max-width:800px){
+    .profile-panel{
+        flex-direction: column;
+    }
+    .avatar-profile-block{
+       flex-direction: row;
+       align-items: center;   
+       gap: 20px;
+    }
+    .like-avatar{
+        top: 190px;
+        left: -70px;
+    }
+    .menu-profile{
+        overflow-x: scroll;
+    }
+    .count-statist-profile_inner{
+        flex-wrap: wrap;
+    }
+}
+@media(max-width:640px){
+    .add-description-modal_inner{
+        width: 95%;
+    }
+}
+@media(max-width:480px){
+    .avatar-image{
+        width: 150px;
+        height: 150px;
+    }
+    .like-avatar{
+        width: 40px;
+        height: 40px;
+        top: 170px;
+    }
+    .statist-profile-item{
+        padding: 10px 0px;
+        width: 100%;
+    }
+    .count-statist-profile_inner{
+        justify-content: center;
+        width: 100%;
+    }
+    .description-modal-send-panel button{
+        padding: 10px 10px;
+    }
+    .description-modal-send-panel{
+        gap: 10px;
+    }
+    .gener-description{
+        height: 1000px;
+    }
+}
+@media(max-width:400px){
+    .avatar-profile-block{
+        flex-direction: column;
+        align-items: center;
+    }
+    .like-avatar{
+        display: none;
+    }
+    .avatar-profile-block>div{
+        width: 100%;
+        align-items: center;
+    }
+    .avatar-profile-block>div>div{
+        align-items: center;
+    }
+    .add-project-block-profile_inner{
+        padding: 0 10px;
+    }
+    
+}
