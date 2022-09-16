@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting.Server;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using System.Text.Json;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
 using WebApplicationList.Services;
 
 namespace WebApplicationList.Controllers
 {
+    [Authorize(Roles = "user")]
     public class UserProjectController : Controller
     {
         private readonly IProjectSetting _projectSetting;
@@ -15,21 +15,22 @@ namespace WebApplicationList.Controllers
         public UserProjectController(IProjectSetting projectSetting, IProfileUser profileUser)
         {
             _projectSetting = projectSetting;
-            _profileUser = profileUser;     
+            _profileUser = profileUser;
         }
 
         [HttpGet]
-        async public Task<IActionResult> Index(string Site,string page)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(string Site, string page)
         {
-            string result =  await _projectSetting.GetHtmlProject(Site,page);
+            string result = await _projectSetting.GetHtmlProject(Site, page);
 
             if (string.IsNullOrEmpty(result))
                 return StatusCode(404);
 
-            return View((object)result);      
+            return View((object)result);
         }
         [HttpPost]
-        async public Task<IActionResult> GetExplorer()
+        public async Task<IActionResult> GetExplorer()
         {
             var user = await _profileUser.GetUserAsync();
 
@@ -39,8 +40,8 @@ namespace WebApplicationList.Controllers
             }
 
             var file = Request.Form.Files[0];
-           
-            if (file is null||file.ContentType!= "application/x-zip-compressed"||file.Length>52428800)
+
+            if (file is null || file.ContentType != "application/x-zip-compressed" || file.Length > 52428800)
             {
                 throw new Exception("Файл пустой или превышает допустимый размер");
             }
@@ -53,7 +54,7 @@ namespace WebApplicationList.Controllers
                 throw new ArgumentNullException("Ошибка на сервере пробуйте позже");
             }
 
-            return PartialView("~/Views/UserProject/Partials/Explorer.cshtml",result);
+            return PartialView("~/Views/UserProject/Partials/Explorer.cshtml", result);
         }
         [HttpGet]
         public IActionResult GetExplorerStart()
@@ -190,52 +191,5 @@ namespace WebApplicationList.Controllers
 
             return true;
         }
-        private bool CheckValidationPath(string path,string userName)
-        {
-            if (!path.Contains(userName))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public  JsonResult InputFile()
-        {
-            
-            var result = Request.Form.Files[0].OpenReadStream();
-            
-            using (FileStream fileStream = new FileStream(@"C:\Users\power\Desktop\ТССА.zip", FileMode.Create))
-            {
-                result.CopyTo(fileStream);
-            }
-            
-            return Json("123");
-        }
-
-        //[HttpGet]
-        //public IActionResult Load([FromServices]ApplicationDataBase.ApplicationDb application)
-        //{
-        //    application.userProjects!.Add(new Models.MainSiteModels.ProfileModels.UserProject
-        //    {
-        //        Name = "Relvise",
-        //        UrlImage = "UserProjectsImage/Relvise.jpg",
-        //        Description = "Finance and Consultancy Solution",
-        //        Type = "Сайт визитка,HTML,JS,CSS,Финансы",
-        //        User_Id = "3ce8cc61-f0ac-47ab-b318-e9d497c9a623",
-        //        Url = "?Site=Relvise&page=Index",
-        //    });
-        //    application.SaveChanges();
-
-        //    return base.Content("");
-        //}
-        
-
     }
 }

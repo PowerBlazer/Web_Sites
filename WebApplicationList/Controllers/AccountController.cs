@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Text.Json;
 using WebApplicationList.IdentityApplication.ViewModels;
 using WebApplicationList.Services;
@@ -7,21 +9,23 @@ namespace WebApplicationList.Controllers
 {
     public class AccountController : Controller
     {
-        IAuthorization _authorization;
-        public AccountController(IAuthorization authorization)
+        private readonly IAuthorization _authorization;
+        private readonly IProfileUser _profileUser;
+        public AccountController(IAuthorization authorization,IProfileUser profileUser)
         {
             _authorization = authorization;
+            _profileUser = profileUser;
         }
 
 
         [HttpPost]
-        async public Task<IActionResult> Register(string registerModelJs)
+        public async Task<IActionResult> Register(string registerModelJs)
         {
             if (!string.IsNullOrEmpty(registerModelJs))
             {
                 try
                 {
-                    var registerModel = JsonSerializer.Deserialize<RegisterModel>(registerModelJs);
+                    var registerModel = System.Text.Json.JsonSerializer.Deserialize<RegisterModel>(registerModelJs);
 
                     var authorizeModel = await _authorization.RegisterAsync(registerModel!);
 
@@ -37,15 +41,16 @@ namespace WebApplicationList.Controllers
                 return StatusCode(404);
             }
         }
+        
 
         [HttpPost]
-        async public Task<IActionResult> Login(string loginModelJs)
+        public async Task<IActionResult> Login(string loginModelJs)
         {
             if (!string.IsNullOrEmpty(loginModelJs))
             {
                 try
                 {
-                    var loginModel = JsonSerializer.Deserialize<LoginModel>(loginModelJs);
+                    var loginModel = System.Text.Json.JsonSerializer.Deserialize<LoginModel>(loginModelJs);
 
                     var authorizeModel = await _authorization.LoginAsync(loginModel!);
 
@@ -61,28 +66,55 @@ namespace WebApplicationList.Controllers
                 return StatusCode(404);
             }
         }
+        [Authorize(Roles ="user")]
         [HttpPost]
-        async public Task<string> GetAvatar(string username)
+        public async Task<string> GetAvatar()
         {
-            return await _authorization.GetUserAvatar(username);
+            return await _authorization.GetUserAvatar(_profileUser.GetUserName());
         }
 
         [HttpPost]
         async public Task<bool> Logout() => await _authorization.Logout();
 
         [HttpPost]
-        public async Task<bool> CheckCookie(string name)
+        public async Task<bool> CheckCookie()
         {
-            if (!string.IsNullOrEmpty(name))
+            var userName = _profileUser.GetUserName();
+            if (!string.IsNullOrEmpty(userName))
             {
-                if (await _authorization.CheckCookie(name))
+                if (await _authorization.CheckCookie(userName))
                     return true;
             }
             return false;
         }
 
 
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public async Task<ViewAuthorizationModel> ChangePassword(string jsonPasswordModel)
+        {
+            if (string.IsNullOrEmpty(jsonPasswordModel))
+            {
+                throw new Exception("Ошибка на сервере");
+            }
 
+            try
+            {
+                var passwordModel = JsonConvert.DeserializeObject<PasswordViewModel>(jsonPasswordModel);
 
+                var user = await _profileUser.GetUserAsync();
+
+                if (passwordModel is null || user is null)
+                {
+                    throw new Exception("Ошибка на сервере");
+                }
+
+                return await _authorization.ChangePassword(passwordModel,user);
+            }
+            catch
+            {
+                throw new Exception("Ошибка на сервере");
+            }
+        }
     }
 }

@@ -7903,11 +7903,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\power\\Desktop\\Прогры\\WebApplicationList\\WebApplicationList\\WebApplicationList.csproj",
+      "projectUniqueName": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\WebApplicationList.csproj",
       "projectName": "WebApplicationList",
-      "projectPath": "C:\\Users\\power\\Desktop\\Прогры\\WebApplicationList\\WebApplicationList\\WebApplicationList.csproj",
+      "projectPath": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\WebApplicationList.csproj",
       "packagesPath": "C:\\Users\\power\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\power\\Desktop\\Прогры\\WebApplicationList\\WebApplicationList\\obj\\",
+      "outputPath": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\VisualStudo2022\\Shared\\NuGetPackages"

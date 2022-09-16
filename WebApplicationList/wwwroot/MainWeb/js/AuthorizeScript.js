@@ -137,11 +137,10 @@ function registerAuthorize(jsonstring){
     
 }
 
-function GetAvatar(username){
+function GetAvatar(){
     $.ajax({
         type:"POST",
         url:"/Account/GetAvatar",
-        data:{ username:username},
         success: function(result){
             if(result!==""){
                 $("#profile-image").attr("src","/"+result);
@@ -154,11 +153,10 @@ function GetAvatar(username){
     })
 }
 
-function CheckAuthorize(username){
+function CheckAuthorize(){
     $.ajax({
         type:"POST",
         url:"/Account/CheckCookie",
-        data:{name:username},
         success:function(result){
             if(!result){
                 location.reload();

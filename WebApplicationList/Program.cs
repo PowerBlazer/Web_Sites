@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
@@ -25,8 +27,12 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-
 }).AddEntityFrameworkStores<ApplicationDb>();
+
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+//});
 
 builder.Services.AddScoped<IAuthorization, Authorization>()
     .AddScoped<IProfileUser, ProfileUser>()
@@ -59,6 +65,11 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
+
+    
+        // other configurations
+   
+
 
 
 app.MapControllerRoute(

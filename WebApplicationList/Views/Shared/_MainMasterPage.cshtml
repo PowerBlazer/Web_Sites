@@ -15,59 +15,7 @@
     </head>
     <body>
         <header>
-            <div class="container">
-                <div class="header_inner">
-                    <a href="~/Main" class="logo-tip">
-                        Web_Sites
-                    </a>
-                    <div class="menu-header">
-                        <ul class="menu-header-items">
-                            <li class="menu-header-item active-item-menu">
-                                <a href="~/Main">Главное</a>  
-                            </li>
-                            <li class="menu-header-item">
-                                <a href="#">О нас</a>  
-                            </li>
-                            <li class="menu-header-item">
-                                <a href="#">Страницы Сайтов</a>
-                            </li>
-                        </ul>
-                        
-                        @if(!User.Identity!.IsAuthenticated)
-                        {
-                            <button type="button" class="login-user">
-                                <div class="border-user">
-                                    <img src="~/MainWeb/Images/user-icon.svg" width="25" height="25">
-                                </div>        
-                                <span>Войти</span>
-                            </button>        
-                        }
-                        else
-                        {         
-                            string Name = User.Identity.Name!;
-                            
-                            <div class="profile_inner">
-                                <button type="button" class="profile-button">
-                                    <img src="" id="profile-image" alt="img" width="45" height="45">
-                                    <span>@Name</span>
-                                </button>
-                                <div class="profile-listdown_inner" style="visibility: hidden; opacity:0;">
-                                    <img src="" id="profile-image-list" asp-append-version="true" alt="img" width="60" height="60">
-                                    <span>@Name</span>
-                                    <div>
-                                        <a href="~/Profile" class="profile-list-item">Профиль</a>
-                                        <a href="~/Profile" class="profile-list-item">Настройки</a>
-                                        <button type="button" class="profile-logout-button" id="logout-but">Logout</button>
-                                    </div>
-                                </div>
-                            </div>
-                        }       
-                    </div>            
-                    <button type="button" id="openmenu" class="close-menu">
-                        <img class="img-close" src="~/MainWeb/Images/hamburgermenu.svg" alt="img" width="40" height="40">
-                    </button>          
-                </div>
-            </div>
+            
         </header>
         <div class="content-gener">      
             @RenderBody()
@@ -154,8 +102,8 @@
         <script src="~/MainWeb/js/AuthorizeScript.js" type="application/javascript" asp-append-version="true"></script>
         <script>
             @if(User.Identity.IsAuthenticated){
-                @:CheckAuthorize("@User.Identity.Name");
-                @:GetAvatar("@User.Identity.Name");
+                @:CheckAuthorize();
+                @:GetAvatar();
             }
         </script>
         @await RenderSectionAsync("Scripts", required: false)

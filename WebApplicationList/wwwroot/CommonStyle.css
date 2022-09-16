@@ -52,6 +52,8 @@ textarea{
 :root{
     --main-text-color:white;
     --main-back-color:#11161f;
+    --button-color:#0057ff;
+    --neon-shadow:3px 3px 30px 1px rgba(26, 87, 241, 0.8);
 }
 
 input[type=text]{
@@ -78,6 +80,26 @@ input[type="number"]:hover,
 input[type="number"]:focus {
     appearance: none;
     -moz-appearance: textfield;
+}
+
+.blue-button{
+    width: fit-content;
+    font-family: "RaleWay",sans-serif;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    background-color:var(--button-color);
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    transition: all .3s;
+}
+.blue-button-small{
+    padding: 8px 10px;
+    font-size: 15px;
+}
+.blue-button:hover{
+    transform: scale(1.02);
+    box-shadow:var(--neon-shadow);
 }
 
 .back-home{

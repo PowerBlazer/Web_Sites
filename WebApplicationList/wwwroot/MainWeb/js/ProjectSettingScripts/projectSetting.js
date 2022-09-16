@@ -13,7 +13,6 @@ function LoadExplorer(){
     FolderOpenButton.on('click',FolderOpen);
     ReturnFolder.on('click',FolderOpen);
    
-
     FileOpenButton.on('click',function(){
         var path = $(this).val();
         GetContentFile(path);
@@ -22,14 +21,14 @@ function LoadExplorer(){
         ClearPaintButtonsTitle();
         GetExplorerItem($(this).val());
         $(this).css({
-            "color":"dodgerblue",
+            "color":"var(--button-color)",
         });
         $(".permision-next").html("");
     });
     SettingsOpen.on('click',function(){
         ClearPaintButtonsTitle();
         $(this).css({
-            "color":"dodgerblue",
+            "color":"var(--button-color)",
         });
         var buttonView = "<button class=\"next-setting-project\">Сохранить</button>";
 

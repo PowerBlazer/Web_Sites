@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
 using WebApplicationList.IdentityApplication.ViewModels;
 using WebApplicationList.Models;
@@ -13,7 +14,7 @@ namespace WebApplicationList.Services.Models
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private ApplicationDb _applicationDB;
+        private readonly ApplicationDb _applicationDB;
 
         public Authorization(UserManager<User> userManager, SignInManager<User> signInManager,
             RoleManager<IdentityRole> roleManager, ApplicationDb applicationDB)
@@ -23,7 +24,7 @@ namespace WebApplicationList.Services.Models
             _roleManager = roleManager;
             _applicationDB = applicationDB;
         }
-        async public Task<ViewAuthorizationModel> RegisterAsync(RegisterModel registerModel)
+        public async Task<ViewAuthorizationModel> RegisterAsync(RegisterModel registerModel)
         {
             ViewAuthorizationModel model = new ViewAuthorizationModel();
 
@@ -55,7 +56,7 @@ namespace WebApplicationList.Services.Models
             }
             return model;
         }
-        async public Task<ViewAuthorizationModel> LoginAsync(LoginModel loginModel)
+        public async Task<ViewAuthorizationModel> LoginAsync(LoginModel loginModel)
         {
             ViewAuthorizationModel modelAuthorize = new();
 
@@ -75,12 +76,24 @@ namespace WebApplicationList.Services.Models
         }
 
 
-        async public Task<string> GetUserAvatar(string username)
+        public async Task<string> GetUserAvatar(string username)
         {
+            string? ImageLink = "";
+
             if (!string.IsNullOrWhiteSpace(username))
-                return (await _userManager.FindByNameAsync(username)).LinkAvatar!;
-            else
-                return string.Empty;
+            {
+               var user = await _applicationDB.Users.Where(p => p.UserName == username).FirstOrDefaultAsync();
+
+               if(user is null)
+               {
+                    return string.Empty;
+               }
+
+               ImageLink = user.LinkAvatar;
+            }
+
+            return ImageLink;
+                
         }
 
         async public Task<bool> Logout()
@@ -106,6 +119,34 @@ namespace WebApplicationList.Services.Models
             //}
 
             return true;
+        }
+
+        public async Task<ViewAuthorizationModel> ChangePassword(PasswordViewModel passwordViewModel,User? user)
+        {
+            if(user is null||string.IsNullOrEmpty(passwordViewModel.NewPassword)
+                ||string.IsNullOrEmpty(passwordViewModel.OldPassword))
+            {
+                throw new ArgumentNullException(passwordViewModel.NewPassword);
+            }
+
+            ViewAuthorizationModel viewAuthorization = new();
+
+            var result = await _userManager.ChangePasswordAsync(user, passwordViewModel.OldPassword, passwordViewModel.NewPassword);
+
+            if (result.Succeeded)
+            {
+                viewAuthorization.IsSuccess();
+            }
+            else
+            {
+                viewAuthorization.NotSuccess();
+                foreach(var item in result.Errors)
+                {
+                    viewAuthorization.Errors!.Add(item.Description);
+                }
+            }
+
+            return viewAuthorization;
         }
     }
 }

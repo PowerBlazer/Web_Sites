@@ -8,7 +8,9 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public ProfileUserInfo? userInfo { get; set; }
         public int NumberSubscriber { get; set; }
         public int NumberLikes { get; set; }
-        public IEnumerable<UserProject>? userProjects { get; set; }
+        public int NumberProjects { get; set; }
+        public IEnumerable<LinksProfile>? linksProfile { get; set; }
+        public IEnumerable<LinkType>? linkTypes { get; set; }
         public IEnumerable<FavoritesProject>? favoritesProjects { get; set; }
     }
 }

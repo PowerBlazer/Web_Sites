@@ -51,7 +51,7 @@
     transition: all .3s;
 }
 .title-explorer-item:hover{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .title-explorer{
     display: flex;
@@ -93,7 +93,7 @@
     transition: all .3s;
 }
 .explorer-item button:hover{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .folder-navigation-panel{
     display: flex;
@@ -104,12 +104,12 @@
     transition: all .3s;
 }
 .folder-navigation-panel:hover{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .next-setting-project{
     width: min-content;
     padding: 10px 20px;
-    background-color: dodgerblue;
+    background-color: var(--button-color);
     color: var(--main-text-color);
     font-size: 18px;
     display: flex;
@@ -192,7 +192,7 @@
 .prev-setting-project{
     width: min-content;
     padding: 10px 20px;
-    background-color: dodgerblue;
+    background-color:var(--button-color);
     color: white;
     font-size: 18px;
     display: flex;
@@ -373,7 +373,7 @@
     font-family: 'RaleWay',sans-serif;
     background-color: white;
     border-radius: 5px;
-    outline: 1px solid dodgerblue;
+    outline: 1px solid var(--button-color);
     align-items: center;
     height: min-content;
     transition: all .3s;
@@ -383,7 +383,7 @@
     font-size: 15px;
 }
 .listdown-button-page:hover{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .list-down-select-page{
     overflow: hidden;
@@ -417,7 +417,7 @@
     color: gray;
 }
 .list-down-page-item:hover span{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .info-correction{
     font-weight: 300;
@@ -426,7 +426,7 @@
 }
 .info-correction span{
     font-weight: 500;
-    color: dodgerblue;
+    color: var(--button-color);
     font-size: 18px;
 }
 .manual-images{
@@ -453,7 +453,7 @@
     width:fit-content;
     border: none;
     background-color:whitesmoke;
-    color: dodgerblue;
+    color: var(--button-color);
     padding: 8px 15px;
     border-radius: 5px;
     font-weight: 400;
@@ -476,7 +476,7 @@
     padding: 10px 0;
 }
 .setting-info-format-pages>div:nth-last-child(2) span{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .list-down-page-item-format{
     display: flex;
@@ -490,10 +490,10 @@
     color: gray;
 }
 .list-down-page-item-format:hover span{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 #format-button-active button{
-    background-color: dodgerblue;
+    background-color: var(--button-color);
     padding: 10px 20px;
     font-size: 18px;
     color: white;
@@ -534,7 +534,7 @@
 }
 .format-result-panel button{
     padding: 10px 20px;
-    background-color: dodgerblue;
+    background-color: var(--button-color);
     color: white;
     font-size: 18px;
     font-weight: 500;

@@ -22,21 +22,24 @@ body{
 .project-count::before{
     content: attr(data-count);
     position: absolute;
-    top: -10px;
+    top: -11px;
     right: -19px;
     font-size: 15px;
-    background-color: dodgerblue;
+    background-color:var(--button-color);
     color: white;
     border-radius: 50%;
     height: 20px;
     width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
 .menu-profile-item_inner{
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding:5px;
     gap: 8px;
     border-radius: 5px;
     transition: all.3s;
@@ -46,8 +49,7 @@ body{
     color: inherit;
 }
 .menu-profile-item_inner:hover{
-    background-color: rgba(0,0,0,0.1);
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .menu-profile-item_inner:nth-last-child(1) button i{
     font-size: 18px;
@@ -71,22 +73,25 @@ body{
     font-size: 20px;
 }
 .menu-profile div:nth-last-child(1) button{
-    width: 130px;
+    width: 180px;
 }
 
 .active-profile-item{
-    color:dodgerblue;
+    color:var(--button-color);
 }
 
 .profile-panel{
     display: flex;
-    gap: 50px;
+    gap: 30px;
 }
 .avatar-profile-block{
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: relative;
+    padding-right: 30px;
+    min-width: 270px;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 .avatar-profile-block input{
    display: none;
@@ -104,6 +109,7 @@ body{
 .profile-email-user{
     font-weight: 300;
     font-size:17px;
+    text-align: center;
     color: var(--main-text-color);
 }
 
@@ -112,6 +118,7 @@ body{
     letter-spacing: 2px;
     font-weight: 400;
     font-size: 'Raleway',sans-serif;
+    text-align: center;
     color: var(--main-text-color);
 }
 
@@ -141,53 +148,70 @@ body{
     transform: translateY(-60px) scale(1.1);
     box-shadow: 1px 4px 20px 0px rgba(223, 70, 70, 0.816);
 }
-
-.change-avatar{
-    background-color:dodgerblue;
-    color: white;
-    font-family: 'RaleWay',sans-serif;
-    font-weight: 500;
-    padding: 10px 35px;
-    width: fit-content;
-    font-size: 17px;
-    border-radius: 5px;
-    transition: all .3s;
-}
-.message-maxsize-image{
-    color:var(--main-text-color);
-    font-size: 13px;
-    font-weight: 300;   
-}
-
-.change-avatar:hover{
-    transform: scale(1.02);
-    box-shadow: 1px 1px 20px 0px rgba(70, 113, 223, 0.716);
-}
-.error-message-download-image{
-    color: red;
-    font-size: 13px;
-    font-weight: 300; 
-}
-
-.avatar-profile-block>div{
+.user-description-panel{
     display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.user-head-description{
+    color: var(--main-text-color);
+}
+
+.info-user-panel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 15px;
+    outline: 1px solid rgba(0,87,255,0.4);
+    border-radius: 5px;
+    margin: 10px 0;
+}
+.avatar-profile-block div:nth-child(1){
+    position: relative;
+}
+.avatar-profile-block div:nth-child(1) input{
+    display: none;
+}
+.avatar-profile-block div:nth-child(2){
+    display: flex;
+    padding: 10px 0;
     flex-direction: column;
     position: relative;
     gap: 10px;
 }
-.avatar-profile-block>div>div{
+#change-avatar{
+    position: absolute;
+    bottom: 5%;
+    left: 73%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    font-size: 22px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s;
+    cursor: pointer;
 }
-
-
+#change-avatar:hover{
+    transform: scale(1.06);
+    box-shadow: var(--neon-shadow);
+}
+.data-registration{
+    color: rgb(202, 202, 202);
+    font-size: 15px;
+    font-family: Segoe Ui;
+    letter-spacing: 1px;
+    text-align: center;
+}
 .user-info-description-panel_inner{
     display: flex;
     flex-direction: column;
     gap: 20px;
     position: relative;
 }
+
 .header-description{
     font-size: 23px;
     color: var(--main-text-color);
@@ -196,6 +220,11 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.user-description{
+    font-family: Segoe Ui;
+    color: var(--main-text-color);
+    font-size: 15px;
 }
 .add-description{
     background-color:dodgerblue;
@@ -221,101 +250,17 @@ body{
     border-radius:5px;
 }
 .followers-count{
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
     font-size: 22px;
     font-family: 'RaleWay',sans-serif;
+    display: flex;
+    justify-content: space-between;
     color: var(--main-text-color);
 }
-.followers-count i{
-    font-size: 20px;
-}
+
 .followers-count span{
     font-size: 15px;
     font-weight: 300;
-    color: grey;
-}
-.add-description-modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 60;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: all .5s;
-}
-.add-description-modal_inner{
-    width: 70%;
-    height: 80%;
-    border-radius: 5px;
-    background-color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.description-input{
-    height: 100%;
-    width: 100%;
-}
-.description-modal-header{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.description-modal-header div{
-    color: #333;
-    font-size: 22px;
-    font-family: 'RaleWay',sans-serif;
-}
-.description-modal-header span{
-    color: dodgerblue;
-    font-size: 15px;
-    font-family: 'RaleWay',sans-serif;
-}
-.description-input textarea{
-    width: inherit;
-    height: inherit;
-    text-align: start;
-    resize: none;
-    outline: none;
-    font-size: 18px;
-    font-family: Segoe Ui;
-}
-.description-modal-send-panel{
-    padding: 5px 10px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-}
-.description-modal-send-panel button{
-    background-color: dodgerblue;
-    padding: 10px 20px;
-    font-size: 15px;
-    font-family: 'RaleWay',sans-serif;
-    color: white;
-    border-radius: 5px;
-}
-.error-message-download-desciption{
-    color: red;
-    font-size: 13px;
-    font-weight: 300; 
-    font-family: 'Ralewat',sans-serif;
-}
-.change-description-text{
-    padding: 10px 20px;
-    background-color: dodgerblue;
-    font-size: 15px;
-    color: white;
-    border-radius: 5px;
-    font-family: 'RaleWay',sans-serif;
+    color: var(--main-text-color);
 }
 .gener-description{
     border: none;
@@ -336,6 +281,7 @@ body{
     gap: 10px;
     overflow: hidden;
 }
+
 .profile-info-block_inner{
     position: absolute;
     width: 100%;
@@ -403,7 +349,7 @@ body{
     margin: 5px 0;
 }
 .project-item_inner:hover{
-    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+    box-shadow: var(--neon-shadow);
 }
 .project-image img{
     height: 145px;
@@ -462,7 +408,7 @@ body{
     transition: all .3s;
 }
 .project-setting-buttons button:hover i{
-    color: dodgerblue;
+    color: var(--button-color);
 }
 .null-elements-text{
     color: rgb(153, 153, 153);
@@ -478,7 +424,6 @@ body{
     gap: 10px;
     padding:5px 0;
 }
-
 .stage_inner-result{
     display: flex;
     flex-direction: column;
@@ -487,6 +432,21 @@ body{
     text-align: center;
     color: white;
     font-size: 20px;
+}
+.profile-links-block{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.profile-links{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.header-profile-links{
+    color: var(--main-text-color);
+    letter-spacing: 1px;
+    font-size: 15px;
 }
 
 
@@ -502,7 +462,9 @@ body{
     }
     .avatar-profile-block{
        flex-direction: row;
-       align-items: center;   
+       align-items: center;
+       padding: 0;
+       border: none;   
        gap: 20px;
     }
     .like-avatar{
@@ -515,12 +477,11 @@ body{
     .count-statist-profile_inner{
         flex-wrap: wrap;
     }
-}
-@media(max-width:640px){
-    .add-description-modal_inner{
-        width: 95%;
+    .avatar-profile-block div:nth-child(2){
+        width: 100%;
     }
 }
+
 @media(max-width:480px){
     .avatar-image{
         width: 150px;
@@ -539,12 +500,6 @@ body{
         justify-content: center;
         width: 100%;
     }
-    .description-modal-send-panel button{
-        padding: 10px 10px;
-    }
-    .description-modal-send-panel{
-        gap: 10px;
-    }
     .gener-description{
         height: 1000px;
     }
@@ -554,15 +509,14 @@ body{
         flex-direction: column;
         align-items: center;
     }
+    .info-user-panel{
+        width:100%;
+    }
     .like-avatar{
         display: none;
     }
-    .avatar-profile-block>div{
+    .avatar-profile-block:nth-child(2) div{
         width: 100%;
-        align-items: center;
-    }
-    .avatar-profile-block>div>div{
-        align-items: center;
     }
     .add-project-block-profile_inner{
         padding: 0 10px;

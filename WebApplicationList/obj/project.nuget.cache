@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cFaz4QRhI/F5yr+K8POxjGaXZBTxXmTpZK13OubS7+jTsziFO5241HYhWZGiNhPeS+ZK6PDAWQyRap5SImqSMg==",
+  "dgSpecHash": "0inNz6H8JgvBbN5hV/aYushP/1nCKh9pd57RSvOUNotG0isTE/5mPW7pXm52qcqq9tmGhdgJyelE2IgFO9kmtA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\power\\Desktop\\Прогры\\WebApplicationList\\WebApplicationList\\WebApplicationList.csproj",
+  "projectFilePath": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\WebApplicationList.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\power\\.nuget\\packages\\azure.core\\1.20.0\\azure.core.1.20.0.nupkg.sha512",
     "C:\\Users\\power\\.nuget\\packages\\azure.identity\\1.5.0\\azure.identity.1.5.0.nupkg.sha512",

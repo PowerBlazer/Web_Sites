@@ -1,15 +1,17 @@
 .settings-elements{
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 600px;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
 }
 
 .setting-item{
-    padding: 20px 20px 40px 20px;
+    padding: 20px 20px 30px 20px;
     background-color: white;
-    width: 100%;
-    border-radius: 3px;
+    width: 600px;
+    
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -51,4 +53,136 @@
 }
 .name-rename_inner input:hover{
     outline: 1px solid dodgerblue;
+}
+.links-blocks{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.links-item{
+    padding: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    position: relative;
+}
+.links-item>div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.links-item>div span::first-letter{
+    text-transform: uppercase;
+}
+.links-item .bind-button-content>button{
+    background-color:var(--button-color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 15px;
+    font-family: 'Roboto',sans-serif;
+    transition:all .3s;
+}
+.bind-button-content{
+    position: absolute;
+    right: 10px;
+}
+.links-item .bind-button-content>button:hover{
+    background-color: dodgerblue;
+    transform: scale(1.02);
+}
+
+
+
+.description-panel textarea{
+    border:1px solid #BBBBBB;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 17px;
+    resize:vertical;
+    min-height: 100px;
+    max-height: 300px;
+    font-family: 'RaleWay',sans-serif;
+}
+.description-panel textarea:focus{
+    border: 1px solid var(--button-color);
+}
+
+.password-message-errors{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.password-message-errors li{
+    font-size: 15px;
+    font-family: 'RaleWay',sans-serif;
+    color: red;
+}
+.modal-bind-link_inner{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.8);
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s;
+}
+.bind-link-block{
+    width: 580px;
+    background-color: white;
+    height: 215px;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+}
+.bind-link-block span{
+    font-family: 'RaleWay',sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+.bind-link-block input{
+    padding: 10px;
+    width:100%;
+    border-radius: 5px;
+    border: 1px solid #888;
+    font-size: 15px;
+}
+.bind-link-block input:focus{
+    border: 1px solid var(--button-color);
+}
+.bind-link-save{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+
+
+
+@media(max-width:640px){
+    .setting-item{
+        width: 100%;
+    }
+    .bind-link-block{
+        width: 90%;
+    }
+}
+@media(max-width:400px){
+    .name-rename_inner label{
+        font-size:15px;
+    }
+    .rename-name-surname-block{
+        flex-direction: column;
+    }
 }

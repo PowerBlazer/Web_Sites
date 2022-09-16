@@ -1,133 +1,37 @@
 
 $(document).ready(function(){
-    document.querySelector('#input-file-avatar').addEventListener('change',function () {
-        var reader = new FileReader();
-        var selectedFile = this.files[0];
-        reader.onload = function () {
-            var comma = this.result.indexOf(',');
-            var base64 = this.result.substr(comma + 1);
-            SendAvatar(base64,selectedFile);
-        }
-        reader.readAsDataURL(selectedFile);
-    }, false);
-    
-    function SendAvatar(byteImage,input){
-        var elementError = $(".error-message-download-image");
-        var parts = input.name.split('.');
-        var exts = "null";
-        var size = input.size;
-
-        if(parts.length>1){
-            exts = parts.pop();
-        }
-        
-        if(exts==="png"||exts=="jpg"){
-            if(size<=20971520){
-                SendUserAvatar(byteImage); 
+    document.querySelector('#change-avatar-input').addEventListener('change',function (e) {
+        if(this.files.length>0){
+            if (window.FormData !== undefined){
+                var data = new FormData();
+                for (var x = 0; x < 1; x++) {
+                    data.append("file" + x, this.files[x]);
+                }
+                if(ValidationAvatar(this.files[0])){
+                    SendAvatar(data);
+                }
             }
             else{
-                elementError.html("Файл превышает размер");
+                ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
             }
         }
-        else{
-            elementError.html("Файл имеет не подходящий формат");
-        }
-    }
-
-});
-$(document).ready(function(){
-
-    const buttonOpenModalDescription = $("#open-modal-description");
-    const buttonCloseModalDescription = $("#close-modal-description");
-    const buttinSendDescriptionInfo = $("#send-description");
-    const elementModalDescription = $(".add-description-modal");
-    const elementTextAreaDescription = $("#description-info");
-    const buttonClearModalDesciption = $("#clear-textarea-description");
-    const buttonChngeModalDescription = $("#change-description");
-
-    buttonOpenModalDescription.on('click',OpenModalDescription);
-    buttonCloseModalDescription.on('click',CloseModalDescription);
-    buttonClearModalDesciption.on('click',ClearTextAreaDescription);
-    buttinSendDescriptionInfo.on('click',SendDescriprionValue);
-    buttonChngeModalDescription.on('click',ChangeOpenModalAndGiveText);
-
-    function OpenModalDescription(){
-        elementModalDescription.css({
-            "visibility":"visible",
-            "opacity":"1"
-        });
-    }
-
-    function CloseModalDescription(){
-        elementModalDescription.css({
-            "visibility":"",
-            "opacity":""
-        });
-    }
-
-    function ClearTextAreaDescription(){
-        elementTextAreaDescription.val('');
-    }
-
-    $(document).mouseup( function(e){
-		if ( !$(".add-description-modal_inner").is(e.target)
-		    && $(".add-description-modal_inner").has(e.target).length === 0 ) {
-			CloseModalDescription();
-		}
-	});
-
-    function SendDescriprionValue(){
-        var text = elementTextAreaDescription.val();
-        SendUserDescription(text);
-    }
-
-    function ChangeOpenModalAndGiveText(){
-        OpenModalDescription();    
-    }
-
-    document.getElementById('description-info').addEventListener('keydown', function(e) {
-        if (e.key == 'Tab') {
-          e.preventDefault();
-          var start = this.selectionStart;
-          var end = this.selectionEnd;
-          this.value = this.value.substring(0, start) +
-            "\t" + this.value.substring(end);
-          this.selectionStart =
-            this.selectionEnd = start + 1;
-        }
     });
-
-    InitIframe();
-
-    function InitIframe(){
-        var linksIframe = '<meta charset=\'utf-8\'>\n'+
-        '<meta name=\'viewport\' content=\'width=device-width, initial-scale=1\'>\n'+
-        '<link rel=\'stylesheet\' type=\'text/css\' href=\'IframeInit.css\'>';
-        $(".gener-description").contents().find('head').html(linksIframe);
-        
-    }
 });
-$(document).ready(function(){
 
-    const profilePanel = $(".profile-info-block_inner");
+$(document).ready(function(){
     const projectPanel = $(".projects-block-profile_inner");
     const favoritesPanel = $(".favorites-block-profile_inner");
     const settingsPanel = $(".settings-block-profile_inner");
     const addProjectPanel = $(".add-project-block-profile_inner");
 
-    const elementsPanel = [profilePanel,projectPanel,
+    const elementsPanel = [projectPanel,
     favoritesPanel,settingsPanel,addProjectPanel];
 
-    const buttonProfile = $("#profilebutton");
     const buttonProject = $("#projectbutton");
     const buttonFavorites = $("#favoritesbutton");
     const buttonSetting = $("#settingbutton");
     const buttonAddProject = $("#add-project");
 
-    buttonProfile.on('click',function(){
-        OpenElement(profilePanel);
-        PaintButton($(this));
-    });
     buttonProject.on('click',function(){
         OpenElement(projectPanel);
         PaintButton($(this));
@@ -148,6 +52,7 @@ $(document).ready(function(){
     function ClosePanel(){
         elementsPanel.forEach(element => {
             element.css({
+                "visibility":"hidden",
                 "position":"absolute",
                 "transform":"translateX(-100%)",
                 "opacity":"0",
@@ -158,6 +63,7 @@ $(document).ready(function(){
     function OpenElement(element){
         ClosePanel();
         element.css({
+            "visibility":"",
             "transform":"translateX(0%)",
             "position":"relative",
             "opacity":"1",
@@ -309,5 +215,50 @@ function SendUserDescription(descriptionText){
             $(".error-message-download-description").html("Ошибка на сервере , пробуйте позже");
         }           
     });
+}
+
+function SendAvatar(data){
+    StartAnimation();
+    $.ajax({
+        type:"POST",
+        url:"/Profile/ChangeAvatar",
+        contentType: false,
+        processData: false,
+        data:data,
+        success:function(result){
+            if(result){
+                SuccessAnimation();
+                setTimeout(StopAnimationReverse(),1000);
+            }
+            else{
+                StopAnimation();
+                ErrorMessage("Ошибка на сервере , пробуйте позже");
+            }
+        }
+
+    })
+}
+
+function ValidationAvatar(file){
+    var parts = file.name.split('.');
+    var size = file.size;
+    if(parts.length>1){
+        exts = parts.pop();
+    }
+
+    if(exts ==="png"||exts==="jpg"){
+        if(size<20971520){
+            return true;
+        }
+        else{
+            ErrorMessage("Файл превышает допустимый размер");
+        }
+    }
+    else{
+        ErrorMessage("Формат изображения не подходит для загрузки")
+    }
+
+    return false;
+
 }
 

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebApplicationList.Models;
+using WebApplicationList.Models.MainSiteModels.ViewModels;
 using WebApplicationList.Services;
+
 
 namespace WebApplicationList.Controllers.MainController
 {
@@ -18,7 +21,7 @@ namespace WebApplicationList.Controllers.MainController
 
         [HttpGet]
         [Route("Profile")]
-        async public Task<IActionResult> ProfilePage(string page)
+        public async Task<IActionResult> ProfilePage(string page)
         {
             var user = await _profileUser.GetUserAsync();
 
@@ -33,17 +36,88 @@ namespace WebApplicationList.Controllers.MainController
         }
 
         [HttpPost]
-        async public Task<bool> ChangeAvatar(string? byteImage)
+        public async Task<bool> ChangeAvatar()
         {
-            return await _profileUser.ChangeAvatarAsync(byteImage!);
+            var image = Request.Form.Files[0];
+
+            if(image is null)
+            {
+                return false;
+            }
+
+            if(!await _profileUser.ChangeAvatarAsync(image))
+            {
+                return false;
+            }
+
+            return true;
         }
         [HttpPost]
-        async public Task<bool> ChangeDescription(string description)
+        public async Task<bool> ChangeUserInfo(string jsonProfileUserInfo)
         {
-            return await _profileUser.ChangeDescriptionAsync(description);
+            if(string.IsNullOrWhiteSpace(jsonProfileUserInfo))
+            {
+                return false;
+            }
+
+            try
+            {
+                var profileUserInfo = JsonConvert.DeserializeObject<ProfileUserInfoViewModel>(jsonProfileUserInfo);
+
+                if(await _profileUser.ChangeUserInfo(profileUserInfo!))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
         }
 
-        async public Task<string> GetUserName() => (await _profileUser.GetUserAsync()).UserName;
+        [HttpPost]
+        public async Task<bool> BindLinkUser(string url,int id)
+        {
+            if(id==0)
+            {
+                return false;
+            }
+
+            if(await _profileUser.BindLinkInUser(url,id))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserProjects(string login)
+        {
+            User? user;
+
+            if (string.IsNullOrWhiteSpace(login))
+            {
+                user = await _profileUser.GetUserAsync();
+            }
+            else
+            {
+
+                user = await _profileUser.GetUserForLogin(login);
+            }
+
+            var result = await _profileUser.GetProjectsUser(user.Id);
+
+            return PartialView("~/Views/Profile/Partials/ProjectsView.cshtml",result);
+        }
+       
+
+        public async Task<string> GetUserName() => (await _profileUser.GetUserAsync()).UserName;
        
     }
 }
