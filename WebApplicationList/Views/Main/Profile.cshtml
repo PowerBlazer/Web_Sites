@@ -116,7 +116,14 @@
                         }>
                         <button type="button" class="menu-profile-item" id="settingbutton"><i class="icon-setting"></i>Настройки</button>
                     </div>
-                    <div class="menu-profile-item_inner">
+                    <div @if(ViewBag.Page=="addproject")
+                        {
+                            @:class="menu-profile-item_inner active-profile-item"
+                        }
+                        else
+                        {
+                           @:class="menu-profile-item_inner"
+                        }>
                         <button type="button" class="menu-profile-item" id="add-project"><i class="icon-html-doc"></i>Добавить проект</button>
                     </div>
                 </div>
@@ -225,7 +232,13 @@
                         </ul>
                     </div>
 
-                    <div class="add-project-block-profile_inner" style="transform: translateX(-100%);">
+                    <div class="add-project-block-profile_inner" @if(ViewBag.Page=="addproject")
+                    {
+                        @:style="transform: translateX(0%); position:relative;opacity:1;"
+                    }
+                    else{
+                        @:style="transform:translateX(-100%);"
+                    }>
                         <div class="unput-project-zip-block">
                             <div class="stages-header-project">Шаг 1/3 - Загрузка архива</div>
                             <div class="stage_inner-result">
@@ -268,6 +281,10 @@
         @if(ViewBag.Page=="projects"||ViewBag.Page is null)
         {
             @:InitProject();
+        }
+        @if(ViewBag.Page=="addproject")
+        {
+            @:FirstStage();
         }
     </script>
 }

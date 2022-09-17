@@ -76,100 +76,62 @@ $(document).ready(function(){
         parent.addClass('active-profile-item');
     }
 
+    $("#add-project").on('click',FirstStage);
+
 });
-$(document).ready(function(){
 
-    const AddProjectPage = $("#add-project");
-    const HeaderStage = $(".stages-header-project");
-    const ResultBlock = $(".stage_inner-result");
-
-    AddProjectPage.on('click',FirstStage);
-
-    //Ajax
-    function FirstStage(){
-        if(ResultBlock.html()!==""){
-            $.ajax({
-                type:"GET",
-                url:"/UserProject/GetExplorerStart",
-                success: function(result){
-                    ResultBlock.html(result);
-                    HeaderStage.html("Шаг 1/3 - Загрузка архива");
-                    InitForm();
-                },
-                error:function(){
-                    ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
-                }
-            })
-        }
-    }
-    function SendZip(data){
-        StartAnimation();
+function FirstStage(){
+    if($(".stage_inner-result").html()!==""){
         $.ajax({
-            type:"POST",
-            contentType: false,
-            processData: false,
-            url:"/UserProject/GetExplorer",
-            data:data,
+            type:"GET",
+            url:"/UserProject/GetExplorerStart",
             success: function(result){
-               ResultBlock.html(result);
-               HeaderStage.html("Шаг 2/3 - Настройки проекта");
-               LoadExplorer();
-               StopAnimation(),
-               SuccessMessage("Успешно загружено");
+                $(".stage_inner-result").html(result);
+                $(".stages-header-project").html("Шаг 1/3 - Загрузка архива");
+                InitForm();
             },
             error:function(){
-                StopAnimation();
                 ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
             }
         })
     }
-
-    
-
-
-
-    //----  
-
-    
-
-    function ValidationZip(data,element){
-        var parts = element.name.split('.');
-        var size = element.size;
-
-        if(parts.length>1){
-            exts = parts.pop();
-        }
-        
-        if(exts==="zip"){
-            if(size<52428800){
-                SendZip(data);
-            }   
-            else{
-                ErrorMessage("Файл превышает допустимый размер");
-            } 
-        }
-        else{
-            ErrorMessage("Файл имеет не подходящий формат");
-        }
-    }
-
-    function InitForm(){
-        document.querySelector('#zipProjectVal').addEventListener('change',function (e) {
-            if(this.files.length>0){
-                if (window.FormData !== undefined){
-                    var data = new FormData();
-                    for (var x = 0; x < this.files.length; x++) {
-                        data.append("file" + x, this.files[x]);
-                    }
-                    ValidationZip(data,this.files[0]);
+}
+function InitForm(){
+    document.querySelector('#zipProjectVal').addEventListener('change',function (e) {
+        if(this.files.length>0){
+            if (window.FormData !== undefined){
+                var data = new FormData();
+                for (var x = 0; x < this.files.length; x++) {
+                    data.append("file" + x, this.files[x]);
                 }
-                else{
-                    ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
-                }
+                ValidationZip(data,this.files[0]);
             }
-        });
+            else{
+                ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
+            }
+        }
+    });
+}
+function ValidationZip(data,element){
+    var parts = element.name.split('.');
+    var size = element.size;
+
+    if(parts.length>1){
+        exts = parts.pop();
     }
-});
+    
+    if(exts==="zip"){
+        if(size<52428800){
+            SendZip(data);
+        }   
+        else{
+            ErrorMessage("Файл превышает допустимый размер");
+        } 
+    }
+    else{
+        ErrorMessage("Файл имеет не подходящий формат");
+    }
+}
 
 function SendUserAvatar(jsonObject){
     StartAnimation();
@@ -192,6 +154,27 @@ function SendUserAvatar(jsonObject){
             $(".error-message-download-image").html("Ошибка на сервере , попробуйте позже");
         }           
     });
+}
+function SendZip(data){
+    StartAnimation();
+    $.ajax({
+        type:"POST",
+        contentType: false,
+        processData: false,
+        url:"/UserProject/GetExplorer",
+        data:data,
+        success: function(result){
+           $(".stage_inner-result").html(result);
+           $(".stages-header-project").html("Шаг 2/3 - Настройки проекта");
+           LoadExplorer();
+           StopAnimation(),
+           SuccessMessage("Успешно загружено");
+        },
+        error:function(){
+            StopAnimation();
+            ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
+        }
+    })
 }
 
 function SendUserDescription(descriptionText){

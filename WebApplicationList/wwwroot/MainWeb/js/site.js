@@ -1,54 +1,122 @@
-﻿$(document).ready(function(){
-
-});
+﻿
 $(document).ready(function(){
+    const CloseModal = $(".close-button-modal-login");
+    const ModalPanel = $(".pop-up-authorized");
+    const RegisterPanel = $(".pop-up-register__inner");
+    const LoginPanel = $(".pop-up-login__inner");
 
-    const OpenModalBut = $(".login-user");
-    const CloseModalBut = $(".close-button-modal-login");
-    const ModalObj = $(".pop-up-authorized");
-    const ModalRegister = $(".pop-up-register__inner");
+    const LoginButton = $(".sign-in");
+    const RegisterButton = $(".register");
+
+    const OverLoginButton = $("#register-modal");
+    const OverRegisterButton = $("#login-modal");
     
-    OpenModalBut.on('click',OpenModalLogin);
-    CloseModalBut.on('click',CloseModalLogin);
-
-    $("#login-modal").on('click',OpenRegsiterModal);
-    $(".close-button-modal-register").on('click',CloseModalLogin);
-    $("#register-modal").on('click',CloseRegisterModal);
-
+    const MenuUserPanel = $(".main-avatar-menu_inner");
+    const MenuUser = $(".avatar-menu");
+    const MenuUserAvatarLink = $(".user-avatar");
     
+    CloseModal.click(function(){
+        CloseLoginPanel();
+        CloseRegisterPanel();
+        CloseModalAuthorized();
+    });
 
-    function OpenModalLogin(){
-        ModalObj.css({
+    LoginButton.click(function(){
+        CloseRegisterPanel();
+        OpeModalAuthorized();
+        OpenLoginPanel();
+    });
+
+    RegisterButton.click(function(){
+        CloseLoginPanel();
+        OpeModalAuthorized();
+        OpenRegisterPanel();
+    });
+
+    OverLoginButton.click(function(){
+        CloseRegisterPanel();
+        OpenLoginPanel();
+    })
+
+    OverRegisterButton.click(function(){
+        CloseLoginPanel();
+        OpenRegisterPanel();
+    })
+
+    function OpeModalAuthorized(){
+        ModalPanel.css({
+            "visibility":"visible",
+            "opacity":"1",
+        })
+    }
+
+    function CloseModalAuthorized(){
+        ModalPanel.css({
+            "visibility":"",
+            "opacity":"",
+        })
+    }
+
+    function OpenLoginPanel(){
+        LoginPanel.css({
+            "visibility":"visible",
+            "opacity":"1",
+        })
+    }
+
+    function CloseLoginPanel(){
+        LoginPanel.css({
+            "visibility":"",
+            "opacity":"",
+        }) 
+    }
+
+    function OpenRegisterPanel(){
+        RegisterPanel.css({
+            "visibility":"visible",
+            "opacity":"1",
+        })
+    }
+
+    function CloseRegisterPanel(){
+        RegisterPanel.css({
+            "visibility":"",
+            "opacity":"",
+        })
+    }
+
+    MenuUserAvatarLink.hover(function(){
+        MenuUserPanel.css({
             "visibility":"visible",
             "opacity":"1",
         });
-        $("body").css("overflow","hidden");
-    }
-
-  
-
-    function CloseModalLogin(){
-        ModalObj.css({
-            "visibility":"hidden",
-            "opacity":"0",
+        $(".header_inner").hover(function(){
+            MenuUserPanel.css({
+                "visibility":"visible",
+                "opacity":"1",
+            });
+        },);
+    },function(){
+        MenuUserPanel.css({
+            "visibility":"",
+            "opacity":"",
         });
-        $("body").css("overflow","");
-        CloseRegisterModal();
-    }
+    });
 
-    function OpenRegsiterModal(){
-        ModalRegister.css({
-            "transform":"",
+    MenuUser.hover(function(){
+        MenuUserPanel.css({
             "visibility":"visible",
-        })
-    }
-
-    function CloseRegisterModal(){
-        ModalRegister.css({
-            "transform":"translate(200%,-50%)",
-            "visibility":"hidden",
-        })
-    }
+            "opacity":"1",
+        });
+    },function(){
+        MenuUserPanel.css({
+            "visibility":"",
+            "opacity":"",
+        });
+        
+    });
+    
+    
 
 
 });

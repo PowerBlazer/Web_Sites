@@ -15,7 +15,38 @@
     </head>
     <body>
         <header>
-            
+            <div class="container">
+                <div class="header_inner">
+                    <ul class="menu-navigation">
+                        <li class="menu-item">
+                            <a href="#" class="logotype">WebSites</a>
+                        </li>
+                    </ul>
+                    @if(User.Identity!.IsAuthenticated)
+                    {
+                        <ul class="header-profile-navigation-panel">
+                            <li class="nav-item">
+                                <a class="user-add-project" href="~/Profile?Page=addproject">Добавить проект</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="user-avatar" href="~/Profile">
+                                    <img src="" id="user-avatar" width="25" height="25" alt="avatar">
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                    else{
+                    <ul class="sign-navigation">
+                        <li class="sign-navigantion-item">
+                            <button class="sign-in">Войти</button>
+                        </li>
+                        <li class="sign-navigantion-item">
+                            <button class="register">Регистрация</button>
+                        </li>
+                    </ul>
+                    }
+                </div>
+            </div>
         </header>
         <div class="content-gener">      
             @RenderBody()
@@ -23,59 +54,59 @@
 
         @*-----ModalWindow----*@
         <div class="pop-up-authorized" style="visibility:hidden;opacity:0;">
-            <div class="pop-up-login__inner">
+            <div class="pop-up-login__inner" style="visibility: hidden;opacity:0;">
                 <button type="button" class="close-button-modal-login"><i class="ic-close-ic"></i></button>
-                <div class="login-label">Account Login</div>
+                <div class="login-label">Войти в аккаунт</div>
                 <div class="form-post">
                     <div class="form-post-item">
-                        <label>Username</label>
+                        <label>Логин</label>
                         <input type="text" class="input-text" id="login"/>
                     </div>
                     <div class="form-post-item">
-                        <label>Password</label>
+                        <label>Пароль</label>
                         <input type="password" class="input-text" id="password"/>
                     </div>
                     <div class="form-post-item remember"> 
                         <div>
                             <input type="checkbox"id="remember" class="input-checkbox"/>
-                            <label>Remember me</label>
+                            <label>Запомнить меня</label>
                         </div> 
-                        <button type="button" class="transition-registr" id="login-modal">Not registered yet?</button>
+                        <button type="button" class="transition-registr" id="login-modal">Не зарегестрированы?</button>
                     </div>
                     <div class="errors-message_inner" id="login-error">
 
                     </div>                 
                 </div>
-                <button type="button" class="post-data-login">Login</button>
+                <button type="button" class="post-data-login">Войти</button>
             </div>
-            <div class="pop-up-register__inner" style="visibility: hidden; transform: translate(200%, -50%);">
-                <button type="button" class="close-button-modal-register"><i class="ic-close-ic"></i></button>
-                <div class="login-label">Account Register</div>
+            <div class="pop-up-register__inner" style="visibility: hidden;opacity:0;">
+                <button type="button" class="close-button-modal-login"><i class="ic-close-ic"></i></button>
+                <div class="login-label">Регистрация</div>
                 <div class="form-post" id="form-register">
                     <div class="form-post-item">
-                        <label>Username</label>
+                        <label>Логин</label>
                         <input type="text" name="login" class="input-text" id="login-reg"/>
                     </div>
                     <div class="form-post-item">
-                        <label>Email</label>
+                        <label>Почта</label>
                         <input type="text" name="email" class="input-text" id="email"/>
                     </div>
                     <div class="form-post-item">
-                        <label>Password</label>
+                        <label>Пароль</label>
                         <input type="password" name="password" class="input-text" id="password-reg"/>
                     </div>
                     <div class="form-post-item remember-reg">
                         <div>
                             <input type="checkbox" id="remember-reg" name="rememberme" class="input-checkbox"/>
-                            <label>Remember me</label>
+                            <label>Запомнить меня</label>
                         </div>
-                        <button type="button" class="transition-registr" id="register-modal">Already have an account?</button>
+                        <button type="button" class="transition-registr" id="register-modal">Уже есть аккаунт?</button>
                     </div> 
                     <div class="errors-message_inner" id="register-errors">
 
                     </div>             
                 </div>
-                <button type="button" class="post-data-register">Sign Up</button>
+                <button type="button" class="post-data-register">Зарегестрироваться</button>
             </div>
         </div>
         <div class="pop-up-load-anim_inner">
@@ -83,11 +114,20 @@
                 <img src="~/MainWeb/Images/spinner.gif" id="load-animation-authorize">
             </div>
         </div>
-        
         <div class="notification-window">
             <img src="~/MainWeb/Images/success.svg" id="notification-image" alt="img" width="30" height="30">
             <div class="message-notification"></div>
         </div>
+        @if(User.Identity.IsAuthenticated)
+        {
+        <div class="main-avatar-menu_inner">
+            <div class="avatar-menu_container">
+                <div class="avatar-menu">
+                    123
+                </div>
+            </div>
+        </div>
+        }
         @*--------------------*@
 
         <footer>
@@ -101,7 +141,7 @@
         <script src="~/MainWeb/js/site.js" type="application/javascript" asp-append-version="true"></script>       
         <script src="~/MainWeb/js/AuthorizeScript.js" type="application/javascript" asp-append-version="true"></script>
         <script>
-            @if(User.Identity.IsAuthenticated){
+            @if(User.Identity!.IsAuthenticated){
                 @:CheckAuthorize();
                 @:GetAvatar();
             }

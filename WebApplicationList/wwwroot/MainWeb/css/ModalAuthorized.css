@@ -29,7 +29,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 35px;
-    transition: all 1s; 
+    transition: all .5s; 
     
 }
 .login-label{
@@ -142,7 +142,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 20px;  
-    transition: all 1s;
+    transition: all .5s;
     visibility: hidden;
     
 }

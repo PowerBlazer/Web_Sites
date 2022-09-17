@@ -143,11 +143,11 @@ function GetAvatar(){
         url:"/Account/GetAvatar",
         success: function(result){
             if(result!==""){
-                $("#profile-image").attr("src","/"+result);
-                $("#profile-image-list").attr("src","/"+result);
+                $("#user-avatar").attr("src","/"+result);
+                //$("#profile-image-list").attr("src","/"+result);
             }
             else{
-                $("#profile-image").attr("src","/UserIcons/defaultAvatar.jpg");
+               $("#profile-image").attr("src","/UserIcons/defaultAvatar.jpg");
             }
         },
     })

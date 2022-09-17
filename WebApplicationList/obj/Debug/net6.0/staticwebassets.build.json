@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "JLt/lUf0hvzVUjT0xaAs0G7L0VwR8/O8O6AeGaGTFUA=",
+  "Hash": "zlhLoPTu/w4Suknviaxv0GH9F+K5OY1+8h0QyJ3ZQDs=",
   "Source": "WebApplicationList",
   "BasePath": "_content/WebApplicationList",
   "Mode": "Default",
@@ -3228,6 +3228,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\UserProjects\\PowerBlaze\\Relvise\\js\\site.js"
+    },
+    {
+      "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\UserProjects\\PowerBlaze\\temporary\\NPE_free.exe",
+      "SourceId": "WebApplicationList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\",
+      "BasePath": "_content/WebApplicationList",
+      "RelativePath": "UserProjects/PowerBlaze/temporary/NPE_free.exe",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\UserProjects\\PowerBlaze\\temporary\\NPE_free.exe"
     },
     {
       "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\UserProjectsImage\\FurniShop.jpg",
