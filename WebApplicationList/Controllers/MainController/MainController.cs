@@ -1,20 +1,49 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApplicationList.ApplicationDataBase;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
+using Newtonsoft.Json;
+using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Services;
 
 namespace WebApplicationList.Controllers.MainController
 {
     public class MainController : Controller
     {
-        
-        public MainController()
+        private readonly ISearch _searchService;
+        public MainController(ISearch searchService)
         {
-            
+            _searchService = searchService;
         }
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ViewBag.Types = await _searchService.GetTypesProject();
+
+            return View(await _searchService.GetProjects());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchProjects(string searchOptionsJson)
+        {
+            if(string.IsNullOrEmpty(searchOptionsJson))
+            {
+                return base.Content("Пустое значение");
+            }
+
+            try
+            {
+                var options = JsonConvert.DeserializeObject<SearchOptions>(searchOptionsJson);
+
+                if(options is null)
+                {
+                  return StatusCode(404);
+                }
+
+                return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", await _searchService.GetProjectsApplyFilters(options)); 
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
     }
 }

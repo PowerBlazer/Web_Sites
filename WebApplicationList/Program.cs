@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 string? connection = builder.Configuration.GetConnectionString("LocalConnection");
 
-
 builder.Services.AddDbContext<ApplicationDb>(options => options.UseSqlServer(connection!,sqlServerOptionsAction:sqlServerOptions=>
 {
     sqlServerOptions.EnableRetryOnFailure(
@@ -36,8 +35,9 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.AddScoped<IAuthorization, Authorization>()
     .AddScoped<IProfileUser, ProfileUser>()
-    .AddScoped<IProjectSetting,ProjectSetting>();
-
+    .AddScoped<IProjectSetting, ProjectSetting>()
+    .AddTransient<ISearch, SearchRepository>();
+    
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
@@ -65,12 +65,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
-
-    
-        // other configurations
-   
-
-
 
 app.MapControllerRoute(
     name: "default",

@@ -13,7 +13,7 @@ namespace WebApplicationList.ApplicationDataBase
         public DbSet<SubscribesProfile>? subscribesProfile { get; set; }
         public DbSet<LikesProfile>? likesProfiles { get; set; }
         public DbSet<FavoritesProject>? favoritesProjects { get; set; }
-        public DbSet<LinkType> linksType { get; set; }
+        public DbSet<LinkType>? linksType { get; set; }
         public DbSet<LinksProfile>? linksProfile { get; set; }
 
         public ApplicationDb(DbContextOptions<ApplicationDb> options) : base(options)

@@ -1,68 +1,70 @@
 $(document).ready(function(){
-    
     $(".post-data-register").on('click',RegisterGetData);
     $(".post-data-login").on('click',LoginGetData);
-    $("#logout-but").on('click',function(){
+    $("#logout").on('click',function(){
         LogoutUser();
-    });
+    });   
+})
 
-    function RegisterGetData(){
+function LoginGetData(){
 
-        const Login = $("#login-reg");
+    const Login = $("#login");
 
-        const Email = $("#email");
+    const Password = $("#password");
 
-        const Password = $("#password-reg");
+    const RememberMe = $("#remember");
 
-        const RememberMe = $("#remember-reg");
+    var rememberVal;
 
-        var rememberVal;
+    if(RememberMe.is(':checked')){
+        rememberVal = true;
+    }
+    else{
+        rememberVal=false;
+    }
 
-        if(RememberMe.is(':checked')){
-            rememberVal = true;
-        }
-        else{
-            rememberVal=false;
-        }
+    
+        var stringJson = JSON.stringify({
+            Login:Login.val(),
+            Password:Password.val(),
+            RememberMe:rememberVal,
+        });
+    
+        LoginAuthorize(stringJson);
+    
+}
 
+
+function RegisterGetData(){
+
+    const Login = $("#login-reg");
+
+    const Email = $("#email");
+
+    const Password = $("#password-reg");
+
+    const RememberMe = $("#remember-reg");
+
+    var rememberVal;
+
+    if(RememberMe.is(':checked')){
+        rememberVal = true;
+    }
+    else{
+        rememberVal=false;
+    }
+
+    
         var stringJson =  JSON.stringify({
             Login:Login.val(),
             Email:Email.val(),
             Password:Password.val(),
             RememberMe:rememberVal,
         });
-
-        registerAuthorize(stringJson);
-    }
-
-    function LoginGetData(){
-
-        const Login = $("#login");
-
-        const Password = $("#password");
-
-        const RememberMe = $("#remember");
-
-        var rememberVal;
-
-        if(RememberMe.is(':checked')){
-            rememberVal = true;
-        }
-        else{
-            rememberVal=false;
-        }
-
-        var stringJson = JSON.stringify({
-            Login:Login.val(),
-            Password:Password.val(),
-            RememberMe:rememberVal,
-        });
-
-        LoginAuthorize(stringJson);
-    }
-
     
-})
+        registerAuthorize(stringJson);
+    
+}
 
 function LogoutUser(){
     StartAnimation();
@@ -137,18 +139,16 @@ function registerAuthorize(jsonstring){
     
 }
 
-function GetAvatar(){
+function GetUserInfo(){
     $.ajax({
         type:"POST",
-        url:"/Account/GetAvatar",
+        url:"/Profile/GetUserInfo",
         success: function(result){
-            if(result!==""){
-                $("#user-avatar").attr("src","/"+result);
-                //$("#profile-image-list").attr("src","/"+result);
-            }
-            else{
-               $("#profile-image").attr("src","/UserIcons/defaultAvatar.jpg");
-            }
+            $(".user-avatar_img").attr("src","/"+result.linkAvatar);
+            $("#set-email").html(result.email);
+        },
+        error:function(){
+            
         },
     })
 }

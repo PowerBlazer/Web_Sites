@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset='utf-8'>
@@ -19,8 +20,11 @@
                 <div class="header_inner">
                     <ul class="menu-navigation">
                         <li class="menu-item">
-                            <a href="#" class="logotype">WebSites</a>
+                            <a href="~/Main" class="logotype">WebSites</a>
                         </li>
+                        <li class="menu-nav-item active">
+                            <a href="~/Main">Главная</a>
+                        </li> 
                     </ul>
                     @if(User.Identity!.IsAuthenticated)
                     {
@@ -29,16 +33,19 @@
                                 <a class="user-add-project" href="~/Profile?Page=addproject">Добавить проект</a>
                             </li>
                             <li class="nav-item">
-                                <a class="user-avatar" href="~/Profile">
-                                    <img src="" id="user-avatar" width="25" height="25" alt="avatar">
-                                </a>
+                                <img src="~/MainWeb/Images/message.svg" width="22">
+                            </li>
+                            <li class="nav-item">
+                                <button class="user-avatar" href="#">
+                                    <img src="" class="user-avatar_img" width="25" height="25" alt="avatar">
+                                </button>
                             </li>
                         </ul>
                     }
                     else{
                     <ul class="sign-navigation">
                         <li class="sign-navigantion-item">
-                            <button class="sign-in">Войти</button>
+                            <button class="sign-in">Вход</button>
                         </li>
                         <li class="sign-navigantion-item">
                             <button class="register">Регистрация</button>
@@ -48,9 +55,9 @@
                 </div>
             </div>
         </header>
-        <div class="content-gener">      
+        <main class="content-gener">      
             @RenderBody()
-        </div>
+        </main>
 
         @*-----ModalWindow----*@
         <div class="pop-up-authorized" style="visibility:hidden;opacity:0;">
@@ -123,7 +130,31 @@
         <div class="main-avatar-menu_inner">
             <div class="avatar-menu_container">
                 <div class="avatar-menu">
-                    123
+                    <ul class="avatar-menu-items">
+                        <li>
+                            <a href="~/Profile">
+                                <img src="" class="user-avatar_img" alt="avatar" width="50" height="50">
+                            </a> 
+                            <div>@User.Identity.Name</div>
+                            <span id="set-email"></span>
+                        </li>
+                        <li>
+                            <ul class="menu-avatar-navigation">
+                                <li>
+                                    <a href="~/Profile">Профиль</a>
+                                </li>
+                                <li>
+                                    <a href="~/Profile?Page=settings">Настройки</a>
+                                </li>
+                                <li>
+                                    <a href="#">Справка</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <button id="logout">Выйти</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -142,8 +173,9 @@
         <script src="~/MainWeb/js/AuthorizeScript.js" type="application/javascript" asp-append-version="true"></script>
         <script>
             @if(User.Identity!.IsAuthenticated){
+                @:InitAuthorizeScript();
                 @:CheckAuthorize();
-                @:GetAvatar();
+                @:GetUserInfo();
             }
         </script>
         @await RenderSectionAsync("Scripts", required: false)

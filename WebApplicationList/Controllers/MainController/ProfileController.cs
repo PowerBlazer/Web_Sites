@@ -24,7 +24,7 @@ namespace WebApplicationList.Controllers.MainController
         public async Task<IActionResult> ProfilePage(string page)
         {
             var user = await _profileUser.GetUserAsync();
-
+       
             var userInfo = await _profileUser.GetUserViewModelAsync(user);
 
             if (userInfo == null)
@@ -92,7 +92,23 @@ namespace WebApplicationList.Controllers.MainController
 
             return false;
         }
+        [HttpPost]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var user = await _profileUser.GetUserAsync();
 
+            if(user is null)
+            {
+                return StatusCode(404);
+            }
+
+            return Ok(new UserViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                LinkAvatar = user.LinkAvatar
+            });
+        }
 
 
 

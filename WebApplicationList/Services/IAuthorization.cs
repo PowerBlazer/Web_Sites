@@ -10,7 +10,6 @@ namespace WebApplicationList.Services
         Task<ViewAuthorizationModel> LoginAsync(LoginModel loginModel);
         Task<bool> CheckCookie(string name); 
         Task<bool> Logout();
-        Task<string> GetUserAvatar(string username);
         Task<ViewAuthorizationModel> ChangePassword(PasswordViewModel passwordViewModel,User? user);
 
     }

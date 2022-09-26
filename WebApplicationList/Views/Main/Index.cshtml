@@ -1,13 +1,111 @@
-﻿
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels
+@model IEnumerable<ProjectViewModel>
 @{
     ViewData["Title"] = "Главная";
 }
 
 @section link{
-    <link rel="stylesheet" href="~/MainWeb/css/mainpage.css">
+    <link rel="stylesheet" href="~/MainWeb/css/MainPage/mainStyle.css">
+    <link rel="stylesheet" href="~/MainWeb/icons-2/style.css">
 }
 
-
+<section>
+    <div class="container">
+        <div class="search-panel_inner">
+            <div class="search-input-panel">
+                <img src="~/MainWeb/Images/lupa.svg" height="25" width="25">
+                <input type="text" placeholder="Поиск по сайту" id="search-input">
+            </div>
+            <ul class="search-filter-panel">
+                <li class="search-filter-item">
+                    <button class="filter-button active">Сайты</button>
+                </li>
+                <li class="search-filter-item">
+                    <button class="filter-button">Люди</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+<section class="search-panel">
+    <div class="container">
+        <div class="sorting-panel">
+            <ul class="list-down-filters-panel">
+                <li>
+                    <button value="" class="list-down-filters-button">
+                        <img src="~/MainWeb/Images/types.svg" width="20" height="20">
+                        <span class="span">Типы сайтов</span>
+                        <span class="select"></span>
+                        <div></div>
+                    </button>
+                    <ul class="list-down-filters-block disabled-listdown">
+                        <span>По алфавиту</span>
+                        <li>
+                            <button>Все</button>
+                        </li>
+                        @if(ViewBag.Types is not null)  
+                        {
+                            @foreach(var item in ViewBag.Types)
+                            {
+                            <li>
+                                <button>@item</button>
+                            </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            </ul>
+            <div class="list-down-sorting-panel">
+                <button class="sorting-button">
+                    <span>Сортировать</span>
+                    <div class="sorting-button_inner">
+                        <div value="name">По именам</div>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="listdown-block disabled-listdown">
+                    <button value="popular" class="sort-listdowb-button">Самые популярные</button>
+                    <button value="viewed" class="sort-listdowb-button">Самые просматриваемые</button>
+                    <button value="date" class="sort-listdowb-button">По дате добавления</button>
+                    <button value="name" class="sort-listdowb-button">По именам</button>
+                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="projects-blocks_inner">
+            @foreach(var item in Model)
+            {
+                <div class="project-block">
+                    <button value="@item.project!.Id" class="project-image">
+                        <div>
+                            <a href="~/UserProject/@(item.project.Url)">@item.project.Name</a>
+                        </div>
+                        <img src="~/@(item.project!.UrlImage)" width="200">
+                    </button>
+                    <div class="project-info">
+                        <div class="project-name-user">
+                            <img src="~/@(item.user!.LinkAvatar)" width="25" height="25">
+                            <a href="#">@item.user!.UserName</a>
+                        </div>
+                        <ul>
+                            <li>
+                                <img src="~/MainWeb/Images/scan.svg" width="25" height="25" alt="eye">
+                                <span>@item.likes</span>
+                            </li>
+                            <li>
+                                <i class="icon-heart"></i>
+                                <span>@item.likes</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
 
 
 
@@ -17,6 +115,6 @@
 
 
 @section Scripts{
-
+    <script src="~/MainWeb/js/MainPage/mainpageScript.js" asp-append-version="true"></script>
 }
 

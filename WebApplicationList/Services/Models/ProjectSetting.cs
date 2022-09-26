@@ -1,11 +1,9 @@
 ﻿using WebApplicationList.ApplicationDataBase;
 using Microsoft.EntityFrameworkCore;
-using Ionic.Zip;
 using System.Text;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
 using WebApplicationList.Models.MainSiteModels.ProjectFormat;
 using WebApplicationList.Models;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
 using System.IO.Compression;
 
 namespace WebApplicationList.Services.Models
@@ -63,17 +61,13 @@ namespace WebApplicationList.Services.Models
                 return null;
             }
 
-            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects",$"{userName}");
-
-            Directory.CreateDirectory(filePath);
-
-            string NameFolder = "temporary";
-            string projectPath = filePath + $"\\{NameFolder}";
+            string projectPath = Path.Combine(_webHostEnvironment.WebRootPath,"UserProjects",$"{userName}","temporary");
 
             if(Directory.Exists(projectPath))
             {
                 Directory.Delete(projectPath, true);
             }
+
             Directory.CreateDirectory(projectPath);
                       
             //Распаковка файлов      
@@ -82,7 +76,6 @@ namespace WebApplicationList.Services.Models
                 zipFile.ExtractToDirectory(projectPath);
             }
             
-
             if(IsDirectoryEmpty(projectPath))
             {
                 return null;
@@ -92,7 +85,7 @@ namespace WebApplicationList.Services.Models
             {
                 Files = await GetFilesAsync(Directory.EnumerateFiles(projectPath)),
                 Folders = await GetFilesAsync(Directory.EnumerateDirectories(projectPath)),
-                ProjectName = NameFolder,   
+                ProjectName = "temporary",   
                 CurrentPath = projectPath,
             };
 
@@ -165,7 +158,7 @@ namespace WebApplicationList.Services.Models
         {
             string pathProject = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects",username,"temporary");
 
-            var projectHtmlDocs = Directory.GetFileSystemEntries(pathProject!, "*.html").ToList();
+            var projectHtmlDocs = Directory.GetFiles(pathProject!, "*.html").ToList();
 
             List<FileItem> fileItems = new List<FileItem>();
             for(int i = 0; i < projectHtmlDocs.Count(); i++)
@@ -225,11 +218,9 @@ namespace WebApplicationList.Services.Models
             };
 
             List<string> changesLines = new List<string>();
-
             foreach(var item in formatTypes)
             {
                var result = item.FormattingFile(fileLines!,pattern,patternRepeat,userName);
-
                fileLines = result.Result;
                changesLines = changesLines.Concat(result.Changes!).ToList();
             }
@@ -247,7 +238,6 @@ namespace WebApplicationList.Services.Models
                  return false;
             }
          
-
             if (!CheckFormatImage(projectSettings.ImageByte!))
             {
                  return false;
@@ -261,13 +251,10 @@ namespace WebApplicationList.Services.Models
                  return false;
             }
 
-            
-
             string projectPath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", $"{user.UserName}", "temporary");
             string newProjectPath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", $"{user.UserName}", $"{projectSettings.Name}");
 
             var files = Directory.GetFiles(projectPath, "*.html").ToList();
-
             int checkCount = files.Where(p => p.Contains(projectSettings.SelectedPage)).Count();
 
             if(checkCount==0)
@@ -303,9 +290,6 @@ namespace WebApplicationList.Services.Models
             });
 
             await _applicationDb.SaveChangesAsync();
-
-
-
 
             return true;
         }

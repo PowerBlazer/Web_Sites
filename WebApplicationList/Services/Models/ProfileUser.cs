@@ -28,7 +28,7 @@ namespace WebApplicationList.Services.Models
         {
             return await _userManager.FindByNameAsync(GetUserName());
         }
-        public async Task<ProfileUserInfo> GetUserInfoAsync(string? id)
+        public async Task<ProfileUserInfo> GetUserProfileInfoAsync(string? id)
         {
             return await _applicationDB.profileUserInfo!.Where(p => p.UserId == id).FirstOrDefaultAsync();
         }
@@ -62,24 +62,6 @@ namespace WebApplicationList.Services.Models
             var user = await _applicationDB.Users.Where(p => p.UserName == userName).FirstOrDefaultAsync();
             _applicationDB.Attach(user!);
             user!.LinkAvatar = $"UserIcons/{userName}.jpg";
-
-            await _applicationDB.SaveChangesAsync();
-
-            return true;
-        }
-        public async Task<bool> ChangeDescriptionAsync(string Description)
-        {
-            var user = await GetUserAsync();
-            if (user == null)
-                return false;
-
-            var userInfo = await _applicationDB.profileUserInfo!.Where(p => p.UserId == user!.Id).FirstOrDefaultAsync();
-            if (userInfo == null)
-                return false;
-
-            _applicationDB.Attach(userInfo!);
-
-            userInfo.Description = Description;
 
             await _applicationDB.SaveChangesAsync();
 
@@ -119,12 +101,12 @@ namespace WebApplicationList.Services.Models
             ProfileUserViewModel profileUserView = new()
             {
                 user = user,
-                userInfo = await GetUserInfoAsync(user.Id),
+                userInfo = await GetUserProfileInfoAsync(user.Id),
                 NumberSubscriber = await GetNumberSubdcribes(user.Id),
                 NumberLikes = await GetNumberLikes(user.Id),
                 favoritesProjects = await GetFavoritesProject(user.Id),
                 NumberProjects = (await GetProjectsUser(user.Id)).Count(),
-                linkTypes = await _applicationDB.linksType.ToListAsync(),
+                linkTypes = await _applicationDB.linksType!.ToListAsync(),
                 linksProfile = await GetLinksUser(user.Id),
             };
 
@@ -170,7 +152,7 @@ namespace WebApplicationList.Services.Models
         }
         public async Task<bool> BindLinkInUser(string url,int id)
         {
-            var linkType = await _applicationDB.linksType.Where(p => p.Id == id).FirstOrDefaultAsync();
+            var linkType = await _applicationDB.linksType!.Where(p => p.Id == id).FirstOrDefaultAsync();
 
             if (linkType is null)
             {
@@ -222,5 +204,7 @@ namespace WebApplicationList.Services.Models
         {
             return await _applicationDB.linksProfile!.Include(p => p.LinkType).Where(p => p.User_Id == userId).ToListAsync();
         }
+
+       
     }
 }

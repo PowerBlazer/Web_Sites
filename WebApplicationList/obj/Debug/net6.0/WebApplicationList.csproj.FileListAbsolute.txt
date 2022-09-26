@@ -172,3 +172,8 @@ D:\GitHubProjects\Web_Sites\WebApplicationList\obj\Debug\net6.0\refint\WebApplic
 D:\GitHubProjects\Web_Sites\WebApplicationList\obj\Debug\net6.0\WebApplicationList.pdb
 D:\GitHubProjects\Web_Sites\WebApplicationList\obj\Debug\net6.0\WebApplicationList.genruntimeconfig.cache
 D:\GitHubProjects\Web_Sites\WebApplicationList\obj\Debug\net6.0\ref\WebApplicationList.dll
+D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\web.config
+D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsettings.Development.json
+D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsettings.json
+D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.deps.json
+D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.runtimeconfig.json

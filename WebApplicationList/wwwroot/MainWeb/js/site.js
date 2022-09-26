@@ -11,10 +11,6 @@ $(document).ready(function(){
     const OverLoginButton = $("#register-modal");
     const OverRegisterButton = $("#login-modal");
     
-    const MenuUserPanel = $(".main-avatar-menu_inner");
-    const MenuUser = $(".avatar-menu");
-    const MenuUserAvatarLink = $(".user-avatar");
-    
     CloseModal.click(function(){
         CloseLoginPanel();
         CloseRegisterPanel();
@@ -66,7 +62,7 @@ $(document).ready(function(){
 
     function CloseLoginPanel(){
         LoginPanel.css({
-            "visibility":"",
+            "visibility":"hidden",
             "opacity":"",
         }) 
     }
@@ -80,46 +76,65 @@ $(document).ready(function(){
 
     function CloseRegisterPanel(){
         RegisterPanel.css({
-            "visibility":"",
+            "visibility":"hidden",
             "opacity":"",
         })
     }
 
-    MenuUserAvatarLink.hover(function(){
-        MenuUserPanel.css({
-            "visibility":"visible",
-            "opacity":"1",
-        });
-        $(".header_inner").hover(function(){
-            MenuUserPanel.css({
-                "visibility":"visible",
-                "opacity":"1",
-            });
-        },);
-    },function(){
-        MenuUserPanel.css({
-            "visibility":"",
-            "opacity":"",
-        });
+    $(document).keydown(function(e){
+        if(e.keyCode==27){
+            CloseModalAuthorized();
+            CloseLoginPanel();
+            CloseRegisterPanel();
+            RemoveFocusElements([LoginButton,RegisterButton]);
+        }
     });
 
-    MenuUser.hover(function(){
-        MenuUserPanel.css({
-            "visibility":"visible",
-            "opacity":"1",
-        });
-    },function(){
-        MenuUserPanel.css({
-            "visibility":"",
-            "opacity":"",
-        });
+    $(document).keydown(function(e){
+        if(e.keyCode==13&&CheckOpenBlock(RegisterPanel)){
+            RegisterGetData();
+        }
         
+        if(e.keyCode==13&&CheckOpenBlock(LoginPanel)){
+            LoginGetData();
+        }
     });
-    
-    
-
 
 });
+
+function CheckOpenBlock(element){
+    let blockStyle = element.css("visibility");
+    if(blockStyle == "visible"){
+        return true;
+    }
+    else{
+        return false;
+    }
+    
+}
+function RemoveFocusElements(massiv){
+    for(let i=0;i<massiv.length;i++){
+        massiv[i].blur();
+    }
+}
+
+function InitAuthorizeScript(){
+    const MenuUserPanel = $(".main-avatar-menu_inner");
+    const MenuUser = $(".avatar-menu");
+    const MenuUserAvatarLink = $(".user-avatar");
+
+    MenuUserAvatarLink.click(function(){
+        MenuUserPanel.toggleClass("active-menu");
+    });
+
+    $(document).mouseup(function(e){
+        if ( !MenuUser.is(e.target)
+            && MenuUser.has(e.target).length === 0&&
+        !MenuUserAvatarLink.is(e.target)&&MenuUserAvatarLink.has(e.target).length===0 ) {
+            MenuUserPanel.removeClass("active-menu");
+        }
+    });
+}
 
 function StartAnimation(){
     $('.pop-up-load-anim_inner').css({

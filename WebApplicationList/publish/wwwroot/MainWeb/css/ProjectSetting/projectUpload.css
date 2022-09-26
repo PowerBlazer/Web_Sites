@@ -1,0 +1,111 @@
+
+.first-stage_inner-items{
+    padding: 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.first-stage_first_stage{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    color:var(--main-text-color);
+}
+
+.number-stage_inner{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 700px;
+}
+
+.number-stage{
+   display: flex;
+   align-items: center;
+   gap: 30px;
+}
+.number-item{
+    position: relative;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    background-color:var(--button-color);
+}
+
+.stage-info_inner{
+    display: flex;
+    padding: 0 60px;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.stage-info-header{
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.gif-tutrial-block{
+    padding: 20px 0;
+}
+.upload-zip-style{
+    padding: 10px 25px;
+    background-color: var(--button-color);
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: all .3s;
+    color: white;
+}
+.upload-zip-style i{
+    font-size: 20px;
+    color: white;
+}
+.upload-zip-style:hover{
+    transform: scale(1.05);
+    box-shadow: 3px 3px 30px 1px rgba(70, 113, 223, 0.8);
+}
+.input-zip-project{
+    display: none;
+}
+.stages-header-project{
+    color:var(--main-text-color);
+    letter-spacing:2px;
+    font-size: 27px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--button-color);
+}
+
+
+@media(max-width:1000px){
+    .gif-tutrial-block img{
+        width: 400px;
+    }
+}
+@media(max-width:500px){
+    .stage-info_inner{
+        padding: 10px 0 ;
+    }
+    .stages-header-project{
+        font-size: 24px;
+    }
+}
+@media(max-width:440px){
+    .gif-tutrial-block img{
+        width: 300px;
+    }
+}
+@media(max-width:405px){
+    .stages-header-project{
+        font-size: 22px;
+    }
+}

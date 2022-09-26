@@ -1,0 +1,29 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels
+@model IEnumerable<ProjectViewModel>
+@foreach (var item in Model)
+{
+    <div class="project-block">
+        <button value="@item.project!.Id" class="project-image">
+            <div>
+                <a href="~/UserProject/@(item.project.Url)">@item.project.Name</a>
+            </div>
+            <img src="~/@(item.project!.UrlImage)" width="200">
+        </button>
+        <div class="project-info">
+            <div class="project-name-user">
+                <img src="~/@(item.user!.LinkAvatar)" width="25" height="25">
+                <a href="#">@item.user!.UserName</a>
+            </div>
+            <ul>
+                <li>
+                    <img src="~/MainWeb/Images/scan.svg" width="25" height="25" alt="eye">
+                    <span>@item.likes</span>
+                </li>
+                <li>
+                    <i class="icon-heart"></i>
+                    <span>@item.likes</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+}

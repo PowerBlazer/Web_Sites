@@ -76,25 +76,7 @@ namespace WebApplicationList.Services.Models
         }
 
 
-        public async Task<string> GetUserAvatar(string username)
-        {
-            string? ImageLink = "";
-
-            if (!string.IsNullOrWhiteSpace(username))
-            {
-               var user = await _applicationDB.Users.Where(p => p.UserName == username).FirstOrDefaultAsync();
-
-               if(user is null)
-               {
-                    return string.Empty;
-               }
-
-               ImageLink = user.LinkAvatar;
-            }
-
-            return ImageLink;
-                
-        }
+       
 
         async public Task<bool> Logout()
         {
@@ -147,6 +129,11 @@ namespace WebApplicationList.Services.Models
             }
 
             return viewAuthorization;
+        }
+
+        public Task<string> GetUserInfo()
+        {
+            throw new NotImplementedException();
         }
     }
 }

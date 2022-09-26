@@ -178,8 +178,6 @@ namespace WebApplicationList.Controllers
 
             return true;
         }
-        
-    
         private async Task<bool> CheckValidationPath(string path)
         {
             var user = await _profileUser.GetUserAsync();

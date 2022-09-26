@@ -66,13 +66,7 @@ namespace WebApplicationList.Controllers
                 return StatusCode(404);
             }
         }
-        [Authorize(Roles ="user")]
-        [HttpPost]
-        public async Task<string> GetAvatar()
-        {
-            return await _authorization.GetUserAvatar(_profileUser.GetUserName());
-        }
-
+       
         [HttpPost]
         async public Task<bool> Logout() => await _authorization.Logout();
 
