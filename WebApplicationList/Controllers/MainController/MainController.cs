@@ -34,10 +34,34 @@ namespace WebApplicationList.Controllers.MainController
 
                 if(options is null)
                 {
-                  return StatusCode(404);
+                    return StatusCode(404);
+                }
+               
+                return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", await _searchService.GetProjectsApplyFilters(options)); 
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SearchUsers(string searchOptionsJson)
+        {
+            if (string.IsNullOrEmpty(searchOptionsJson))
+            {
+                return base.Content("Пустое значение");
+            }
+
+            try
+            {
+                var options = JsonConvert.DeserializeObject<SearchOptions>(searchOptionsJson);
+
+                if (options is null)
+                {
+                    return StatusCode(404);
                 }
 
-                return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", await _searchService.GetProjectsApplyFilters(options)); 
+                return PartialView("~/Views/Main/Partials/SearchUsersView.cshtml", await _searchService.GetUsersApplyFilters(options));
             }
             catch
             {

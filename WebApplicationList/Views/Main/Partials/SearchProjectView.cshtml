@@ -5,7 +5,7 @@
     <div class="project-block">
         <button value="@item.project!.Id" class="project-image">
             <div>
-                <a href="~/UserProject/@(item.project.Url)">@item.project.Name</a>
+                <a href="~/UserProject@(item.project.Url)">@item.project.Name</a>
             </div>
             <img src="~/@(item.project!.UrlImage)" width="200">
         </button>

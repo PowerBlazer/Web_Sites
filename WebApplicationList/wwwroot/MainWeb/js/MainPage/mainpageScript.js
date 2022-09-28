@@ -22,7 +22,13 @@ $(document).ready(function(){
         listDownPanel.addClass("disabled-listdown");
         listDownButton.find(".sorting-button_inner").find("div").html($(this).html());
         listDownButton.find(".sorting-button_inner").find("div").val($(this).val());
-        SearchProjectsEvent();
+        if($(".search-filter-item").find(".active").html()=="Сайты"){
+            SearchProjectsEvent();
+        }
+        if($(".search-filter-item").find(".active").html()=="Люди"){
+            SearchUsersEvent();
+        }
+        
         closeListDownFilters();
     });
 
@@ -145,6 +151,9 @@ $(document).ready(function(){
             SearchProjectsEvent();
             return;
         }
+        if($(".search-filter-item").find(".active").html()=="Люди"){
+            SearchUsersEvent();
+        }
     });
 
     $(".filter-button").click(function(){
@@ -153,12 +162,14 @@ $(document).ready(function(){
                 "visibility":"",
                 "opacity":"",
             });
+            SearchProjectsEvent();
         }
         if($(this).html()=="Люди"){
             $(".list-down-filters-panel").css({
                 "visibility":"hidden",
                 "opacity":"0",
             });
+            SearchUsersEvent();
         }
     })
 
@@ -184,6 +195,21 @@ $(document).ready(function(){
         SearchProjects(JSON.stringify(searchOptions),$(".projects-blocks_inner"));
     }
 
+    function SearchUsersEvent(){
+        const searchText = $("#search-input").val();
+        const searchSortType = listDownButton.find(".sorting-button_inner").find("div").val();
+        let pageIndex = 20;
+
+        let searchOptions = {
+            Text:searchText,
+            Type:"",
+            SortType:searchSortType,
+            pageIndex:pageIndex
+        }
+
+        SearchUsers(JSON.stringify(searchOptions));
+    }
+
 
    
 
@@ -195,6 +221,19 @@ function SearchProjects(data,block){
     $.ajax({
         type:"POST",
         url:"/Main/SearchProjects",
+        data:{searchOptionsJson:data},
+        success:function(result){
+            $(".projects-blocks_inner").html(result);
+        },
+        error:function(){
+            ErrorsMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+function SearchUsers(data,block){
+    $.ajax({
+        type:"POST",
+        url:"/Main/SearchUsers",
         data:{searchOptionsJson:data},
         success:function(result){
             $(".projects-blocks_inner").html(result);

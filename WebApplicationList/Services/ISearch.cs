@@ -1,4 +1,5 @@
-﻿using WebApplicationList.Models.MainSiteModels.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApplicationList.Models.MainSiteModels.ViewModels;
 
 namespace WebApplicationList.Services
 {
@@ -7,5 +8,6 @@ namespace WebApplicationList.Services
         Task<IEnumerable<ProjectViewModel>> GetProjects();
         Task<IEnumerable<string>> GetTypesProject();
         Task<IEnumerable<ProjectViewModel>> GetProjectsApplyFilters(SearchOptions searchOptions);
+        Task<IEnumerable<ProfileUserViewModel>> GetUsersApplyFilters(SearchOptions searchOptions);
     }
 }

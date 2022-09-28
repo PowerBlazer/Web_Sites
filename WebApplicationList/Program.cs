@@ -12,12 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 string? connection = builder.Configuration.GetConnectionString("LocalConnection");
 
-builder.Services.AddDbContext<ApplicationDb>(options => options.UseSqlServer(connection!,sqlServerOptionsAction:sqlServerOptions=>
+builder.Services.AddDbContext<ApplicationDb>(options => options.UseSqlServer(connection!, sqlServerOptionsAction: sqlServerOptions =>
 {
     sqlServerOptions.EnableRetryOnFailure(
-    maxRetryCount:2,
-    maxRetryDelay:TimeSpan.FromSeconds(10),
-    errorNumbersToAdd:null);
+    maxRetryCount: 2,
+    maxRetryDelay: TimeSpan.FromSeconds(10),
+    errorNumbersToAdd: null);
 }));
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>

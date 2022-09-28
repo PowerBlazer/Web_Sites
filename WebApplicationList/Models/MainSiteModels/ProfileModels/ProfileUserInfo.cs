@@ -11,8 +11,6 @@ namespace WebApplicationList.Models.MainSiteModels.ProfileModels
         public string? HeaderDescription { get; set; }
         public string? Description { get; set; }
         public string? Profession { get; set; }
-        public int? Year { get; set; }
-        public DateTime DateRegistraition { get; set; } = DateTime.Now;
-        
+        public int? Year { get; set; }        
     }
 }

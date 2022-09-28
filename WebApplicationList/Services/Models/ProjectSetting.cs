@@ -218,6 +218,7 @@ namespace WebApplicationList.Services.Models
             };
 
             List<string> changesLines = new List<string>();
+
             foreach(var item in formatTypes)
             {
                var result = item.FormattingFile(fileLines!,pattern,patternRepeat,userName);

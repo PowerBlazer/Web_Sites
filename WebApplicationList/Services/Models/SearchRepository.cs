@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
 using WebApplicationList.Models;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
@@ -8,9 +10,11 @@ namespace WebApplicationList.Services.Models
     public class SearchRepository:ISearch
     {
         private readonly ApplicationDb _context;
-        public SearchRepository(ApplicationDb context)
+        private readonly IProfileUser _profileUser;
+        public SearchRepository(ApplicationDb context, IProfileUser profileUser)
         {
             _context = context;
+            _profileUser = profileUser;
         }
 
         public async Task<IEnumerable<ProjectViewModel>> GetProjects()
@@ -101,6 +105,35 @@ namespace WebApplicationList.Services.Models
 
             return projectsView;
            
+        }
+        public async Task<IEnumerable<ProfileUserViewModel>> GetUsersApplyFilters(SearchOptions searchOptions)
+        {
+            if (string.IsNullOrEmpty(searchOptions.SortType))
+            {
+                return Enumerable.Empty<ProfileUserViewModel>();
+            }
+
+            if (searchOptions.PageIndex == 0)
+            {
+                searchOptions.PageIndex = 20;
+            }
+
+            var users = searchOptions.SortType switch
+            {
+                "name" => await _context.Users.OrderBy(p => p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
+                "date"=>await _context.Users.OrderBy(p=>p.DateRegistraition).Take(searchOptions.PageIndex).ToListAsync(),
+                _=> await _context.Users.OrderBy(p=>p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
+
+            };
+
+            List<ProfileUserViewModel> usersView = new List<ProfileUserViewModel>();
+
+            foreach (var item in users)
+            {
+                usersView.Add(await _profileUser.GetUserViewModelAsync(item));
+            }
+
+            return usersView;
         }
 
     }
