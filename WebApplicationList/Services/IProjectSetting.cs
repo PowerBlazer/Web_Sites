@@ -14,7 +14,6 @@ namespace WebApplicationList.Services
         Task<bool> GetValidationProjectName(string projectName);
         IEnumerable<FileItem> GetPagesProject(string username);
         List<string> FormattingFile(string path, string projectName, string userName);
-        Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);
-        
+        Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);  
     }
 }

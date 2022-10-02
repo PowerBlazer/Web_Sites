@@ -9,5 +9,6 @@ namespace WebApplicationList.Services
         Task<IEnumerable<string>> GetTypesProject();
         Task<IEnumerable<ProjectViewModel>> GetProjectsApplyFilters(SearchOptions searchOptions);
         Task<IEnumerable<ProfileUserViewModel>> GetUsersApplyFilters(SearchOptions searchOptions);
+        Task<ProjectViewModel> GetProjectPresentation(string projectName);
     }
 }

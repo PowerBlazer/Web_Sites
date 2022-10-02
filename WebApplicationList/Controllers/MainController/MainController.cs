@@ -36,8 +36,10 @@ namespace WebApplicationList.Controllers.MainController
                 {
                     return StatusCode(404);
                 }
-               
-                return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", await _searchService.GetProjectsApplyFilters(options)); 
+
+                var result = await _searchService.GetProjectsApplyFilters(options);
+
+                return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml",result); 
             }
             catch
             {
@@ -61,7 +63,9 @@ namespace WebApplicationList.Controllers.MainController
                     return StatusCode(404);
                 }
 
-                return PartialView("~/Views/Main/Partials/SearchUsersView.cshtml", await _searchService.GetUsersApplyFilters(options));
+                var result = await _searchService.GetUsersApplyFilters(options);
+
+                return PartialView("~/Views/Main/Partials/SearchUsersView.cshtml",result);
             }
             catch
             {

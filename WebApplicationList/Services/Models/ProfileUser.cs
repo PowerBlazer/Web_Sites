@@ -75,20 +75,6 @@ namespace WebApplicationList.Services.Models
         {
             return await _applicationDB.likesProfiles!.Where(p => p.UserId == id).CountAsync();
         }
-        public async Task<string> GetDescription()
-        {
-            var user = await GetUserAsync();
-
-            if (user == null)
-                return string.Empty;
-
-            var userInfo = await _applicationDB.profileUserInfo!.Where(p => p.UserId == user.Id).FirstOrDefaultAsync();
-
-            if (userInfo == null)
-                return string.Empty;
-
-            return userInfo!.Description;
-        }
         public async Task<IEnumerable<UserProject>> GetProjectsUser(string id)
         {
             return await _applicationDB.userProjects!.Where(p => p.User_Id == id).ToListAsync();

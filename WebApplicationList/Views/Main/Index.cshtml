@@ -57,10 +57,12 @@
             </ul>
             <div class="list-down-sorting-panel">
                 <button class="sorting-button">
-                    <span>Сортировать</span>
-                    <div class="sorting-button_inner">
-                        <div value="name">По именам</div>
-                        <span></span>
+                    <div>
+                        <span>Сортировать</span>
+                        <div class="sorting-button_inner">
+                            <div value="name">По именам</div>
+                            <span></span>
+                        </div>
                     </div>
                 </button>
                 <div class="listdown-block disabled-listdown">
@@ -68,7 +70,7 @@
                     <button value="viewed" class="sort-listdowb-button">Самые просматриваемые</button>
                     <button value="date" class="sort-listdowb-button">По дате добавления</button>
                     <button value="name" class="sort-listdowb-button">По именам</button>
-                 </div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,15 +81,15 @@
             @foreach(var item in Model)
             {
                 <div class="project-block">
-                    <button value="@item.project!.Id" class="project-image">
+                    <button value="@item.project!.Name" class="project-image">
                         <div>
                             <a href="~/UserProject@(item.project.Url)">@item.project.Name</a>
                         </div>
-                        <img src="~/@(item.project!.UrlImage)" width="200">
+                        <img src="~/@(item.project!.UrlImage)" alt="img" width="200">
                     </button>
                     <div class="project-info">
                         <div class="project-name-user">
-                            <img src="~/@(item.user!.LinkAvatar)" width="25" height="25">
+                            <img src="~/@(item.user!.LinkAvatar)" alt="img" width="25" height="25">
                             <a href="#">@item.user!.UserName</a>
                         </div>
                         <ul>

@@ -1,1 +1,46 @@
-﻿123
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@model IEnumerable<ProfileUserViewModel>;
+
+@foreach (var item in Model)
+{
+    <div class="user-profile-block">
+        <a class="" href="#">
+            <div class="user-profile-avatar">
+                <object>
+                    <a href="#">
+                        <img src="~/@item.user!.LinkAvatar" alt="img" width="80" height="80">
+                    </a>
+                </object>
+                @if(string.IsNullOrEmpty(item.userInfo!.Surname)){
+                <div class="user-name">@item.user.UserName</div>
+                }
+                else{
+                <div class="user-name">@item.userInfo!.Surname</div>
+                }
+                @if(string.IsNullOrEmpty(item.userInfo!.Profession)){
+                <div class="profession">Проффессия не указана</div>
+                }
+                else{
+                <div class="profession">@item.userInfo!.Profession</div>
+                }
+            </div>
+        </a>
+        <ul class="user-profile-info">
+            <li>
+                <div>@item.NumberLikes</div>
+                <span>Оценки</span>
+            </li>
+            <li>
+                <div>@item.NumberSubscriber</div>
+                <span>Подписчики</span>
+            </li>
+            <li>
+                <div>@item.NumberProjects</div>
+                <span>Проекты</span>
+            </li>
+        </ul>    
+        <button class="subscribe-button">
+            <div>Подписаться</div>
+        </button>
+    </div>
+}

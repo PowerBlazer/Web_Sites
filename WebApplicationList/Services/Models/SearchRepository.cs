@@ -39,7 +39,6 @@ namespace WebApplicationList.Services.Models
 
             return projects;
         }
-
         public async Task<IEnumerable<string>> GetTypesProject()
         {
             var projects = await _context.userProjects!.ToListAsync();
@@ -120,9 +119,9 @@ namespace WebApplicationList.Services.Models
 
             var users = searchOptions.SortType switch
             {
-                "name" => await _context.Users.OrderBy(p => p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
-                "date"=>await _context.Users.OrderBy(p=>p.DateRegistraition).Take(searchOptions.PageIndex).ToListAsync(),
-                _=> await _context.Users.OrderBy(p=>p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
+                "name" => await _context.Users.Where(p=>EF.Functions.Like(p.UserName,$"%{searchOptions.Text}%")).OrderBy(p => p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
+                "date"=>await _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%")).OrderBy(p=>p.DateRegistraition).Take(searchOptions.PageIndex).ToListAsync(),
+                _=> await _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%")).OrderBy(p=>p.UserName).Take(searchOptions.PageIndex).ToListAsync(),
 
             };
 
@@ -136,5 +135,9 @@ namespace WebApplicationList.Services.Models
             return usersView;
         }
 
+        public Task<ProjectViewModel> GetProjectPresentation(string projectName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

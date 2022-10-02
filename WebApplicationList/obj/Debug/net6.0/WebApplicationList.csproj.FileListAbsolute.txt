@@ -177,15 +177,3 @@ D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsetti
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsettings.json
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.deps.json
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.runtimeconfig.json
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\BouncyCastle.Crypto.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\Google.Protobuf.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\K4os.Compression.LZ4.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\K4os.Compression.LZ4.Streams.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\K4os.Hash.xxHash.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\MySql.Data.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\Ubiety.Dns.Core.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\Zstandard.Net.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\MySql.Data.EntityFrameworkCore.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\Renci.SshNet.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\SshNet.Security.Cryptography.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\System.Xml.XPath.XmlDocument.dll
