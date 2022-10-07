@@ -3,7 +3,7 @@
 @foreach (var item in Model)
 {
     <div class="project-block">
-        <button value="@item.project!.Name" class="project-image">
+        <button value="@item.project!.Name" class="project-image open-project-info">
             <div>
                 <a href="~/UserProject@(item.project.Url)">@item.project!.Name</a>
             </div>

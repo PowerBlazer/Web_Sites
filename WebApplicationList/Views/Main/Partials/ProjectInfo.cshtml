@@ -1,0 +1,126 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@using WebApplicationList.Services.Models;
+@model ProjectViewModel;
+
+<div class="user-info_inner">
+    <img src="~/@(Model.user!.LinkAvatar)" width="30" height="30">
+    <div class="user-info">
+        <div class="project-name">@Model.project!.Name</div>
+        <div class="links">
+            <a href="#">@Model.user!.UserName</a>
+            <button type="button" id="">Подписаться</button>
+        </div>
+    </div>
+</div>
+<ul class="content">
+    <li class="image-block">
+        <a href="~/UserProject@(Model.project!.Url)">
+            <img src="~/@(Model.project!.UrlImage)" width="1200" alt="img">
+        </a>
+    </li>
+    <li class="table-project-comments">
+        <div class="first-column">
+            @if(User.Identity!.IsAuthenticated){
+            <div class="add-comment">
+                <img src="" id="user-avatar" alt="" width="30" height="30">
+                <div class="comment-area">
+                    <textarea placeholder="Что вы думаете о проекте?" id="comment"></textarea>
+                    <button type="button" value="@Model.project.Id" id="send-comment">Опубликовать комментарий</button>
+                </div>
+            </div>
+            }
+            else{
+                <div class="reg-info">
+                    <div>Зарегистрируйтесь, чтобы присоединиться к обсуждению</div>
+                    <span>Добавьте свой отзыв о проекте пользователя @(Model.user.UserName), войдя в систему или зарегистрировавшись.</span>
+                    <button id="project-register-user">Зарегестрироваться</button>
+                </div>
+            }
+            <ul class="comments" id="comments-panel">
+                @foreach(var item in Model.projectComments!)
+                {
+                    <li class="comments-item">
+                        <img src="~/@(item.user!.LinkAvatar)" alt="ava" width="40" height="40">
+                        <div>
+                            <div>
+                                @{
+                                var time = new RestTime().GetRest(DateTime.Now,item.date);
+                                }
+                                <a href="#">@item.user.UserName</a><span>• @time</span>
+                            </div>
+                            <div class="comment-text">@item.Text</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            
+            
+        </div>
+        <ul class="second-column">
+            <li class="owner-panel-info">
+                <div class="header">Владелец</div>
+                <div class="user-info-panel">
+                    <div>
+                        <img src="~/@(Model.user!.LinkAvatar)" alt="img" width="30" height="30">
+                        <div>
+                            <div>@Model.user!.UserName</div>
+                            @if(string.IsNullOrEmpty(Model.userInfo!.Profession)){
+                                <span>Не указана профессия</span>
+                            }
+                            else{
+                                <span>@Model.userInfo!.Profession</span>
+                            }
+                        </div>
+                    </div>
+                    <button type="button">Подписаться</button>
+                    <button type="button">Сообщение</button>
+                </div>
+            </li>
+            <li class="project-info">
+                <div class="name">@Model.project.Name</div>
+                <div class="description">@Model.project.Description</div>
+                <ul class="numbers">
+                    <li>
+                        <img src="~/MainWeb/Images/finger-upGray.svg" alt="" width="15" height="15">
+                        <span>@Model.likes</span>
+                    </li>
+                    <li>
+                        <img src="~/MainWeb/Images/scan.svg" alt="" width="15" height="15">
+                        <span>0</span>
+                    </li>
+                    <li>
+                        <img src="~/MainWeb/Images/comment.svg" alt="" width="15" height="15">
+                        <span>@Model.projectComments!.Count()</span>
+                    </li>
+                </ul>
+                <span>Опубликовано @Model.project.AddedTime.ToShortDateString()</span>
+            </li>
+            @if(User.Identity.IsAuthenticated){
+            <li class="like-panel">
+                <div class="header">Оценить</div>
+                <div class="button-panel" data-id="@Model.project.Id" id="like-button-panel">
+                @if(Model.liked)
+                {
+                    <button type="button" class="disabled" id="delete-like">Дизлайк</button>
+                }
+                else{
+                    <button type="button"  id="like-button">Оценить</button>
+                }
+                </div>
+            </li>
+            }
+            <li class="project-tags">
+                <div class="header">Теги</div>
+                <ul class="tags-panel">
+                    @{
+                        string[] tags = Model.project!.Type!.Split(',');
+                        foreach(var item in tags)
+                        {
+                            @:<li><a href="#">@item.Replace(",","")</a></li>
+                        }
+                    }
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

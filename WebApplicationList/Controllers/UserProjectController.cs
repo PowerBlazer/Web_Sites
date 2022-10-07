@@ -30,6 +30,18 @@ namespace WebApplicationList.Controllers
             return View((object)result);
         }
         [HttpPost]
+        public async Task<bool> AddComment(string text,int projectId)
+        {
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                throw new Exception("Пользователь не найден");
+            }
+
+            return await _projectSetting.AddComment(projectId, user, text);
+        }
+        [HttpPost]
         public async Task<IActionResult> GetExplorer()
         {
             var user = await _profileUser.GetUserAsync();
@@ -178,9 +190,39 @@ namespace WebApplicationList.Controllers
 
             return true;
         }
+        [HttpPost]
+        public async Task<bool> PutLike(int projectId)
+        {
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                throw new Exception("Пользователь не найден");
+            }
+
+            return await _projectSetting.SelectLike(projectId, user);
+        }
+        [HttpPost]
+        public async Task<bool> DeleteLike(int projectId)
+        {
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                throw new Exception("Пользователь не найден");
+            }
+
+            return await _projectSetting.DeleteLike(projectId, user);
+        }
+
+
+
         private async Task<bool> CheckValidationPath(string path)
         {
             var user = await _profileUser.GetUserAsync();
+
+            if(!path.Contains("wwwroot"))
+                path = EncodingText.CustomEncoding.EncodeDecrypt(path);
 
             if (!path.Contains(user.UserName))
             {

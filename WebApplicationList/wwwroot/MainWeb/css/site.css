@@ -38,6 +38,8 @@ body{
     align-items: center;
     font-size: 18px;
     transition: all .5s;
+    z-index: 100;
+    box-shadow: var(--default-shadow);
 }
 
 /*--------Header---------*/

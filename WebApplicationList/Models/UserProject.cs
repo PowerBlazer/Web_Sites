@@ -1,4 +1,6 @@
-﻿namespace WebApplicationList.Models
+﻿using WebApplicationList.Models.MainSiteModels.ProjectModels;
+
+namespace WebApplicationList.Models
 {
     public class UserProject
     {
@@ -17,6 +19,7 @@
         public DateTime AddedTime { get; set; }
 
         public string? User_Id { get; set; }
+        public List<ProjectComment> projectComments { get; set; } = new List<ProjectComment>();
 
     }
 }

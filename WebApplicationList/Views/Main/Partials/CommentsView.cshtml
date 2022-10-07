@@ -1,0 +1,19 @@
+﻿@using WebApplicationList.Models.MainSiteModels.ProjectModels;
+@using WebApplicationList.Services.Models;
+@model IEnumerable<ProjectComment>
+
+@foreach (var item in Model)
+{
+    <li class="comments-item">
+        <img src="~/@(item.user!.LinkAvatar)" alt="ava" width="40" height="40">
+        <div>
+            <div>
+                @{
+                    var time = new RestTime().GetRest(DateTime.Now, item.date);
+                }
+                <a href="#">@item.user.UserName</a><span>• @time</span>
+            </div>
+            <div class="comment-text">@item.Text</div>
+        </div>
+    </li>
+}

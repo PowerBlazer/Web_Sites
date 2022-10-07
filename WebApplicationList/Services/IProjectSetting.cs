@@ -10,10 +10,12 @@ namespace WebApplicationList.Services
         Task<ExplorerViewModel> GetExplorerItem(string directoryPath);
         Task<FileItem> GetContentFileAsync(string filePath);
         Task<bool> ChangeContentFile(FileItem fileItem);
-        string GetProjectPath(string username);
         Task<bool> GetValidationProjectName(string projectName);
         IEnumerable<FileItem> GetPagesProject(string username);
         List<string> FormattingFile(string path, string projectName, string userName);
-        Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);  
+        Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);
+        Task<bool> AddComment(int projectId, User user, string text);
+        Task<bool> SelectLike(int projectId, User user);
+        Task<bool> DeleteLike(int projectId, User user);
     }
 }

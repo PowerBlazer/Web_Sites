@@ -434,6 +434,419 @@ section{
     font-size: 17px;
     font-weight: 700;
 }
+body{
+    overflow: hidden;
+}
+.modal-project-info{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    z-index: 60;
+    justify-content: center;
+    overflow: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .3s;
+}
+.modal-project-info .load-animation{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    border: 5px solid #888;
+    border-radius: 50%;
+    border-top: 5px solid var(--button-color);
+    left: 50%;
+    translate:-50% -50%;
+    animation: load 1s linear infinite;
+}
+@keyframes load{
+    0%{
+        rotate: 0deg;
+    }
+    100%{
+        rotate: 360deg;
+    }
+}
+.modal-project-info>.project-info{
+    position: relative;
+    margin-top:20px;
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.modal-project-info .user-info_inner{
+    display: flex;
+    gap: 12px;
+}
+.modal-project-info .user-info_inner>img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.modal-project-info .user-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.modal-project-info .project-name{
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 18px;
+}
+.modal-project-info .links{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.modal-project-info .links>a{
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: white;
+    font-size: 13px;
+}
+.modal-project-info .links>button{
+    background-color: var(--button-color);
+    padding: 5px 10px;
+    font-size: 15px;
+    color: white;
+    font-weight: 400;
+    border-radius: 30px;
+    transition: background-color .3s;
+}
+.modal-project-info .links>button:hover{
+    background-color: #0041c3;
+}
+.modal-project-info .content{
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.modal-project-info .image-block img{
+    width: 100%;
+    object-fit: cover;
+}
+.modal-project-info .close-modal{
+    position: fixed;
+    top:15px;
+    right:40px;
+    width: 35px;
+    height:35px;
+    background-color:#191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 55;
+}
+.modal-project-info .close-modal>div{
+    width: 20px;
+    height:20px;
+    position: relative;
+}
+.modal-project-info .close-modal span{
+   position: absolute;
+   top: 50%;
+   translate: -50% -50%;
+   width: 15px;
+   height: 2px;
+   background-color: rgb(171, 171, 171);
+}
+.modal-project-info .close-modal span:nth-child(1){
+    rotate: 45deg;
+}
+.modal-project-info .close-modal span:nth-child(2){
+    rotate: -45deg;
+}
+.table-project-comments{
+    padding: 60px 60px;
+    background-color: #FAFAFA;
+    display: flex;
+    gap: 20px;
+}
+.table-project-comments .first-column{
+    background-color: white;
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    width: 100%;
+    height: min-content;
+    max-width: 680px;
+}
+.table-project-comments .first-column .add-comment{
+    display: flex;
+    gap: 20px;
+    min-height: 250px;
+    width: 100%;
+    padding: 30px;
+}
+.add-comment .comment-area{
+    display: flex;
+    flex-direction: column;
+    min-width: 550px;
+    width: 100%;
+    align-items: flex-end;
+    gap: 15px;
+}
+.add-comment .comment-area textarea{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    padding: 5px;
+    
+}
+.add-comment>img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+}
+.add-comment .comment-area>button{
+    padding: 10px 15px;
+    background-color: white;
+    color: black;
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 20px;
+    transition:background-color .3s ;
+}
+.add-comment .comment-area>button:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.table-project-comments .second-column{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 380px;
+}
+.table-project-comments .second-column>li{
+    padding: 30px;
+    background-color: white;
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    max-width: 380px;
+    height: min-content;
+}
+.owner-panel-info{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.table-project-comments .second-column>li .header{
+    text-transform: uppercase;
+    color: #707070;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.owner-panel-info .user-info-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+.owner-panel-info .user-info-panel>div{
+    display: flex;
+    padding: 5px;
+    gap: 10px;
+}
+.owner-panel-info .user-info-panel>div>img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: filter .3s;
+}
+.owner-panel-info .user-info-panel>div>img:hover{
+    filter:brightness(80%);
+}
+.owner-panel-info .user-info-panel>div>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.owner-panel-info .user-info-panel>div>div>span{
+    font-size: 13px;
+    font-weight: 400;
+    color: #707070;
+}
+.owner-panel-info .user-info-panel>button{
+    background-color: var(--button-color);
+    width: 100%;
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    transition: background-color .3s;
+}
+.owner-panel-info .user-info-panel>button:nth-child(2):hover{
+    background-color: #0041c3;
+}
+.owner-panel-info .user-info-panel>button:nth-child(3){
+    color: var(--button-color);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+.owner-panel-info .user-info-panel>button:nth-child(3):hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.table-project-comments .second-column .project-info{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.table-project-comments .second-column .project-info>.name{
+    font-size: 18px;
+    padding: 5px 0;
+}
+.table-project-comments .second-column .project-info>.description{
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.table-project-comments .second-column .project-info>.numbers{
+    display: flex;
+    font-size: 17px;
+    gap: 10px;
+}
+.table-project-comments .second-column .project-info>.numbers>li{
+    display: flex;
+    gap: 5px;
+    color: #707070;
+    font-weight: 300;
+    align-items: center;
+}
+.table-project-comments .second-column .project-info>span{
+    font-size: 13px;
+    color: black;
+    font-weight: 300;
+}
+.table-project-comments .second-column .project-tags{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.table-project-comments .second-column .project-tags>.tags-panel{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.table-project-comments .second-column .project-tags>.tags-panel a{
+    padding: 5px 10px;
+    outline: 1px solid rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 20px;
+    transition:  background-color .3s;
+}
+.table-project-comments .second-column .project-tags>.tags-panel a:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.table-project-comments .reg-info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 30px;
+    width: 100%;
+}
+.table-project-comments .reg-info>div{
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.table-project-comments .reg-info>span{
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.table-project-comments .reg-info>button{
+    background-color: var(--button-color);
+    width: 100%;
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px;
+    font-size: 15px;
+    border-radius: 20px;
+}
+.table-project-comments .comments{
+    border-top:1px solid rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+.table-project-comments .comments>li{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+.comments-item>img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+}
+.comments-item>div{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.comments-item>div>div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.comments-item>div>div>span{
+    color: #707070;
+    font-weight: 300;
+    font-size: 14px;
+}
+.comments-item .comment-text{
+    font-size: 17px;
+    font-weight: 300;
+    max-width: 550px;
+    overflow: hidden;
+}
+.table-project-comments .second-column .like-panel{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.table-project-comments .second-column .like-panel .button-panel>button{
+    background-color: var(--button-color);
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    transition: background-color .3s;
+    width: 100%;
+}
+.table-project-comments .second-column .like-panel .button-panel>button:not(.disabled):hover{
+    background-color: #0041c3;
+}
+.table-project-comments .second-column .like-panel .button-panel .disabled{
+    background-color: transparent;
+    border:1px solid rgba(0, 0, 0, 0.2);
+    color: #707070;
+}
+.table-project-comments .second-column .like-panel .button-panel .disabled:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
 
 @media(max-width:800px){
     .projects-blocks_inner{

@@ -5,17 +5,19 @@ using WebApplicationList.Models.MainSiteModels.ViewModels;
 using WebApplicationList.Models.MainSiteModels.ProjectFormat;
 using WebApplicationList.Models;
 using System.IO.Compression;
+using EncodingText;
+using WebApplicationList.Models.MainSiteModels.ProjectModels;
 
 namespace WebApplicationList.Services.Models
 {
     public class ProjectSetting : IProjectSetting
     {
-        private readonly ApplicationDb _applicationDb;
+        private readonly ApplicationDb _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProjectSetting(ApplicationDb applicationDb, IWebHostEnvironment webHostEnvironment)
         {
-            _applicationDb = applicationDb;
+            _context = applicationDb;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -25,6 +27,8 @@ namespace WebApplicationList.Services.Models
             {
                 return await Task.FromResult(false);
             }
+
+            fileItem.Path = CustomEncoding.EncodeDecrypt(fileItem.Path!);
 
             using (StreamWriter writer = new StreamWriter(fileItem.Path!, false, Encoding.UTF8))
             {
@@ -44,7 +48,12 @@ namespace WebApplicationList.Services.Models
 
             FileItem? fileItem = ( await GetFilesAsync(new List<string> { filePath! })).FirstOrDefault();
 
-            using (StreamReader reader = new StreamReader(filePath, Encoding.UTF8))
+            if (!File.Exists(CustomEncoding.EncodeDecrypt(filePath)))
+            {
+                throw new Exception("Такого файла нет");
+            }
+
+            using (StreamReader reader = new StreamReader(CustomEncoding.EncodeDecrypt(filePath), Encoding.UTF8))
             {
                 fileItem!.Content = await reader.ReadToEndAsync();
                 fileItem.Path = filePath;
@@ -93,6 +102,8 @@ namespace WebApplicationList.Services.Models
         }
         public async Task<ExplorerViewModel> GetExplorerItem(string directoryPath)
         {
+            directoryPath = CustomEncoding.EncodeDecrypt(directoryPath);
+
             var explorerResult = new ExplorerViewModel()
             {
                 Files = await GetFilesAsync(Directory.EnumerateFiles(directoryPath)),
@@ -108,12 +119,12 @@ namespace WebApplicationList.Services.Models
             if (string.IsNullOrEmpty(nameProject))
                 return string.Empty;
 
-            var project = await _applicationDb.userProjects!.Where(p => p.Name == nameProject).FirstOrDefaultAsync();
+            var project = await _context.userProjects!.Where(p => p.Name == nameProject).FirstOrDefaultAsync();
 
             if (project is null)
                 return string.Empty;
 
-            var user = await _applicationDb.Users.Where(p => p.Id == project.User_Id).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(p => p.Id == project.User_Id).FirstOrDefaultAsync();
 
             if (user is null)
                 return string.Empty;
@@ -166,15 +177,11 @@ namespace WebApplicationList.Services.Models
                 fileItems.Add(new FileItem
                 {
                     Name = Path.GetFileName(projectHtmlDocs[i]),
-                    Path = projectHtmlDocs[i],
+                    Path = CustomEncoding.EncodeDecrypt(projectHtmlDocs[i]),
                 });
             }
 
             return fileItems;
-        }
-        public string GetProjectPath(string username)
-        {
-            return Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", username, "temporary");
         }
         public async Task<bool> GetValidationProjectName(string projectName)
         {
@@ -183,7 +190,7 @@ namespace WebApplicationList.Services.Models
                 return false;
             }
 
-            var countResult = await _applicationDb.userProjects!.Where(p => p.Name == projectName).CountAsync();
+            var countResult = await _context.userProjects!.Where(p => p.Name == projectName).CountAsync();
 
             if (countResult > 0)
             {
@@ -199,6 +206,8 @@ namespace WebApplicationList.Services.Models
             {
                 throw new Exception("Пустые значения");
             }
+
+            path = CustomEncoding.EncodeDecrypt(path);
 
             string pattern = $"UserProjects/{userName}/{projectName}/";
             string patternRepeat = $"UserProjects/{userName}";
@@ -230,9 +239,88 @@ namespace WebApplicationList.Services.Models
 
             return changesLines;
         }
+        public async Task<bool> AddComment(int projectId, User user, string text)
+        {
+            if(user is null|| string.IsNullOrEmpty(text))
+            {
+                return false;
+            }
+
+            var project = await _context.userProjects!.Where(p => p.Id == projectId).FirstOrDefaultAsync();
+
+            if(project is null)
+            {
+                throw new Exception("Проект не найден");
+            }
+
+            await _context.AddAsync(new ProjectComment
+            {
+                user = user,
+                project = project,
+                Text = text,
+            });
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<bool> SelectLike(int projectId,User user)
+        {
+            if(user is null)
+            {
+                return false;
+            }
+
+            var project = await _context.userProjects!.Where(p => p.Id == projectId).FirstOrDefaultAsync();
+
+            if (project is null)
+            {
+                throw new Exception("Проект не найден");
+            }
+
+            await _context.AddAsync(new ProjectLike
+            {
+                user = user,
+                project = project,
+            });
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return false;
+            }
+            
+
+            return true;
+        }
+        public async Task<bool> DeleteLike(int projectId,User user)
+        {
+            var like = await _context.projectLikes!.Where(p => p.project!.Id == projectId && p.user!.Id == user.Id).FirstOrDefaultAsync();
+
+            if(like is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.projectLikes!.Remove(like);
+
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
         public async Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user)
         {
-            if(await _applicationDb.userProjects!.Where(p=>p.Name==projectSettings.Name).CountAsync()!=0||
+            if(await _context.userProjects!.Where(p=>p.Name==projectSettings.Name).CountAsync()!=0||
               string.IsNullOrWhiteSpace(projectSettings.Name)||string.IsNullOrWhiteSpace(projectSettings.ImageByte)
               ||string.IsNullOrWhiteSpace(projectSettings.SelectedPage))
             {
@@ -243,6 +331,8 @@ namespace WebApplicationList.Services.Models
             {
                  return false;
             }
+
+           
 
             string pathProjectImage = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjectsImage",$"{projectSettings.Name}.jpg");
             byte[] byteImage = Convert.FromBase64String(projectSettings.ImageByte);
@@ -280,7 +370,7 @@ namespace WebApplicationList.Services.Models
 
             Directory.Move(projectPath, newProjectPath);
 
-            await _applicationDb.userProjects!.AddAsync(new UserProject
+            await _context.userProjects!.AddAsync(new UserProject
             {
                 Name = projectSettings.Name,
                 Description = projectSettings.Description,
@@ -290,11 +380,11 @@ namespace WebApplicationList.Services.Models
                 Url = $"?Site={projectSettings.Name}&page={projectSettings.SelectedPage}"
             });
 
-            await _applicationDb.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;
         }
-
+       
 
         private async Task<List<FileItem>> GetFilesAsync(IEnumerable<string> paths)
         {
@@ -303,11 +393,18 @@ namespace WebApplicationList.Services.Models
             {
                 foreach (var item in paths)
                 {
+                    var path = item;
+
+                    if (!item.Contains("UserProjects"))
+                    {
+                        path = CustomEncoding.EncodeDecrypt(item);
+                    }
+             
                     files.Add(new FileItem
                     {
-                        Name = Path.GetFileName(item),
-                        Path = item,
-                        Size = GetSizeFile(item)
+                        Name = Path.GetFileName(path),
+                        Path = CustomEncoding.EncodeDecrypt(path),
+                        Size = GetSizeFile(path)
                     });
                 }
             });
@@ -318,7 +415,7 @@ namespace WebApplicationList.Services.Models
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
 
-            return directoryInfo.Parent!.ToString();
+            return CustomEncoding.EncodeDecrypt(directoryInfo.Parent!.ToString());
         }
         private string GetSizeFile(string path)
         {
@@ -336,7 +433,7 @@ namespace WebApplicationList.Services.Models
             }
             catch
             {
-                return String.Empty;
+                return string.Empty;
             }
         }
         private bool IsDirectoryEmpty(string path)

@@ -152,6 +152,16 @@
             <img src="~/MainWeb/Images/success.svg" id="notification-image" alt="img" width="30" height="30">
             <div class="message-notification"></div>
         </div>
+        <div class="modal-project-info">
+            <button class="close-modal">
+                <div>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <div class="project-info" id="project-content"></div>
+            <div class="load-animation"></div>
+        </div>
         <div class="brightness"></div>
         @if(User.Identity.IsAuthenticated)
         {

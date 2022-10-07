@@ -15,10 +15,7 @@ namespace WebApplicationList.Services
         Task<bool> ChangeAvatarAsync(IFormFile imageFile);
         Task<bool> ChangeUserInfo(ProfileUserInfoViewModel profileUserInfo);
         Task<IEnumerable<LinksProfile>> GetLinksUser(string userId);
-        Task<bool> BindLinkInUser(string url, int id);
-        Task<int> GetNumberSubdcribes(string id);
-        Task<int> GetNumberLikes(string id);
-        Task<IEnumerable<UserProject>> GetProjectsUser(string id);
-        Task<IEnumerable<FavoritesProject>> GetFavoritesProject(string id);
+        Task<bool> BindLinkInUser(string url, int id);      
+        Task<IEnumerable<UserProject>> GetProjectsUser(string id);     
     }
 }

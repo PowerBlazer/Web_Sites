@@ -8,18 +8,19 @@ namespace WebApplicationList.Controllers.MainController
     public class MainController : Controller
     {
         private readonly ISearch _searchService;
-        public MainController(ISearch searchService)
+        private readonly IProfileUser _profileUser;
+        public MainController(ISearch searchService, IProfileUser profileUser)
         {
             _searchService = searchService;
+            _profileUser = profileUser;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             ViewBag.Types = await _searchService.GetTypesProject();
 
-            return View(await _searchService.GetProjects());
+            return View("~/Views/Main/Index.cshtml",await _searchService.GetProjects());
         }
-
         [HttpPost]
         public async Task<IActionResult> SearchProjects(string searchOptionsJson)
         {
@@ -72,6 +73,24 @@ namespace WebApplicationList.Controllers.MainController
                 return StatusCode(500);
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> GetProjectInfo(string projectName)
+        {
+            if(string.IsNullOrEmpty(projectName))
+            {
+                throw new Exception(projectName);
+            }
 
+            var result = await _searchService.GetProjectPresentation(projectName);
+
+            return PartialView("~/Views/Main/Partials/ProjectInfo.cshtml", result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetCommentsProject(int count,int projectId)
+        {
+         
+            return PartialView("~/Views/Main/Partials/CommentsView.cshtml",await _searchService.GetComments(count,projectId));
+        }
+                  
     }
 }

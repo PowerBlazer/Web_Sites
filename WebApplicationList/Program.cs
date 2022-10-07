@@ -10,7 +10,7 @@ using WebApplicationList.Services.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connection = builder.Configuration.GetConnectionString("LocalConnection");
 
 builder.Services.AddDbContext<ApplicationDb>(options => options.UseSqlServer(connection!, sqlServerOptionsAction: sqlServerOptions =>
 {

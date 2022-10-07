@@ -8,7 +8,7 @@ namespace WebApplicationList.Controllers
     {
         public AdminController()
         {
-
+            
         }
         
         public IActionResult Index()

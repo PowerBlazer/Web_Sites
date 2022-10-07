@@ -66,20 +66,12 @@ namespace WebApplicationList.Services.Models
             await _applicationDB.SaveChangesAsync();
 
             return true;
-        }
-        public async Task<int> GetNumberSubdcribes(string id)
-        {
-            return await _applicationDB.subscribesProfile!.Where(p => p.UserId == id).CountAsync();
-        }
-        public async Task<int> GetNumberLikes(string id)
-        {
-            return await _applicationDB.likesProfiles!.Where(p => p.UserId == id).CountAsync();
-        }
+        }   
         public async Task<IEnumerable<UserProject>> GetProjectsUser(string id)
         {
             return await _applicationDB.userProjects!.Where(p => p.User_Id == id).ToListAsync();
         }
-        async public Task<ProfileUserViewModel> GetUserViewModelAsync(User user)
+        public async Task<ProfileUserViewModel> GetUserViewModelAsync(User user)
         {
             if (user == null)
                 return null;
@@ -87,10 +79,7 @@ namespace WebApplicationList.Services.Models
             ProfileUserViewModel profileUserView = new()
             {
                 user = user,
-                userInfo = await GetUserProfileInfoAsync(user.Id),
-                NumberSubscriber = await GetNumberSubdcribes(user.Id),
-                NumberLikes = await GetNumberLikes(user.Id),
-                favoritesProjects = await GetFavoritesProject(user.Id),
+                userInfo = await GetUserProfileInfoAsync(user.Id),        
                 NumberProjects = (await GetProjectsUser(user.Id)).Count(),
                 linkTypes = await _applicationDB.linksType!.ToListAsync(),
                 linksProfile = await GetLinksUser(user.Id),
@@ -101,10 +90,6 @@ namespace WebApplicationList.Services.Models
         public async Task<User> GetUserForLogin(string login)
         {
             return await _applicationDB.Users.Where(p => p.UserName == login).FirstOrDefaultAsync();
-        }
-        public async Task<IEnumerable<FavoritesProject>> GetFavoritesProject(string id)
-        {
-            return await _applicationDB.favoritesProjects!.Where(p => p.User_Id == id).ToListAsync();
         }
         public async Task<bool> ChangeUserInfo(ProfileUserInfoViewModel profileUserInfo)
         {

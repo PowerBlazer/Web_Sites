@@ -11,6 +11,5 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public int NumberProjects { get; set; }
         public IEnumerable<LinksProfile>? linksProfile { get; set; }
         public IEnumerable<LinkType>? linkTypes { get; set; }
-        public IEnumerable<FavoritesProject>? favoritesProjects { get; set; }
     }
 }

@@ -1,9 +1,10 @@
 ﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+@using EncodingText;
 @model ExplorerViewModel
 
 @{
     
-    var result = Model.ReturnPath!.Contains("temporary");
+    var result = CustomEncoding.EncodeDecrypt(Model.ReturnPath!).Contains("temporary");
     
     if (!string.IsNullOrWhiteSpace(Model.ReturnPath))
     {
