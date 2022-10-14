@@ -9,9 +9,10 @@ namespace WebApplicationList.Controllers.MainController
     {
         private readonly ISearch _searchService;
         private readonly IProfileUser _profileUser;
-        public MainController(ISearch searchService, IProfileUser profileUser)
+             
+        public MainController(ISearch searchService,IProfileUser profileUser)
         {
-            _searchService = searchService;
+            _searchService = searchService;  
             _profileUser = profileUser;
         }
         [HttpGet]
@@ -74,11 +75,18 @@ namespace WebApplicationList.Controllers.MainController
             }
         }
         [HttpPost]
-        public async Task<IActionResult> GetProjectInfo(string projectName)
+        public async Task<IActionResult> GetProjectInfo(string projectName, [FromServices] IProjectSetting projectSetting)
         {
             if(string.IsNullOrEmpty(projectName))
             {
                 throw new Exception(projectName);
+            }
+
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is not null)
+            {
+                await projectSetting.SetViewProject(projectName, user);
             }
 
             var result = await _searchService.GetProjectPresentation(projectName);

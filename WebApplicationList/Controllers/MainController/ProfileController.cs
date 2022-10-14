@@ -34,7 +34,6 @@ namespace WebApplicationList.Controllers.MainController
 
             return View("~/Views/Main/Profile.cshtml", userInfo);
         }
-
         [HttpPost]
         public async Task<bool> ChangeAvatar()
         {
@@ -76,7 +75,6 @@ namespace WebApplicationList.Controllers.MainController
 
             return false;
         }
-
         [HttpPost]
         public async Task<bool> BindLinkUser(string url,int id)
         {
@@ -109,13 +107,58 @@ namespace WebApplicationList.Controllers.MainController
                 LinkAvatar = user.LinkAvatar
             });
         }
+        [HttpPost]
+        public async Task<bool?> SetSubscribe(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new Exception("Пустой значение");
+            }
 
+            var subscribeUser = await _profileUser.GetUserForLogin(userName);
 
+            var user = await _profileUser.GetUserAsync();
 
+            if (subscribeUser == user)
+            {
+                return null;
+            }
+
+            if (await _profileUser.SetSubsccribe(user, subscribeUser))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        [HttpPost]
+        public async Task<bool?> DeleteSubscribe(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new Exception("Пустой значение");
+            }
+
+            var subscribeUser = await _profileUser.GetUserForLogin(userName);
+
+            var user = await _profileUser.GetUserAsync();
+
+            if(subscribeUser == user)
+            {
+                return null;
+            }
+
+            if (await _profileUser.DeleteSubscribe(user, subscribeUser))
+            {
+                return true;
+            }
+
+            return false;
+        }
         [HttpPost]
         public async Task<IActionResult> GetUserProjects(string login)
         {
-            User? user;
+            User? user = default;
 
             if (string.IsNullOrWhiteSpace(login))
             {
@@ -123,8 +166,12 @@ namespace WebApplicationList.Controllers.MainController
             }
             else
             {
-
                 user = await _profileUser.GetUserForLogin(login);
+            }
+
+            if(user is null)
+            {
+                throw new Exception("Пользователя нету");
             }
 
             var result = await _profileUser.GetProjectsUser(user.Id);
@@ -132,8 +179,6 @@ namespace WebApplicationList.Controllers.MainController
             return PartialView("~/Views/Profile/Partials/ProjectsView.cshtml",result);
         }
        
-
-        public async Task<string> GetUserName() => (await _profileUser.GetUserAsync()).UserName;
        
     }
 }

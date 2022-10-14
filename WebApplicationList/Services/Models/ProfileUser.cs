@@ -11,7 +11,7 @@ namespace WebApplicationList.Services.Models
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly ApplicationDb _applicationDB;
+        private readonly ApplicationDb _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public ProfileUser(SignInManager<User> signInManager, UserManager<User> userManager,
@@ -19,18 +19,25 @@ namespace WebApplicationList.Services.Models
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _applicationDB = applicationDB;
+            _context = applicationDB;
             _hostEnvironment = hostEnvironment;
         }
 
         public string GetUserName() => _signInManager.Context.User.Identity!.Name!;
         public async Task<User> GetUserAsync()
         {
-            return await _userManager.FindByNameAsync(GetUserName());
+            var userName = GetUserName();
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                return null;
+            }
+
+            return await _context.Users.Where(p => p.UserName == userName).FirstOrDefaultAsync();
         }
         public async Task<ProfileUserInfo> GetUserProfileInfoAsync(string? id)
         {
-            return await _applicationDB.profileUserInfo!.Where(p => p.UserId == id).FirstOrDefaultAsync();
+            return await _context.profileUserInfo!.Where(p => p.user!.Id == id).FirstOrDefaultAsync();
         }
         public async Task<bool> ChangeAvatarAsync(IFormFile image)
         {
@@ -59,37 +66,46 @@ namespace WebApplicationList.Services.Models
                 await image.OpenReadStream().CopyToAsync(fileStream);
             }
 
-            var user = await _applicationDB.Users.Where(p => p.UserName == userName).FirstOrDefaultAsync();
-            _applicationDB.Attach(user!);
+            var user = await _context.Users.Where(p => p.UserName == userName).FirstOrDefaultAsync();
+            _context.Attach(user!);
             user!.LinkAvatar = $"UserIcons/{userName}.jpg";
 
-            await _applicationDB.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;
         }   
         public async Task<IEnumerable<UserProject>> GetProjectsUser(string id)
         {
-            return await _applicationDB.userProjects!.Where(p => p.User_Id == id).ToListAsync();
+            return await _context.userProjects!.Where(p => p.user!.Id == id).ToListAsync();
         }
         public async Task<ProfileUserViewModel> GetUserViewModelAsync(User user)
         {
             if (user == null)
                 return null;
 
-            ProfileUserViewModel profileUserView = new()
-            {
-                user = user,
-                userInfo = await GetUserProfileInfoAsync(user.Id),        
-                NumberProjects = (await GetProjectsUser(user.Id)).Count(),
-                linkTypes = await _applicationDB.linksType!.ToListAsync(),
-                linksProfile = await GetLinksUser(user.Id),
-            };
+            var linkTypes = await _context.linksType!.ToListAsync();
 
-            return profileUserView;
+            var result = await _context.Users.Where(p => p.Id == user.Id)
+                .Include(p => p.ProfileUserInfo).Include(p => p.linksProfiles)
+                .Include(p=>p.projectViews)
+                .Include(p=>p.projectLikes)
+                .Include(p=>p.projects)
+                .Select(p => new ProfileUserViewModel
+                {
+                    userInfo = p.ProfileUserInfo,
+                    linksProfile =  p.linksProfiles,
+                    linkTypes =  linkTypes,
+                    countLikes = p.projectLikes.Count(),
+                    countProjects = p.projects.Count(),
+                    countViews = p.projectViews.Count()
+
+                }).FirstOrDefaultAsync();
+
+            return result;
         }
         public async Task<User> GetUserForLogin(string login)
         {
-            return await _applicationDB.Users.Where(p => p.UserName == login).FirstOrDefaultAsync();
+            return await _context.Users.Where(p => p.UserName == login).FirstOrDefaultAsync();
         }
         public async Task<bool> ChangeUserInfo(ProfileUserInfoViewModel profileUserInfo)
         {
@@ -105,25 +121,26 @@ namespace WebApplicationList.Services.Models
                 return false;
             }
 
-            var userInfo = await _applicationDB.profileUserInfo!.Where(p => p.UserId == user.Id).FirstOrDefaultAsync();
+            var userInfo = await _context.profileUserInfo!.Where(p => p.user!.Id == user.Id).FirstOrDefaultAsync();
 
             if(userInfo is null) 
                 return false;
 
-            _applicationDB.Attach(userInfo);
+            _context.Attach(userInfo);
+
             userInfo.HeaderDescription = profileUserInfo.HeaderDescription;
             userInfo.Description = profileUserInfo.Descrpition;
             userInfo.Year = profileUserInfo.Year;
             userInfo.Surname = profileUserInfo.Surname;
             userInfo.Profession = profileUserInfo.Profession;
 
-            await _applicationDB.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;
         }
         public async Task<bool> BindLinkInUser(string url,int id)
         {
-            var linkType = await _applicationDB.linksType!.Where(p => p.Id == id).FirstOrDefaultAsync();
+            var linkType = await _context.linksType!.Where(p => p.Id == id).FirstOrDefaultAsync();
 
             if (linkType is null)
             {
@@ -132,7 +149,7 @@ namespace WebApplicationList.Services.Models
 
             var user = await GetUserAsync();
             
-            var linksUser = await _applicationDB.linksProfile!.Where(p=>p.LinkType!.Id==linkType.Id&&p.User_Id==user.Id).FirstOrDefaultAsync();
+            var linksUser = await _context.linksProfile!.Where(p=>p.LinkType!.Id==linkType.Id&&p.User!.Id==user.Id).FirstOrDefaultAsync();
 
             if(linksUser is null)
             {
@@ -141,25 +158,25 @@ namespace WebApplicationList.Services.Models
                     return true;
                 }
             
-                await _applicationDB.linksProfile!.AddRangeAsync(new LinksProfile
+                await _context.linksProfile!.AddRangeAsync(new LinksProfile
                 {
                     LinkType = linkType,
-                    User_Id = user.Id,
+                    User = user,
                     Link = url,
                 });
 
-                await _applicationDB.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
 
-            _applicationDB.Attach(linkType);
-            _applicationDB.Attach(linksUser);
+            _context.Attach(linkType);
+            _context.Attach(linksUser);
 
             if (string.IsNullOrEmpty(url))
             {
-                 _applicationDB.linksProfile!.Remove(linksUser);
-                await _applicationDB.SaveChangesAsync();
+                 _context.linksProfile!.Remove(linksUser);
+                await _context.SaveChangesAsync();
                 return true;
             }
 
@@ -167,13 +184,69 @@ namespace WebApplicationList.Services.Models
 
             linksUser.Link = url;
 
-            await _applicationDB.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;  
         }
         public async Task<IEnumerable<LinksProfile>> GetLinksUser(string userId)
         {
-            return await _applicationDB.linksProfile!.Include(p => p.LinkType).Where(p => p.User_Id == userId).ToListAsync();
+            return await _context.linksProfile!.Include(p => p.LinkType).Where(p => p.User!.Id == userId).ToListAsync();
+        }
+
+        public async Task<bool> SetSubsccribe(User user,User subscribeUser)
+        {
+            if(user is null|| subscribeUser is null)
+            {
+                return false;
+            }
+
+            var checkSubscribe = await _context.subscribeUsers!
+                .Where(p => p.user == user && p.subscribe == subscribeUser).FirstOrDefaultAsync();
+
+            if(checkSubscribe is null)
+            {
+                await _context.subscribeUsers!.AddAsync(new SubscribeUser
+                {
+                    user = user,
+                    subscribe = subscribeUser,
+                });
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            
+
+            return true;
+        }
+        public async Task<bool> DeleteSubscribe(User user,User subscribe)
+        {
+            var subscriber = await _context.subscribeUsers!
+                .Where(p => p.user == user && p.subscribe == subscribe).FirstOrDefaultAsync();
+
+            if(subscriber is null)
+            {
+                return true;
+            }
+
+            _context.subscribeUsers!.Remove(subscriber);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
        

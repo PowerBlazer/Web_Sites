@@ -17,5 +17,6 @@ namespace WebApplicationList.Services
         Task<bool> AddComment(int projectId, User user, string text);
         Task<bool> SelectLike(int projectId, User user);
         Task<bool> DeleteLike(int projectId, User user);
+        Task SetViewProject(string projectName, User user);
     }
 }

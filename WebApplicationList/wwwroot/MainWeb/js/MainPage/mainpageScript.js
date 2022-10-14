@@ -286,10 +286,20 @@ function InitModalProject(){
 
     });
 
+    $(".subscribe-user").click(function(){
+        let userName = $(this).val();
+        if($(this).hasClass("disabled-button")){
+            $(this).removeClass("disabled-button");
+            $(this).html("Подписаться");
+            UnSubscribe(userName);
+        }
+        else{
+            $(this).addClass("disabled-button");
+            $(this).html("Подписано");
+            Subscribe(userName);
+        }
+    });
     InitLikePanel();
-
-
-
 }
 
 function InitLikePanel(){
@@ -299,11 +309,18 @@ function InitLikePanel(){
 
     let projectId = $("#like-button-panel").attr("data-id");
 
+
     likeButton.click(function(){
         Like(projectId);
+        
+        let likes =  $("#count-like").html();
+        $("#count-like").html(Number(likes)+1)
     });
     dislikeButton.click(function(){
         Dislike(projectId);
+
+        let likes =  $("#count-like").html();
+        $("#count-like").html(Number(likes)-1)
     });
 
 
@@ -400,7 +417,7 @@ function Like(projectId){
         data:{projectId:projectId},
         success:function(result){
             if(result){
-                let button = "<button type=\"button\" class=\"disabled\" id=\"delete-like\">Дизлайк</button>"
+                let button = "<button type=\"button\" class=\"disabled\" id=\"delete-like\">Убрать лайк</button>"
                 $("#like-button-panel").html(button);
                 InitLikePanel();
             }
@@ -433,3 +450,48 @@ function Dislike(projectId){
         }
     })
 }
+function Subscribe(userName){
+    $.ajax({
+        type:"POST",
+        url:"/Profile/SetSubscribe",
+        data:{userName:userName},
+        success:function(result){
+            if(result == null){
+                ErrorMessage("На самого себя нельзя");
+                return;
+            }
+            if(result){
+                SuccessMessage("Подписано");
+            }
+            else{
+                ErrorMessage("Ошибка на сервере пробуйте позже")
+            }
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+function UnSubscribe(userName){
+    $.ajax({
+        type:"POST",
+        url:"/Profile/DeleteSubscribe",
+        data:{userName:userName},
+        success:function(result){
+            if(result == null){
+                ErrorMessage("На самого себя нельзя");
+                return;
+            }
+            if(result){
+                SuccessMessage("Отписано");
+            }
+            else{
+                ErrorMessage("Ошибка на сервере пробуйте позже")
+            }
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+

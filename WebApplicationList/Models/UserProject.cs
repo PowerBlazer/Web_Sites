@@ -18,8 +18,10 @@ namespace WebApplicationList.Models
         public string? Type { get; set; }
         public DateTime AddedTime { get; set; }
 
-        public string? User_Id { get; set; }
+        public User? user { get; set; }
         public List<ProjectComment> projectComments { get; set; } = new List<ProjectComment>();
+        public List<ProjectLike> projectLikes { get; set; } = new List<ProjectLike>();
+        public List<ProjectView> projectViews { get; set; } = new List<ProjectView>();
 
     }
 }

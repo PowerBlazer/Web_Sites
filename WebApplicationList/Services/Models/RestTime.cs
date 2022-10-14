@@ -32,7 +32,7 @@
                 return Convert.ToInt32(timeSpan.Hours) + " часов назад";
             }
 
-            if (timeSpan.Minutes >= 1)
+            if (timeSpan.Minutes > 1)
             {
                 if (timeSpan.Minutes < 2)
                 {
@@ -46,7 +46,7 @@
             }
 
             if (timeSpan.Seconds >= 1)
-            {
+            {               
                 if (timeSpan.Seconds < 2)
                 {
                     return Convert.ToInt32(timeSpan.Seconds) + " секунду назад";

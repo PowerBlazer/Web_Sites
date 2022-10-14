@@ -11,17 +11,17 @@
         </button>
         <div class="project-info">
             <div class="project-name-user">
-                <img src="~/@(item.user!.LinkAvatar)" alt="img" width="25" height="25">
-                <a href="#">@item.user!.UserName</a>
+                <img src="~/@(item.userInfo!.user!.LinkAvatar)" alt="img" width="25" height="25">
+                <a href="#">@item.userInfo!.user!.UserName</a>
             </div>
             <ul>
                 <li>
                     <img src="~/MainWeb/Images/scan.svg" width="25" height="25" alt="eye">
-                    <span>@item.likes</span>
+                    <span>@item.project.projectViews.Count()</span>
                 </li>
                 <li>
                     <i class="icon-heart"></i>
-                    <span>@item.likes</span>
+                    <span>@item.project.projectLikes.Count()</span>
                 </li>
             </ul>
         </div>

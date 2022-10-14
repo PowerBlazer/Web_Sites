@@ -238,7 +238,6 @@ section{
     transition: all .3s;
     min-width: 170px;
     position: relative;
-    max-width: 210px;
 }
 .list-down-filters-button:hover{
     outline:1px solid #888;
@@ -248,8 +247,7 @@ section{
     font-weight: 500;
     transition: all .3s;
     font-size: 17px;
-    padding-right: 17px;
-    max-width: 150px;
+    padding-right: 15px;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -524,6 +522,14 @@ body{
 .modal-project-info .links>button:hover{
     background-color: #0041c3;
 }
+.modal-project-info .links>.disabled-button{
+    background-color: gray;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgb(190, 190, 190);
+}
+.modal-project-info .links>.disabled-button:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
 .modal-project-info .content{
     width: 100%;
     background-color: white;
@@ -656,6 +662,14 @@ body{
     align-items: flex-start;
     gap: 10px;
 }
+.owner-panel-info .user-info-panel .disabled-button{
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #707070;
+}
+.owner-panel-info .user-info-panel .disabled-button:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
 .owner-panel-info .user-info-panel>div{
     display: flex;
     padding: 5px;
@@ -690,7 +704,7 @@ body{
     border-radius: 20px;
     transition: background-color .3s;
 }
-.owner-panel-info .user-info-panel>button:nth-child(2):hover{
+.owner-panel-info .user-info-panel>button:nth-child(2):not(.disabled-button){
     background-color: #0041c3;
 }
 .owner-panel-info .user-info-panel>button:nth-child(3){
@@ -848,6 +862,31 @@ body{
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+@media(max-width:1220px){
+    .modal-project-info>.project-info {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .add-comment .comment-area {
+        min-width: 0px;
+    }
+}
+@media(max-width:1000px){
+    .table-project-comments{
+        flex-direction:column-reverse;
+    }
+    .table-project-comments .second-column>li{
+       width: 100%;
+       max-width: none;
+    }
+    .table-project-comments .second-column button{
+        max-width: 380px;
+    }
+    .table-project-comments .first-column {
+        max-width: none;
+    }
+
+}
 @media(max-width:800px){
     .projects-blocks_inner{
         justify-content: center;
@@ -856,6 +895,14 @@ body{
 @media(max-width:600px){
     .projects-blocks_inner .project-block .project-image img {
         width: 90vw;
+    }
+}
+@media(max-width:560px){
+    .table-project-comments{
+        padding: 20px;
+    }
+    .modal-project-info .close-modal {
+        right: 15px;
     }
 }
 @media(max-width:490px){
@@ -878,6 +925,12 @@ body{
         position: relative;
         overflow: visible;
     } 
+    .table-project-comments .second-column button{
+        width: 100%;
+    }
+    .table-project-comments .second-column{
+        min-width: 0px;
+    }
 }
 @media(max-width:440px){
     .projects-blocks_inner .project-block .project-image img {
@@ -898,4 +951,8 @@ body{
         left: 0;
         width: 100%;
     }
+    .add-comment>img {
+        display: none;
+    }
+
 }

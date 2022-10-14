@@ -119,19 +119,15 @@ namespace WebApplicationList.Services.Models
             if (string.IsNullOrEmpty(nameProject))
                 return string.Empty;
 
-            var project = await _context.userProjects!.Where(p => p.Name == nameProject).FirstOrDefaultAsync();
+            var project = await _context.userProjects!.Where(p => p.Name == nameProject)
+                .Include(p=>p.user).FirstOrDefaultAsync();
 
             if (project is null)
                 return string.Empty;
 
-            var user = await _context.Users.Where(p => p.Id == project.User_Id).FirstOrDefaultAsync();
-
-            if (user is null)
-                return string.Empty;
-
             string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects");
             var listUserNames = Directory.GetDirectories(filePath).ToList();
-            string? pathUserProjects = listUserNames.Where(p => p.EndsWith(user!.UserName)).FirstOrDefault();
+            string? pathUserProjects = listUserNames.Where(p => p.EndsWith(project.user!.UserName)).FirstOrDefault();
 
             if (string.IsNullOrEmpty(pathUserProjects))
                 return string.Empty;
@@ -238,6 +234,30 @@ namespace WebApplicationList.Services.Models
             File.WriteAllLines(path,fileLines);
 
             return changesLines;
+        }
+        public async Task SetViewProject(string projectName, User user)
+        {
+            var project = await _context.userProjects!.Where(p => p.Name == projectName).FirstOrDefaultAsync();
+
+            if(project is null)
+            {
+                return;
+            }
+
+            var count = await _context.projectViews!
+                .Where(p => p.project!.Name == projectName && p.user!.Id == user.Id).CountAsync();
+
+            if (count == 0)
+            {
+                await _context.projectViews!.AddAsync(new ProjectView
+                {
+                    project = project,
+                    user = user,
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
         }
         public async Task<bool> AddComment(int projectId, User user, string text)
         {
@@ -375,7 +395,7 @@ namespace WebApplicationList.Services.Models
                 Name = projectSettings.Name,
                 Description = projectSettings.Description,
                 Type= projectSettings.Types,
-                User_Id = user.Id,
+                user = user, 
                 UrlImage = $"UserProjectsImage/{projectSettings.Name}.jpg",
                 Url = $"?Site={projectSettings.Name}&page={projectSettings.SelectedPage}"
             });

@@ -42,8 +42,10 @@ namespace WebApplicationList.Services.Models
                 await _roleManager.CreateAsync(new IdentityRole("user"));
                 await _userManager.AddToRoleAsync(user, "user");
                 await _signInManager.SignInAsync(user, registerModel.RememberMe);
-                await _applicationDB.profileUserInfo!.AddAsync(new ProfileUserInfo { UserId = user.Id });
+
+                await _applicationDB.profileUserInfo!.AddAsync(new ProfileUserInfo { user = user });
                 await _applicationDB!.SaveChangesAsync();
+
                 model.IsSuccess();
             }
             else

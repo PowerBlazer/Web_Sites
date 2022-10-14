@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using WebApplicationList.Models;
 using WebApplicationList.Models.MainSiteModels.ProfileModels;
 using WebApplicationList.Models.MainSiteModels.ProjectModels;
@@ -14,6 +15,8 @@ namespace WebApplicationList.ApplicationDataBase
         public DbSet<LinksProfile>? linksProfile { get; set; }
         public DbSet<ProjectComment>? projectComments { get; set; }
         public DbSet<ProjectLike>? projectLikes { get; set; }
+        public DbSet<ProjectView>? projectViews { get; set; }
+        public DbSet<SubscribeUser>? subscribeUsers { get; set; }
 
         public ApplicationDb(DbContextOptions<ApplicationDb> options) : base(options)
         {
@@ -51,6 +54,25 @@ namespace WebApplicationList.ApplicationDataBase
                     Name = "instagram",
                 }
             );
+            builder
+             .Entity<User>()
+             .HasOne(u => u.ProfileUserInfo)
+             .WithOne(p => p.user)
+             .HasForeignKey<ProfileUserInfo>(p => p.User_key);
+
+            builder.Entity<SubscribeUser>()
+                .HasOne(p => p.user)
+                .WithMany(p => p.usersProfile);
+
+            builder.Entity<SubscribeUser>()
+                .HasOne(p=>p.subscribe)
+                .WithMany(p=>p.subscribes);
+                
+                
+
+           
+
+
 
         }
 

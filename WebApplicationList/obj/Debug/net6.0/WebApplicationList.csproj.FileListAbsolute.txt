@@ -177,5 +177,3 @@ D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsetti
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\appsettings.json
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.deps.json
 D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\publish\WebApplicationList.runtimeconfig.json
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\EncodingText.dll
-D:\GitHubProjects\Web_Sites\WebApplicationList\bin\Debug\net6.0\EncodingText.pdb

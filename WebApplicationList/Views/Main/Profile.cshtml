@@ -18,7 +18,7 @@
         <div class="profile-panel">
             <div class="avatar-profile-block">
                 <div>
-                    <img src="@Model.user!.LinkAvatar" alt="avatar" asp-append-version="true" class="avatar-image">
+                    <img src="@Model.userInfo!.user!.LinkAvatar" alt="avatar" asp-append-version="true" class="avatar-image">
                     <input type="file" id="change-avatar-input">
                     <label for="change-avatar-input" id="change-avatar"><i class="icon-pencil-svgrepo-com"></i></label>
                 </div>
@@ -26,30 +26,30 @@
                     @{
                         if(string.IsNullOrEmpty(Model.userInfo!.Surname))
                         {
-                            <div class="profile-user-name">@Model.user.UserName</div>
+                            <div class="profile-user-name">@Model.userInfo!.user.UserName</div>
                         }
                         else
                         {
                             <div class="profile-user-name">@Model.userInfo.Surname</div>
                         }
                     }
-                    <span class="profile-email-user">@Model.user!.Email</span>
+                    <span class="profile-email-user">@Model.userInfo!.user!.Email</span>
                     <ul class="info-user-panel">
                         <li class="followers-count">
                             <span>Подписчики</span>
-                            @Model.NumberSubscriber
+                            0
                         </li>
                         <li class="followers-count">
                             <span>Оценки</span>
-                            @Model.NumberLikes
+                           @Model.countLikes
                         </li>
                         <li class="followers-count">
                             <span>Подписки</span>
-                            @Model.NumberLikes
+                            0
                         </li>
                         <li class="followers-count">
                             <span>Просмотры проектов</span>
-                            @Model.NumberLikes
+                            @Model.countViews
                         </li>
                     </ul>
 
@@ -88,7 +88,7 @@
                         </div>
                     }
 
-                    <div class="data-registration">Дата регистрации @Model.user!.DateRegistraition.ToShortDateString()</div>
+                    <div class="data-registration">Дата регистрации @Model.userInfo!.user!.DateRegistraition.ToShortDateString()</div>
                 </div>
             </div>  
             <div class="profile-info-block">
@@ -101,7 +101,7 @@
                         {
                            @:class="menu-profile-item_inner"
                         }>
-                        <button data-count="@Model.NumberProjects" type="button" class="menu-profile-item project-count" id="projectbutton"><i class="icon-projexts"></i>Проекты</button>
+                        <button data-count="@Model.countProjects" type="button" class="menu-profile-item project-count" id="projectbutton"><i class="icon-projexts"></i>Проекты</button>
                     </div>
                     <div class="menu-profile-item_inner">
                         <button type="button" class="menu-profile-item favorite-count" id="favoritesbutton"><i class="icon-heart"></i>Оценки</button>
