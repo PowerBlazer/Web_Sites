@@ -18,26 +18,29 @@
         <div class="profile-panel">
             <div class="avatar-profile-block">
                 <div>
-                    <img src="@Model.userInfo!.user!.LinkAvatar" alt="avatar" asp-append-version="true" class="avatar-image">
-                    <input type="file" id="change-avatar-input">
-                    <label for="change-avatar-input" id="change-avatar"><i class="icon-pencil-svgrepo-com"></i></label>
+                    <img src="~/@Model.LinkAvatar" alt="avatar" asp-append-version="true" class="avatar-image">
+                    @if(ViewBag.Privacy)
+                    {
+                        <input type="file" id="change-avatar-input">
+                        <label for="change-avatar-input" id="change-avatar"><i class="icon-pencil-svgrepo-com"></i></label>
+                    }
                 </div>
                 <div>
                     @{
-                        if(string.IsNullOrEmpty(Model.userInfo!.Surname))
+                        if(string.IsNullOrEmpty(Model.Surname))
                         {
-                            <div class="profile-user-name">@Model.userInfo!.user.UserName</div>
+                            <div class="profile-user-name">@Model.UserName!</div>
                         }
                         else
                         {
-                            <div class="profile-user-name">@Model.userInfo.Surname</div>
+                            <div class="profile-user-name">@Model.Surname!</div>
                         }
                     }
-                    <span class="profile-email-user">@Model.userInfo!.user!.Email</span>
+                    <span class="profile-email-user">@Model.Email</span>
                     <ul class="info-user-panel">
                         <li class="followers-count">
                             <span>Подписчики</span>
-                            0
+                            @Model.countSubscriber
                         </li>
                         <li class="followers-count">
                             <span>Оценки</span>
@@ -45,7 +48,7 @@
                         </li>
                         <li class="followers-count">
                             <span>Подписки</span>
-                            0
+                            @Model.countSubscriptions
                         </li>
                         <li class="followers-count">
                             <span>Просмотры проектов</span>
@@ -53,18 +56,18 @@
                         </li>
                     </ul>
 
-                    @if(!string.IsNullOrEmpty(Model.userInfo!.Description))
+                    @if(!string.IsNullOrEmpty(Model.Description))
                     {                  
                         string descriptionHeader = "Описание";
                         
-                        if(!string.IsNullOrEmpty(Model.userInfo.HeaderDescription))
+                        if(!string.IsNullOrEmpty(Model.HeaderDescriprion))
                         {
-                            descriptionHeader = Model.userInfo.HeaderDescription;
+                            descriptionHeader = Model.HeaderDescriprion;
                         } 
                     
                         <div class="user-description-panel">
                             <div class="user-head-description">@descriptionHeader</div>
-                            <div class="user-description">@Model.userInfo.Description</div>
+                            <div class="user-description">@Model.Description</div>
                         </div>
                     }
 
@@ -88,7 +91,7 @@
                         </div>
                     }
 
-                    <div class="data-registration">Дата регистрации @Model.userInfo!.user!.DateRegistraition.ToShortDateString()</div>
+                    <div class="data-registration">Дата регистрации @Model.DateRegistration.ToShortDateString()</div>
                 </div>
             </div>  
             <div class="profile-info-block">
@@ -105,8 +108,10 @@
                     </div>
                     <div class="menu-profile-item_inner">
                         <button type="button" class="menu-profile-item favorite-count" id="favoritesbutton"><i class="icon-heart"></i>Оценки</button>
-                    </div>             
-                    <div @if(ViewBag.Page=="settings")
+                    </div>  
+                    @if(ViewBag.Privacy!)
+                    {
+                        <div @if(ViewBag.Page=="settings")
                         {
                             @:class="menu-profile-item_inner active-profile-item"
                         }
@@ -115,17 +120,19 @@
                            @:class="menu-profile-item_inner"
                         }>
                         <button type="button" class="menu-profile-item" id="settingbutton"><i class="icon-setting"></i>Настройки</button>
-                    </div>
-                    <div @if(ViewBag.Page=="addproject")
-                        {
-                            @:class="menu-profile-item_inner active-profile-item"
-                        }
-                        else
-                        {
-                           @:class="menu-profile-item_inner"
-                        }>
+                        </div>
+                        <div @if(ViewBag.Page=="addproject")
+                            {
+                                @:class="menu-profile-item_inner active-profile-item"
+                            }
+                            else
+                            {
+                                @:class="menu-profile-item_inner"
+                            }>
                         <button type="button" class="menu-profile-item" id="add-project"><i class="icon-html-doc"></i>Добавить проект</button>
-                    </div>
+                        </div>
+                    }           
+                    
                 </div>
                 
 
@@ -141,7 +148,8 @@
                 <div class="favorites-block-profile_inner" style="transform: translateX(-100%);">
         
                 </div>
-                <div class="settings-block-profile_inner" 
+                @if(ViewBag.Privacy){
+                    <div class="settings-block-profile_inner" 
                     @if(ViewBag.Page=="settings")
                     {
                         @:style="transform: translateX(0%); position:relative;opacity:1;"
@@ -155,19 +163,19 @@
                                 <div class="rename-name-surname-block">
                                     <div class="name-rename_inner">
                                         <label>Ник</label>
-                                        <input type="text" id="surname-rename" value="@Model.userInfo!.Surname">
+                                        <input type="text" id="surname-rename" value="@Model.Surname">
                                     </div>
                                 </div>
                                 <div class="rename-name-surname-block">
                                     <div class="name-rename_inner">
                                         <label>Год рождения</label>
-                                        <input type="number" id="year-rename" value="@Model.userInfo!.Year">
+                                        <input type="number" id="year-rename" value="@Model.Year">
                                     </div>
                                 </div>
                                 <div class="rename-name-surname-block">
                                     <div class="name-rename_inner">
                                         <label>Профессия</label>
-                                        <input type="text" id="proffesion-rename" value="@Model.userInfo!.Profession">
+                                        <input type="text" id="proffesion-rename" value="@Model.Profession">
                                     </div>
                                 </div>
                             </li>
@@ -201,11 +209,11 @@
                                 <div class="header-setting-element">Изменить описание профиля</div>
                                 <div class="name-rename_inner">
                                     <label>Заголовок Описания</label>
-                                    <input type="text" id="header-description-input" value="@Model.userInfo.HeaderDescription">
+                                    <input type="text" id="header-description-input" value="@Model.HeaderDescriprion">
                                 </div>
                                 <div class="name-rename_inner description-panel">
                                     <label>Описание</label>
-                                    <textarea id="description-content">@Model.userInfo.Description</textarea>
+                                    <textarea id="description-content">@Model.Description</textarea>
                                 </div>
                             </li>
                             <li class="setting-item">
@@ -243,23 +251,28 @@
                             </div>
                         </div>
                     </div>
+                }
+                
                 </div>
             </div>
         </div>
     </div>  
 </section>
 
-<div class="modal-bind-link_inner">
-    <div class="bind-link-block">
-        <span>Оставьте поле пустым,чтобы удалить</span>
-        <input type="text" placeholder="NewLink" id="bind-link-value">
-        <div class="bind-link-save">
-            <button class="blue-button blue-button-small" id="bind-link" value="">Сохранить</button>
-            <button class="blue-button blue-button-small" id="bind-modal-close" >Закрыть</button>
+@if(ViewBag.Privacy){
+    <div class="modal-bind-link_inner">
+        <div class="bind-link-block">
+            <span>Оставьте поле пустым,чтобы удалить</span>
+            <input type="text" placeholder="NewLink" id="bind-link-value">
+            <div class="bind-link-save">
+                <button class="blue-button blue-button-small" id="bind-link" value="">Сохранить</button>
+                <button class="blue-button blue-button-small" id="bind-modal-close" >Закрыть</button>
+            </div>
+            
         </div>
-        
     </div>
-</div>
+}
+
 
 <div class="modal-check-file" id="result-text-file">
 
@@ -268,8 +281,12 @@
 @section Scripts{
     <script src="~/MainWeb/js/ProfilePage/profilescript.js" asp-append-version="true"></script>
     <script src="~/MainWeb/js/ProfilePage/projectscript.js" asp-append-version="true"></script>
-    <script src="~/MainWeb/js/ProjectSettingScripts/projectSetting.js" asp-append-version="true"></script>
-    <script src="~/MainWeb/js/ProfilePage/profileSettings.js" asp-append-version="true"></script>
+    @if(ViewBag.Privacy)
+    {
+        <script src="~/MainWeb/js/ProjectSettingScripts/projectSetting.js" asp-append-version="true"></script>
+        <script src="~/MainWeb/js/ProfilePage/profileSettings.js" asp-append-version="true"></script>
+    }
+    
     <script>
         @if(ViewBag.Page=="settings")
         {

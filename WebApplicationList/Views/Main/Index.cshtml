@@ -83,25 +83,25 @@
             @foreach(var item in Model)
             {
                 <div class="project-block">
-                    <button value="@item.project!.Name" class="project-image open-project-info">
+                    <button value="@item.projectName" class="project-image open-project-info">
                         <div>
-                            <a href="~/UserProject@(item.project.Url)">@item.project.Name</a>
+                            <a href="~/UserProject@(item.projectUrl)">@item.projectName</a>
                         </div>
-                        <img src="~/@(item.project!.UrlImage)" alt="img" width="200">
+                        <img src="~/@(item.projectUrlImage)" alt="img" width="200">
                     </button>
                     <div class="project-info">
                         <div class="project-name-user">
-                            <img src="~/@(item.userInfo!.user!.LinkAvatar)" alt="img" width="25" height="25">
-                            <a href="#">@item.userInfo!.user!.UserName</a>
+                            <img src="~/@(item.linkAvatar)" alt="img" width="25" height="25">
+                            <a href="#">@item.userName</a>
                         </div>
                         <ul>
                             <li>
                                 <img src="~/MainWeb/Images/scan.svg" width="25" height="25" alt="eye">
-                                <span>@item.project.projectViews.Count()</span>
+                                <span>@item.views</span>
                             </li>
                             <li>
                                 <i class="icon-heart"></i>
-                                <span>@item.project.projectLikes.Count()</span>
+                                <span>@item.likes</span>
                             </li>
                         </ul>
                     </div>

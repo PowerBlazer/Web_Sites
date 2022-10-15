@@ -3,25 +3,25 @@
 @model ProjectViewModel;
 
 <div class="user-info_inner">
-    <img src="~/@(Model.userInfo!.user!.LinkAvatar)" width="30" height="30">
+    <img src="~/@(Model.linkAvatar)" width="30" height="30">
     <div class="user-info">
-        <div class="project-name">@Model.project!.Name</div>
+        <div class="project-name">@Model.projectName</div>
         <div class="links">
-            <a href="#">@Model.userInfo!.user!.UserName</a>
+            <a href="#">@Model.userName</a>
             @if(Model.signed)
             {
-                <button type="button" class="subscribe-user disabled-button" value="@Model.userInfo!.user!.UserName" id="">Подписано</button>
+                <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="">Подписано</button>
             }
             else{
-                <button type="button" class="subscribe-user" value="@Model.userInfo!.user!.UserName" id="">Подписаться</button>
+                <button type="button" class="subscribe-user" value="@Model.userName" id="">Подписаться</button>
             }
         </div>
     </div>
 </div>
 <ul class="content">
     <li class="image-block">
-        <a href="~/UserProject@(Model.project!.Url)">
-            <img src="~/@(Model.project!.UrlImage)" width="1200" alt="img">
+        <a href="~/UserProject@(Model.projectUrl)">
+            <img src="~/@(Model.projectUrlImage)" width="1200" alt="img">
         </a>
     </li>
     <li class="table-project-comments">
@@ -31,14 +31,14 @@
                 <img src="" id="user-avatar" alt="" width="30" height="30">
                 <div class="comment-area">
                     <textarea placeholder="Что вы думаете о проекте?" id="comment"></textarea>
-                    <button type="button" value="@Model.project.Id" id="send-comment">Опубликовать комментарий</button>
+                    <button type="button" value="@Model.projectId" id="send-comment">Опубликовать комментарий</button>
                 </div>
             </div>
             }
             else{
                 <div class="reg-info">
                     <div>Зарегистрируйтесь, чтобы присоединиться к обсуждению</div>
-                    <span>Добавьте свой отзыв о проекте пользователя @(Model.userInfo.user.UserName), войдя в систему или зарегистрировавшись.</span>
+                    <span>Добавьте свой отзыв о проекте пользователя @(Model.userName), войдя в систему или зарегистрировавшись.</span>
                     <button id="project-register-user">Зарегестрироваться</button>
                 </div>
             }
@@ -67,29 +67,29 @@
                 <div class="header">Владелец</div>
                 <div class="user-info-panel">
                     <div>
-                        <img src="~/@(Model.userInfo.user!.LinkAvatar)" alt="img" width="30" height="30">
+                        <img src="~/@(Model.linkAvatar)" alt="img" width="30" height="30">
                         <div>
-                            <div>@Model.userInfo!.user!.UserName</div>
-                            @if(string.IsNullOrEmpty(Model.userInfo!.Profession)){
+                            <div>@Model.userName</div>
+                            @if(string.IsNullOrEmpty(Model.profession)){
                                 <span>Не указана профессия</span>
                             }
                             else{
-                                <span>@Model.userInfo!.Profession</span>
+                                <span>@Model.profession</span>
                             }
                         </div>
                     </div>
                     @if(Model.signed){
-                        <button type="button" class="subscribe-user disabled-button" value="@Model.userInfo.user.UserName" id="subscribe-button">Подписано</button>
+                        <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="subscribe-button">Подписано</button>
                     }
                     else{
-                        <button type="button" class="subscribe-user" value="@Model.userInfo.user.UserName" id="subscribe-button">Подписаться</button>
+                        <button type="button" class="subscribe-user" value="@Model.userName" id="subscribe-button">Подписаться</button>
                     }
                     <button type="button">Сообщение</button>
                 </div>
             </li>
             <li class="project-info">
-                <div class="name">@Model.project.Name</div>
-                <div class="description">@Model.project.Description</div>
+                <div class="name">@Model.projectName</div>
+                <div class="description">@Model.projectDescription</div>
                 <ul class="numbers">
                     <li>
                         <img src="~/MainWeb/Images/finger-upGray.svg" alt="" width="15" height="15">
@@ -104,12 +104,12 @@
                         <span id="count-comments">@Model.projectComments!.Count()</span>
                     </li>
                 </ul>
-                <span>Опубликовано @Model.project.AddedTime.ToShortDateString()</span>
+                <span>Опубликовано @Model.addedTime.ToShortDateString()</span>
             </li>
             @if(User.Identity.IsAuthenticated){
             <li class="like-panel">
                 <div class="header">Оценить</div>
-                <div class="button-panel" data-id="@Model.project.Id" id="like-button-panel">
+                <div class="button-panel" data-id="@Model.projectId" id="like-button-panel">
                 @if(Model.liked)
                 {
                     <button type="button" class="disabled" id="delete-like">Убрать лайк</button>
@@ -124,7 +124,7 @@
                 <div class="header">Теги</div>
                 <ul class="tags-panel">
                     @{
-                        string[] tags = Model.project!.Type!.Split(',');
+                        string[] tags = Model.projectTypes!.Split(',');
                         foreach(var item in tags)
                         {
                             @:<li><a href="#">@item.Replace(",","")</a></li>

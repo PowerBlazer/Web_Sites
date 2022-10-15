@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
 using WebApplicationList.IdentityApplication.ViewModels;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.MainSiteModels.ProfileModels;
 using WebApplicationList.Services;
 

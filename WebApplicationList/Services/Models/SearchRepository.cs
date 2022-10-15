@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
-using WebApplicationList.Models;
-using WebApplicationList.Models.MainSiteModels.ProjectModels;
+using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
 
 namespace WebApplicationList.Services.Models
@@ -26,11 +25,15 @@ namespace WebApplicationList.Services.Models
                 .Include(p=>p.projectViews)
                 .Select(p => new ProjectViewModel
                 {
-                    userInfo = p.user!.ProfileUserInfo,
-                    project = p,
+                    userName = p.user!.UserName,
+                    linkAvatar = p.user!.LinkAvatar,
+                    projectName = p.Name,
+                    projectUrl = p.Url,
+                    projectUrlImage = p.UrlImage,
+                    addedTime = p.AddedTime,
                     likes = p.projectLikes.Count(),
                     views = p.projectViews.Count(),
-                }).AsSplitQuery().Take(20).ToListAsync();
+                }).AsSplitQuery().AsNoTracking().Take(20).ToListAsync();
 
             return projects;
         }
@@ -62,24 +65,34 @@ namespace WebApplicationList.Services.Models
             }
 
             var request = _context.userProjects!
-                                 .Where(p => EF.Functions.Like(p.Name!, $"%{searchOptions.Text}%"))
-                                 .Where(p => EF.Functions.Like(p.Type!, $"%{searchOptions.Type!}%"))
-                                 .Include(p => p.user).ThenInclude(p => p!.ProfileUserInfo)
-                                 .Select(p => new ProjectViewModel
-                                 {
-                                     userInfo = p.user!.ProfileUserInfo,
-                                     project = p,
-                                 }).Take(searchOptions.PageIndex);
+                .Where(p => EF.Functions.Like(p.Name!, $"%{searchOptions.Text}%"))
+                .Where(p => EF.Functions.Like(p.Type!, $"%{searchOptions.Type!}%"))
+                .Include(p => p.user)
+                .Include(p=>p.projectLikes)
+                .Include(p=>p.projectViews)
+                .Select(p => new ProjectViewModel
+                {
+                    userName = p.user!.UserName,
+                    linkAvatar = p.user!.LinkAvatar,
+                    projectName = p.Name,
+                    projectUrl = p.Url,
+                    projectUrlImage = p.UrlImage,
+                    addedTime = p.AddedTime,
+                    likes = p.projectLikes.Count(),
+                    views = p.projectViews.Count(),
+
+
+                }).Take(searchOptions.PageIndex).AsNoTracking();
 
             var result = searchOptions.SortType switch 
             {
-                "name"=> await request.OrderBy(p=>p.project!.Name).ToListAsync(),
+                "name"=> await request.OrderBy(p=>p.projectName).ToListAsync(),
                    
-                "date"=> await request.OrderByDescending(p=>p.project!.AddedTime).ToListAsync(),
+                "date"=> await request.OrderByDescending(p=>p.addedTime).ToListAsync(),
 
-                "popular" => await request.OrderBy(p=>p.project!.Id).ToListAsync(),
+                "popular" => await request.OrderByDescending(p=>p.projectId).ToListAsync(),
 
-                _ => await request.OrderBy(p => p.project!.Id).ToListAsync(),
+                _ => await request.OrderByDescending(p => p.projectId).ToListAsync(),
             };
 
             return result; 
@@ -97,24 +110,28 @@ namespace WebApplicationList.Services.Models
             }
 
             var request = _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%"))
-                    .Include(p => p.ProfileUserInfo).ThenInclude(p => p!.user)
+                    .Include(p => p.profileUserInfo)
                     .Include(p => p.projects)
                     .Include(p => p.projectLikes)
-                    .Include(p=>p.usersProfile)
+                    .Include(p => p.usersProfile)
                     .Select(p => new ProfileUserViewModel
                     {
-                        userInfo = p.ProfileUserInfo,
+                        UserName = p.UserName,
+                        Surname = p.profileUserInfo!.Surname,
+                        LinkAvatar = p.LinkAvatar,
+                        Profession = p.profileUserInfo!.Profession,
+                        DateRegistration = p.DateRegistraition,
                         countLikes = p.projectLikes.Count(),
                         countProjects = p.projects.Count(),
                         countSubscriber = p.subscribes.Count(),
                     })
-                    .Take(searchOptions.PageIndex).AsSplitQuery();
+                    .Take(searchOptions.PageIndex).AsNoTracking().AsSplitQuery();
 
             var result = searchOptions.SortType switch
             {
-                "name" => await request.OrderBy(p=>p.userInfo!.user!.UserName).ToListAsync(),
-                "date"=> await request.OrderBy(p=>p.userInfo!.user!.DateRegistraition).ToListAsync(),
-                _ => await request.OrderBy(p=>p.userInfo!.Id).ToListAsync(),
+                "name" => await request.OrderBy(p=>p.UserName).ToListAsync(),
+                "date"=> await request.OrderByDescending(p=>p.DateRegistration).ToListAsync(),
+                _ => await request.OrderBy(p=>p.UserName).ToListAsync(),
             };
         
             return result;
@@ -122,29 +139,31 @@ namespace WebApplicationList.Services.Models
         public async Task<ProjectViewModel> GetProjectPresentation(string projectName)
         {
             var project = await _context.userProjects!.Where(p => p.Name == projectName)
-                .Include(p=>p.user).FirstOrDefaultAsync();
+                .Include(p => p.user).ThenInclude(p => p!.profileUserInfo)
+                .Include(p => p.projectViews)
+                .Include(p => p.projectLikes)
+                .Include(p => p.projectComments).ThenInclude(p=>p.user)
+                .Select(p => new ProjectViewModel
+                {
+                    userName = p.user!.UserName,
+                    linkAvatar = p.user!.LinkAvatar,
+                    profession = p.user!.profileUserInfo!.Profession,
+                    projectId = p.Id,
+                    projectName = p.Name,
+                    projectUrl = p.Url,
+                    projectUrlImage = p.UrlImage,
+                    projectDescription = p.Description,
+                    addedTime = p.AddedTime,
+                    projectTypes = p.Type,
+                    projectComments = p.projectComments,
+                    likes = p.projectLikes.Count(),
+                    views = p.projectViews.Count()
+                }).AsNoTracking().AsSplitQuery().FirstOrDefaultAsync();
 
-            if(project is null)
-            {
-                throw new Exception("Не найдено");
-            }
+            project!.liked = await GetLikedProject(project.projectId);
+            project!.signed = await GetSignedUser(project.userName!);
 
-            var result = new ProjectViewModel()
-            {
-                userInfo = await _context.profileUserInfo!.Where(p => p.user!.Id == project.user!.Id)
-                .Include(p => p.user).FirstOrDefaultAsync(),
-                project = project,
-                likes = await _context.projectLikes!.Where(p => p.project!.Id == project.Id).CountAsync(),
-                liked = await GetLikedProject(project.Id),
-                views = await _context.projectViews!.Where(p => p.project!.Id == project.Id).CountAsync(),
-                signed = await GetSignedUser(project.user!),
-                projectComments = await _context.projectComments!.Where(p => p.project!.Id == project.Id)
-                    .OrderByDescending(p=>p.date)
-                    .Include(p => p.project)
-                    .Include(p => p.user).Take(20).ToListAsync(),
-            };
-
-            return result;
+            return project;
         }
         public async Task<List<ProjectComment>> GetComments(int count,int projectId)
         {
@@ -153,11 +172,13 @@ namespace WebApplicationList.Services.Models
                 count = 20;
             }
 
-            return await _context.projectComments!.Where(p=>p.project!.Id == projectId)
+            var comments = await _context.projectComments!.Where(p=>p.project!.Id == projectId)
                 .OrderByDescending(p=>p.date)
                 .Include(p=>p.project)
                 .Include(p=>p.user)
-                .Take(count).AsSplitQuery().ToListAsync();
+                .Take(count).AsSplitQuery().AsNoTracking().ToListAsync();
+
+            return comments;
         }
         public async Task<bool> GetLikedProject(int projectId)
         {
@@ -175,7 +196,7 @@ namespace WebApplicationList.Services.Models
 
             return false;
         }
-        public async Task<bool> GetSignedUser(User projectOwner)
+        public async Task<bool> GetSignedUser(string userName)
         {
             var user = await _profileUser.GetUserAsync();
 
@@ -184,7 +205,8 @@ namespace WebApplicationList.Services.Models
                 return false;
             }
 
-            var result = await _context.subscribeUsers!.Where(p => p.user == user && p.subscribe == projectOwner).CountAsync();
+            var result = await _context.subscribeUsers!
+                .Where(p => p.user == user && p.subscribe!.UserName == userName).CountAsync();
 
             if (result > 0)
                 return true;

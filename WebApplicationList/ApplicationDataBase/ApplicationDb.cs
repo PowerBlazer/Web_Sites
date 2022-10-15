@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.MainSiteModels.ProfileModels;
 using WebApplicationList.Models.MainSiteModels.ProjectModels;
 
@@ -56,7 +56,7 @@ namespace WebApplicationList.ApplicationDataBase
             );
             builder
              .Entity<User>()
-             .HasOne(u => u.ProfileUserInfo)
+             .HasOne(u => u.profileUserInfo)
              .WithOne(p => p.user)
              .HasForeignKey<ProfileUserInfo>(p => p.User_key);
 

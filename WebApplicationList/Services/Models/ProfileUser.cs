@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.MainSiteModels.ProfileModels;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
 
@@ -27,11 +27,6 @@ namespace WebApplicationList.Services.Models
         public async Task<User> GetUserAsync()
         {
             var userName = GetUserName();
-
-            if (string.IsNullOrEmpty(userName))
-            {
-                return null;
-            }
 
             return await _context.Users.Where(p => p.UserName == userName).FirstOrDefaultAsync();
         }
@@ -74,11 +69,28 @@ namespace WebApplicationList.Services.Models
 
             return true;
         }   
-        public async Task<IEnumerable<UserProject>> GetProjectsUser(string id)
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsUser(string id)
         {
-            return await _context.userProjects!.Where(p => p.user!.Id == id).ToListAsync();
+            var projects = await _context.userProjects!.OrderBy(p => p.Name)
+                 .Where(p=>p.user!.Id == id)
+                 .Include(p => p.user)
+                 .Include(p => p.projectLikes)
+                 .Include(p => p.projectViews)
+                 .Select(p => new ProjectViewModel
+                 {
+                     userName = p.user!.UserName,
+                     linkAvatar = p.user!.LinkAvatar,
+                     projectName = p.Name,
+                     projectUrl = p.Url,
+                     projectUrlImage = p.UrlImage,
+                     addedTime = p.AddedTime,
+                     likes = p.projectLikes.Count(),
+                     views = p.projectViews.Count(),
+                 }).AsSplitQuery().AsNoTracking().Take(20).ToListAsync();
+
+            return projects;
         }
-        public async Task<ProfileUserViewModel> GetUserViewModelAsync(User user)
+        public async Task<ProfileUserViewModel> GetProfileUserViewModelAsync(User user)
         {
             if (user == null)
                 return null;
@@ -86,21 +98,34 @@ namespace WebApplicationList.Services.Models
             var linkTypes = await _context.linksType!.ToListAsync();
 
             var result = await _context.Users.Where(p => p.Id == user.Id)
-                .Include(p => p.ProfileUserInfo).Include(p => p.linksProfiles)
+                .Include(p => p.profileUserInfo)
+                .Include(p => p.linksProfiles).ThenInclude(p=>p.LinkType)
                 .Include(p=>p.projectViews)
                 .Include(p=>p.projectLikes)
                 .Include(p=>p.projects)
+                .Include(p=>p.usersProfile)
+                .Include(p=>p.subscribes)
                 .Select(p => new ProfileUserViewModel
                 {
-                    userInfo = p.ProfileUserInfo,
+                    UserName = p.UserName,
+                    LinkAvatar = p.LinkAvatar,
+                    Email = p.Email,
+                    Year = p.profileUserInfo!.Year,
+                    Profession = p.profileUserInfo!.Profession,
+                    HeaderDescriprion = p.profileUserInfo.HeaderDescription,
+                    Description = p.profileUserInfo.Description,
+                    Surname = p.profileUserInfo.Surname,
+                    DateRegistration = p.DateRegistraition,
                     linksProfile =  p.linksProfiles,
                     linkTypes =  linkTypes,
                     countLikes = p.projectLikes.Count(),
+                    countSubscriber = p.subscribes.Count(),
+                    countSubscriptions = p.usersProfile.Count(),
                     countProjects = p.projects.Count(),
                     countViews = p.projectViews.Count()
 
-                }).FirstOrDefaultAsync();
-
+                }).AsNoTracking().FirstOrDefaultAsync();
+          
             return result;
         }
         public async Task<User> GetUserForLogin(string login)

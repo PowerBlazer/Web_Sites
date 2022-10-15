@@ -6,8 +6,8 @@ $(document).ready(function(){
 
 function InitProject(){
     const ProjectsBlock = $("#projects-block");
-    
     GetProjects("",ProjectsBlock);
+
 }
 
 
@@ -20,6 +20,7 @@ function GetProjects(userName,element){
         data:{login:userName},
         success:function(result){
             element.html(result);
+            InitModalProjectInfo();
         },
         error:function(){
             ErrorMessage("Ошибка на сервере");

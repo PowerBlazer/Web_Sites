@@ -1,6 +1,6 @@
 ﻿
 using WebApplicationList.IdentityApplication.ViewModels;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
 
 namespace WebApplicationList.Services
 {

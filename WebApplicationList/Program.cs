@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
 using WebApplicationList.Services;
 using WebApplicationList.Services.Models;
 

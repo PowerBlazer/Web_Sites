@@ -8,20 +8,20 @@
             <div class="user-profile-avatar">
                 <object>
                     <a href="#">
-                        <img src="~/@item.userInfo!.user!.LinkAvatar" alt="img" width="80" height="80">
+                        <img src="~/@item.LinkAvatar" alt="img" width="80" height="80">
                     </a>
                 </object>
-                @if(string.IsNullOrEmpty(item.userInfo!.Surname)){
-                <div class="user-name">@item.userInfo.user.UserName</div>
+                @if(string.IsNullOrEmpty(item.Surname)){
+                <div class="user-name">@item.UserName</div>
                 }
                 else{
-                <div class="user-name">@item.userInfo.Surname</div>
+                <div class="user-name">@item.Surname</div>
                 }
-                @if(string.IsNullOrEmpty(item.userInfo!.Profession)){
+                @if(string.IsNullOrEmpty(item.Profession)){
                 <div class="profession">Проффессия не указана</div>
                 }
                 else{
-                <div class="profession">@item.userInfo!.Profession</div>
+                <div class="profession">@item.Profession</div>
                 }
             </div>
         </a>
@@ -39,7 +39,7 @@
                 <span>Проекты</span>
             </li>
         </ul>    
-        <button class="subscribe-button">
+        <button class="subscribe-button" value="@item.UserName">
             <div>Подписаться</div>
         </button>
     </div>

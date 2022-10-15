@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AZwE9zFhhFtGl7iivTsFwcCUH5DHpTnOqCtJZqQDXV4=",
+  "Hash": "BtcrevbPHz98pg4yHXT2opunACm1CEC9PzlBTE2tsPU=",
   "Source": "WebApplicationList",
   "BasePath": "_content/WebApplicationList",
   "Mode": "Default",
@@ -185,23 +185,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\iconExplorer\\style.css"
-    },
-    {
-      "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\IframeInit.css",
-      "SourceId": "WebApplicationList",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\",
-      "BasePath": "_content/WebApplicationList",
-      "RelativePath": "IframeInit.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\IframeInit.css"
     },
     {
       "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
@@ -1239,6 +1222,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\MainWeb\\css\\ProfilePage\\profilestyle.css"
+    },
+    {
+      "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\MainWeb\\css\\projectModal.css",
+      "SourceId": "WebApplicationList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\",
+      "BasePath": "_content/WebApplicationList",
+      "RelativePath": "MainWeb/css/projectModal.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\MainWeb\\css\\projectModal.css"
     },
     {
       "Identity": "D:\\GitHubProjects\\Web_Sites\\WebApplicationList\\wwwroot\\MainWeb\\css\\ProjectSetting\\projectSettingsStyle.css",

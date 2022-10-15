@@ -1,4 +1,4 @@
-﻿using WebApplicationList.Models;
+﻿using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.MainSiteModels.ViewModels;
 
 namespace WebApplicationList.Services

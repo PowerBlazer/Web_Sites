@@ -1,5 +1,5 @@
 section{
-    padding: 20px;
+    padding: 20px 0;
 }
 body{
     background-color: var(--main-back-color);   
@@ -160,8 +160,8 @@ body{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 10px 15px;
-    outline: 1px solid rgba(0,87,255,0.4);
+    padding: 10px 5px;
+    /*outline: 1px solid rgba(0,87,255,0.4);*/
     border-radius: 5px;
     margin: 10px 0;
 }
@@ -249,15 +249,14 @@ body{
     border-radius:5px;
 }
 .followers-count{
-    font-size: 22px;
-    font-family: 'RaleWay',sans-serif;
+    font-size: 18px;
     display: flex;
     justify-content: space-between;
     color: var(--main-text-color);
 }
 
-.followers-count span{
-    font-size: 15px;
+.followers-count>span{
+    font-size: 17px;
     font-weight: 300;
     color: var(--main-text-color);
 }
@@ -335,80 +334,7 @@ body{
     gap: 15px;
     padding: 15px;
 }
-.project-item_inner{
-    width: 300px;
-    height: 200px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    background-color: whitesmoke;
-    transition: all .3s;
-    box-shadow: 2px 2px 25px 0px rgba(70, 113, 223, 0.4);
-    margin: 5px 0;
-}
-.project-item_inner:hover{
-    box-shadow: var(--neon-shadow);
-}
-.project-image img{
-    height: 145px;
-    width: 100%;
-    object-fit:contain;
-    object-position:center center;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    background-color: rgb(177, 177, 177);
-}
-.project-item_inner-header{
-    display: flex;
-    padding: 5px 10px;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-}
-.project-logo{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-.project-logo img{
-    width: 40px;
-    height: 50px;
-}
-.project-logo-text{
-    font-family: 'RaleWay',sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
-.project-logo-text a{
-    font-size: 18px;
-}
-.project-logo-text a:hover{
-    text-decoration: underline;
-}
-.project-logo-text span{
-    font-size: 14px;
-    color: gray;
-    font-family: 'Roboto',sans-serif;
-    font-weight: 300;
-    letter-spacing: 1px;
-}
-.project-setting-buttons{
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.project-setting-buttons button i{
-    font-size: 22px;
-    transition: all .3s;
-}
-.project-setting-buttons button:hover i{
-    color: var(--button-color);
-}
+
 .null-elements-text{
     color: rgb(153, 153, 153);
     font-size: 20px;
@@ -447,7 +373,85 @@ body{
     letter-spacing: 1px;
     font-size: 15px;
 }
+.project-block{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.project-block .project-image:hover{
+    transform: scale(1.02);
+}
+.project-block .project-image img{
+    border-radius: 4px;
+    object-fit: cover;
+    width: 400px;
+    height: 250px;
+    object-position: center center;
+}
+.project-block .project-image{
+    position: relative;
+    transition: all .3s;
+}
+.project-block .project-image>div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 3px);
+    border-radius: 4px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 37%, rgba(0,0,0,0.8) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+}
+.project-block .project-image>div a{
+    color: white;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.project-block .project-image>div a:hover{
+    text-decoration: underline;
+}
+.project-block .project-info{
+    display: flex;
+    justify-content: space-between;
+}
+.project-name-user{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.project-name-user img{
+    object-fit:cover;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
 
+.project-name-user>a{
+    font-size: 15px;
+    color:white;
+    text-align: left;
+}
+.project-name-user>a:hover{
+    text-decoration: underline;
+}
+.project-block .project-info>ul{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.project-block .project-info>ul li:nth-child(1) img{
+    width: 17px;
+    height: 17px;
+}
+.project-block .project-info>ul li{
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    font-size: 15px;
+    color: #888;
+}
 
 
 

@@ -432,9 +432,7 @@ section{
     font-size: 17px;
     font-weight: 700;
 }
-body{
-    overflow: hidden;
-}
+
 .modal-project-info{
     position: fixed;
     top: 0;

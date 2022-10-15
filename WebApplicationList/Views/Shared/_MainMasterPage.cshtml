@@ -11,7 +11,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="~/CommonStyle.css">
         <link rel="stylesheet" type="text/css" href="~/MainWeb/css/site.css">
-        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ModalAuthorized.css">   
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ModalAuthorized.css">
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/projectModal.css">   
         @await RenderSectionAsync("link",required:false)  
     </head>
     <body>
@@ -209,6 +210,7 @@
         <script src="~/lib/jquery/dist/jquery.min.js" type="application/javascript" asp-append-version="true"></script>
         <script src="~/MainWeb/js/site.js" type="application/javascript" asp-append-version="true"></script>       
         <script src="~/MainWeb/js/AuthorizeScript.js" type="application/javascript" asp-append-version="true"></script>
+
         <script>
             @if(User.Identity!.IsAuthenticated){
                 @:InitAuthorizeScript();

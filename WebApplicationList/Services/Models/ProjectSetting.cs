@@ -7,6 +7,7 @@ using WebApplicationList.Models;
 using System.IO.Compression;
 using EncodingText;
 using WebApplicationList.Models.MainSiteModels.ProjectModels;
+using WebApplicationList.Models.Enitity;
 
 namespace WebApplicationList.Services.Models
 {
