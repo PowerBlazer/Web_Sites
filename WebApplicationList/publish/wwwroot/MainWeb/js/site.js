@@ -208,6 +208,271 @@ function OpenNotification(){
    });
 }
 
+function InitModalProjectInfo(){
+    $(".open-project-info").click(OpenModalProject);
+    $(".close-modal").click(CloseModalProject);
+    $(document).mouseup(function(e){
+        if(!$("#project-content").is(e.target) && $("#project-content").has(e.target).length === 0&&
+    !$(".pop-up-authorized").is(e.target)&&
+    $(".pop-up-authorized").has(e.target).length===0){
+        CloseModalProject();
+    }});
+}
+
+function OpenModalProject(){
+
+    const modalWindow = $(".modal-project-info");
+
+    let value = $(this).val();
+
+    modalWindow.css({
+        "visibility":"visible",
+        "opacity":"1",
+    });
+
+    $(".load-animation").css({
+        "visibility":"visible",
+    })
+
+    $('body').css("overflow","hidden")
+
+    GetProject(value);
+}
+
+function CloseModalProject(){
+    $(".modal-project-info").css({
+        "visibility":"",
+        "opacity":"",
+    });
+    $("#project-content").html("");
+    $('body').css("overflow","")
+}
+
+function InitModalProject(){
+    const modalAuthorized = $(".pop-up-authorized");
+    const modalRegister = $(".pop-up-register__inner");
+    const avatar = $("#user-avatar");
+
+    let linkAvatar = $(".user-avatar_img").attr("src");
+
+    avatar.attr("src",linkAvatar);
+    
+    $("#project-register-user").click(function(){
+        modalAuthorized.css({
+            "visibility":"visible",
+            "opacity":"1",
+        });
+        modalRegister.css({
+            "visibility":"visible",
+            "opacity":"1",
+        });
+    });
+
+    $("#send-comment").click(function(){
+        let idProject = $(this).val();
+        let text = $("#comment").val();
+
+        AddComment(text,idProject);
+
+    });
+
+    $(".subscribe-user").click(function(){
+        let userName = $(this).val();
+        if($(this).hasClass("disabled-button")){
+            $(this).removeClass("disabled-button");
+            $(this).html("Подписаться");
+            UnSubscribe(userName);
+        }
+        else{
+            $(this).addClass("disabled-button");
+            $(this).html("Подписано");
+            Subscribe(userName);
+        }
+    });
+    InitLikePanel();
+}
+
+function InitLikePanel(){
+
+    const likeButton = $("#like-button");
+    const dislikeButton = $("#delete-like");
+
+    let projectId = $("#like-button-panel").attr("data-id");
+
+
+    likeButton.click(function(){
+        Like(projectId);
+        
+        let likes =  $("#count-like").html();
+        $("#count-like").html(Number(likes)+1)
+    });
+    dislikeButton.click(function(){
+        Dislike(projectId);
+
+        let likes =  $("#count-like").html();
+        $("#count-like").html(Number(likes)-1)
+    });
+
+
+}
+
+
+
+//AJAX//
+function SearchProjects(data,block){
+    $.ajax({
+        type:"POST",
+        url:"/Main/SearchProjects",
+        data:{searchOptionsJson:data},
+        success:function(result){
+            $(".projects-blocks_inner").html(result);
+            $(".open-project-info").click(OpenModalProject);
+        },
+        error:function(){
+            ErrorsMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+
+function GetProject(projectName){
+    $.ajax({
+        type:"POST",
+        url:"/Main/GetProjectInfo",
+        data:{projectName:projectName},
+        success:function(result){
+            $(".load-animation").css({"visibility":"hidden",});
+            $("#project-content").html(result);
+            InitModalProject();
+        },
+        error:function(){
+            CloseModalProject();
+            ErrorsMessage("Ошибка на сервере , пробуйте позже");
+        }
+    })
+}
+function AddComment(text,idProject){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/AddComment",
+        data:{
+            text:text,
+            projectId:idProject,
+        },
+        success:function(result){
+            if(result){
+                SuccessMessage("Успешно");
+                UpdateComments(idProject);
+            }
+            else{
+                ErrorMessage("Больше 5 комментариев нельзя");
+            }
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере,пробуйте позже");
+        }
+    })
+}
+function UpdateComments(projectId){
+    $.ajax({
+        type:"POST",
+        url:"/Main/GetCommentsProject",
+        data:{
+            count:20,
+            projectId:projectId,
+        },
+        success:function(result){
+            $("#comments-panel").html(result);
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере,пробуйте позже");
+        }
+    })
+}
+function Like(projectId){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/PutLike",
+        data:{projectId:projectId},
+        success:function(result){
+            if(result){
+                let button = "<button type=\"button\" class=\"disabled\" id=\"delete-like\">Убрать лайк</button>"
+                $("#like-button-panel").html(button);
+                InitLikePanel();
+            }
+            else{
+               ErrorMessage("Уже лайкнуто");
+            }
+        },
+        errror:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+function Dislike(projectId){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/DeleteLike",
+        data:{projectId:projectId},
+        success:function(result){
+            if(result){
+                let button = "<button type=\"button\"  id=\"like-button\">Оценить</button>"
+                $("#like-button-panel").html(button);
+                InitLikePanel();
+            }
+            else{
+                ErrorMessage("Ошибка на сервере пробуйте позже");
+            }
+        },
+        errror:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+function Subscribe(userName){
+    $.ajax({
+        type:"POST",
+        url:"/Profile/SetSubscribe",
+        data:{userName:userName},
+        success:function(result){
+            if(result == null){
+                ErrorMessage("На самого себя нельзя");
+                return;
+            }
+            if(result){
+                SuccessMessage("Подписано");
+            }
+            else{
+                ErrorMessage("Ошибка на сервере пробуйте позже")
+            }
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+function UnSubscribe(userName){
+    $.ajax({
+        type:"POST",
+        url:"/Profile/DeleteSubscribe",
+        data:{userName:userName},
+        success:function(result){
+            if(result == null){
+                ErrorMessage("На самого себя нельзя");
+                return;
+            }
+            if(result){
+                SuccessMessage("Отписано");
+            }
+            else{
+                ErrorMessage("Ошибка на сервере пробуйте позже")
+            }
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}
+
 function SuccessMessage(message){
     const MessageResult = $(".message-notification");
     $("#notification-image").attr("src","/MainWeb/Images/success.svg");

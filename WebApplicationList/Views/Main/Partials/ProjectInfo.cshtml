@@ -7,12 +7,13 @@
     <div class="user-info">
         <div class="project-name">@Model.projectName</div>
         <div class="links">
-            <a href="#">@Model.userName</a>
+            <a href="~/Profile?userName=@Model.userName">@Model.userName</a>
             @if(Model.signed)
             {
                 <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="">Подписано</button>
             }
-            else{
+            else
+            {
                 <button type="button" class="subscribe-user" value="@Model.userName" id="">Подписаться</button>
             }
         </div>
@@ -78,18 +79,23 @@
                             }
                         </div>
                     </div>
-                    @if(Model.signed){
+                    @if(User.Identity.IsAuthenticated){
+                        @if(Model.signed){
                         <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="subscribe-button">Подписано</button>
+                        }
+                        else{
+                            <button type="button" class="subscribe-user" value="@Model.userName" id="subscribe-button">Подписаться</button>
+                        }
+                        <button type="button">Сообщение</button>
                     }
-                    else{
-                        <button type="button" class="subscribe-user" value="@Model.userName" id="subscribe-button">Подписаться</button>
-                    }
-                    <button type="button">Сообщение</button>
+                    
                 </div>
             </li>
             <li class="project-info">
                 <div class="name">@Model.projectName</div>
+                @if(!string.IsNullOrEmpty(Model.projectDescription)){
                 <div class="description">@Model.projectDescription</div>
+                }
                 <ul class="numbers">
                     <li>
                         <img src="~/MainWeb/Images/finger-upGray.svg" alt="" width="15" height="15">
@@ -115,11 +121,12 @@
                     <button type="button" class="disabled" id="delete-like">Убрать лайк</button>
                 }
                 else{
-                    <button type="button"  id="like-button">Оценить</button>
+                    <button type="button" id="like-button">Оценить</button>
                 }
                 </div>
             </li>
             }
+            @if(!string.IsNullOrWhiteSpace(Model.projectTypes)){
             <li class="project-tags">
                 <div class="header">Теги</div>
                 <ul class="tags-panel">
@@ -132,6 +139,7 @@
                     }
                 </ul>
             </li>
+            }  
         </ul>
     </li>
 </ul>

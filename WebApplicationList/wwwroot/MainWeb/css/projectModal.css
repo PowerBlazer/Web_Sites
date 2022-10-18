@@ -469,8 +469,16 @@
         min-width: 0px;
     }
 }
+
 @media(max-width:440px){
+    .project-block .project-image img {
+        width: 100%;
+    }
     .add-comment>img {
         display: none;
     }
+    .add-comment .comment-area>button {
+        width: 100%;
+    }
+
 }

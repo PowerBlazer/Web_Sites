@@ -7,7 +7,6 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public string? userName { get; set; }
         public string? linkAvatar { get; set; }
         public string? profession { get; set; }
-
         public int projectId { get; set; }
         public string? projectName { get; set; }
         public string? projectUrl { get; set; }

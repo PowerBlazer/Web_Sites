@@ -1,13 +1,9 @@
-$(document).ready(function(){
-    $("#projectbutton").click(function(){
-        InitProject();
-    });
-});
 
-function InitProject(){
+
+function InitProject(userName){
     const ProjectsBlock = $("#projects-block");
-    
-    GetProjects("",ProjectsBlock);
+    GetProjects(userName,ProjectsBlock);
+
 }
 
 
@@ -20,6 +16,22 @@ function GetProjects(userName,element){
         data:{login:userName},
         success:function(result){
             element.html(result);
+            InitModalProjectInfo();
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере");
+        }
+    });
+}
+
+function GetFavorites(userName){
+    $.ajax({
+        type:"POST",
+        url:"/Profile/GetUserFavorites",
+        data:{userName:userName},
+        success:function(result){
+            $("#favorites-block").html(result);
+            InitModalProjectInfo();
         },
         error:function(){
             ErrorMessage("Ошибка на сервере");

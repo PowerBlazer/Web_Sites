@@ -18,6 +18,7 @@ body{
     width: 100%;
 }
 
+
 .project-count::before{
     content: attr(data-count);
     position: absolute;
@@ -65,14 +66,11 @@ body{
     display: flex;
     gap: 5px;
     align-items: center;
-    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 .menu-profile-item i{
     transition: all .1s;
     font-size: 20px;
-}
-.menu-profile div:nth-last-child(1) button{
-    width: 180px;
 }
 
 .active-profile-item{
@@ -178,6 +176,30 @@ body{
     position: relative;
     gap: 10px;
 }
+.avatar-profile-block div:nth-child(2) .subscribe-button{
+    background-color: var(--button-color);
+    width: 100%;
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    transition: background-color .3s;
+}
+.avatar-profile-block div:nth-child(2) .message-button{
+    width: 100%;
+    font-weight: 600;
+    padding: 7px 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    color: var(--button-color);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+.avatar-profile-block div:nth-child(2) .subscribe-button:hover{
+    background-color: #0041c3;
+}
+
 #change-avatar{
     position: absolute;
     bottom: 5%;
@@ -311,6 +333,10 @@ body{
     transform: translateX(-100%);
     opacity: 0;
     transition: opacity .5s;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 0 10px;
 }
 .settings-block-profile_inner{
     position: absolute;
@@ -452,11 +478,17 @@ body{
     font-size: 15px;
     color: #888;
 }
-
-
-
-
-
+.setting-project-block_inner{
+    position: absolute;
+    width: 100%;
+    top:0;
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: opacity .5s;
+    display: flex;
+    flex-direction: column;
+}
 
 
 @media(max-width:800px){
@@ -483,6 +515,9 @@ body{
     .avatar-profile-block div:nth-child(2){
         width: 100%;
     }
+    .favorites-block-profile_inner{
+        justify-content: center;
+    }
 }
 
 @media(max-width:480px){
@@ -505,6 +540,19 @@ body{
     }
     .gener-description{
         height: 1000px;
+    }
+    .favorites-block-profile_inner{
+        padding: 0;
+    }
+}
+@media(max-width:440px){
+    .project-block .project-image img {
+        width: 100%;
+    }
+}
+@media(max-width:420px){
+    .projects-block-profile_inner{
+        padding: 0;
     }
 }
 @media(max-width:400px){

@@ -1,0 +1,49 @@
+.project-forsetting-panel{
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap:10px
+}
+.project-forsetting-panel .project-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-bottom: 1px solid var(--button-color);
+}
+.project-forsetting-panel .project-item>span{
+    color:var(--main-text-color);
+    font-family: 'Roboro',sans-serif;
+    font-size: 19px;
+    letter-spacing: 1px;
+}
+.project-forsetting-panel .project-item .project-item_button-panel{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.project-item_button-panel .folder-manager-project{
+    position: relative;
+}
+.project-item_button-panel .folder-manager-project i{
+    color: var(--main-text-color);
+    font-size: 22px;
+}
+.project-item_button-panel .folder-manager-project::before{
+    transition: all .3s;
+    opacity: 0;
+    content: "Файловый менеджер";
+    position: absolute;
+    padding: 10px;
+    white-space: nowrap;
+    top: -45px;
+    background-color: rgb(96, 90, 90);
+    color: var(--main-text-color);
+    font-size: 15px;
+    visibility: hidden;
+    border-radius: 3px;
+}
+.project-item_button-panel:hover .folder-manager-project::before{
+    opacity: 1;
+    visibility: visible;
+}

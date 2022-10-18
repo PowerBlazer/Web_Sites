@@ -7,7 +7,7 @@
         <a class="" href="#">
             <div class="user-profile-avatar">
                 <object>
-                    <a href="#">
+                    <a href="~/Profile?userName=@item.UserName">
                         <img src="~/@item.LinkAvatar" alt="img" width="80" height="80">
                     </a>
                 </object>
@@ -38,9 +38,18 @@
                 <div>@item.countProjects</div>
                 <span>Проекты</span>
             </li>
-        </ul>    
-        <button class="subscribe-button" value="@item.UserName">
-            <div>Подписаться</div>
-        </button>
+        </ul>
+        @if(User.Identity!.IsAuthenticated){
+            @if(item.signed){
+            <button class="subscribe-button disabled-button" value="@item.UserName">
+                <div>Подписано</div>
+            </button>
+        }
+        else{
+            <button class="subscribe-button" value="@item.UserName">
+                <div>Подпиcаться</div>
+            </button>
+        }
+        }    
     </div>
 }

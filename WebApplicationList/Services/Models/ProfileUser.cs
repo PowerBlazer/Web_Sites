@@ -10,15 +10,13 @@ namespace WebApplicationList.Services.Models
     public class ProfileUser : IProfileUser
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
         private readonly ApplicationDb _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProfileUser(SignInManager<User> signInManager, UserManager<User> userManager,
+        public ProfileUser(SignInManager<User> signInManager, 
             ApplicationDb applicationDB, IWebHostEnvironment hostEnvironment)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
             _context = applicationDB;
             _hostEnvironment = hostEnvironment;
         }
@@ -97,10 +95,9 @@ namespace WebApplicationList.Services.Models
 
             var linkTypes = await _context.linksType!.ToListAsync();
 
-            var result = await _context.Users.Where(p => p.Id == user.Id)
+            var result = await _context.Users.Where(p => p == user)
                 .Include(p => p.profileUserInfo)
-                .Include(p => p.linksProfiles).ThenInclude(p=>p.LinkType)
-                .Include(p=>p.projectViews)
+                .Include(p => p.linksProfiles).ThenInclude(p=>p.LinkType)              
                 .Include(p=>p.projectLikes)
                 .Include(p=>p.projects)
                 .Include(p=>p.usersProfile)
@@ -118,14 +115,24 @@ namespace WebApplicationList.Services.Models
                     DateRegistration = p.DateRegistraition,
                     linksProfile =  p.linksProfiles,
                     linkTypes =  linkTypes,
-                    countLikes = p.projectLikes.Count(),
                     countSubscriber = p.subscribes.Count(),
                     countSubscriptions = p.usersProfile.Count(),
-                    countProjects = p.projects.Count(),
-                    countViews = p.projectViews.Count()
-
+                    countProjects = p.projects.Count(),                   
                 }).AsNoTracking().FirstOrDefaultAsync();
-          
+
+            var views = await _context.userProjects!
+                .Where(p => p.user == user)
+                .Include(p => p.projectViews)
+                .Select(p => p.projectViews.Count()).ToListAsync();
+
+            var likes = await _context.userProjects!
+                .Where(p => p.user == user)
+                .Include(p => p.projectLikes)
+                .Select(p => p.projectLikes.Count()).ToListAsync();
+
+            result!.countViews = views.Sum();
+            result!.countLikes = likes.Sum();
+
             return result;
         }
         public async Task<User> GetUserForLogin(string login)
@@ -163,9 +170,28 @@ namespace WebApplicationList.Services.Models
 
             return true;
         }
+        public async Task<List<ProjectViewModel>> GetUserFavorites(User user)
+        {
+            var result = await _context.projectLikes!.Where(p => p.user == user)
+                .Include(p => p.project).ThenInclude(p=>p!.user)
+                .Select(p => new ProjectViewModel
+                {
+                    userName = p.project!.user!.UserName,
+                    linkAvatar = p.project!.user!.LinkAvatar,
+                    projectName = p.project!.Name,
+                    projectUrl = p.project.Url,
+                    projectUrlImage = p.project.UrlImage,
+                    addedTime = p.project.AddedTime,
+                    likes = p.project.projectLikes.Count(),
+                    views = p.project.projectViews.Count(),
+                }).AsSplitQuery().AsNoTracking().ToListAsync();
+
+            return result;
+        }
         public async Task<bool> BindLinkInUser(string url,int id)
         {
-            var linkType = await _context.linksType!.Where(p => p.Id == id).FirstOrDefaultAsync();
+            var linkType = await _context.linksType!
+                .Where(p => p.Id == id).FirstOrDefaultAsync();
 
             if (linkType is null)
             {

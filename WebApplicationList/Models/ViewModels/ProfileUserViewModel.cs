@@ -20,6 +20,7 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public int countViews { get; set; }
         public int countSubscriber { get; set; }
         public int countSubscriptions { get; set; }
+        public bool signed { get; set; }
         public IEnumerable<LinksProfile>? linksProfile { get; set; }
         public List<LinkType>? linkTypes { get; set; }
     }

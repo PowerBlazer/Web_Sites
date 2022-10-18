@@ -1,21 +1,27 @@
 
 $(document).ready(function(){
-    document.querySelector('#change-avatar-input').addEventListener('change',function (e) {
-        if(this.files.length>0){
-            if (window.FormData !== undefined){
-                var data = new FormData();
-                for (var x = 0; x < 1; x++) {
-                    data.append("file" + x, this.files[x]);
+    try{
+        document.querySelector('#change-avatar-input').addEventListener('change',function (e) {
+            if(this.files.length>0){
+                if (window.FormData !== undefined){
+                    var data = new FormData();
+                    for (var x = 0; x < 1; x++) {
+                        data.append("file" + x, this.files[x]);
+                    }
+                    if(ValidationAvatar(this.files[0])){
+                        SendAvatar(data);
+                    }
                 }
-                if(ValidationAvatar(this.files[0])){
-                    SendAvatar(data);
+                else{
+                    ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
                 }
             }
-            else{
-                ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
-            }
-        }
-    });
+        });
+    }
+    catch{
+        
+    }
+    
 });
 
 $(document).ready(function(){
@@ -23,14 +29,16 @@ $(document).ready(function(){
     const favoritesPanel = $(".favorites-block-profile_inner");
     const settingsPanel = $(".settings-block-profile_inner");
     const addProjectPanel = $(".add-project-block-profile_inner");
+    const settingProjectPanel = $(".setting-project-block_inner");
 
     const elementsPanel = [projectPanel,
-    favoritesPanel,settingsPanel,addProjectPanel];
+    favoritesPanel,settingsPanel,addProjectPanel,settingProjectPanel];
 
     const buttonProject = $("#projectbutton");
     const buttonFavorites = $("#favoritesbutton");
     const buttonSetting = $("#settingbutton");
     const buttonAddProject = $("#add-project");
+    const buttonProjectSetting = $("#settingProjectbutton")
 
     buttonProject.on('click',function(){
         OpenElement(projectPanel);
@@ -46,6 +54,11 @@ $(document).ready(function(){
     })
     buttonAddProject.on('click',function(){
         OpenElement(addProjectPanel);
+        PaintButton($(this));
+    });
+
+    buttonProjectSetting.on('click',function(){
+        OpenElement(settingProjectPanel);
         PaintButton($(this));
     })
 

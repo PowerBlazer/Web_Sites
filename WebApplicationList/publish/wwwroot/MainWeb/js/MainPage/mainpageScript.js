@@ -32,6 +32,23 @@ $(document).ready(function(){
         closeListDownFilters();
     });
 
+    $(".open-project-info").click(OpenModalProject);
+    $(".close-modal").click(CloseModalProject);
+
+    $(document).mouseup(function(e){
+        if(!$("#project-content").is(e.target) && $("#project-content").has(e.target).length === 0&&
+    !$(".pop-up-authorized").is(e.target)&&
+    $(".pop-up-authorized").has(e.target).length===0){
+            CloseModalProject();
+        }
+    });
+
+    $(document).keydown(function(e){
+        if($(".modal-project-info").css("opacity")==="1"&& e.keyCode==27){
+            CloseModalProject();
+        }
+    })
+
     function closeListDownFilters(){
         listDownButton.find(".sorting-button_inner").find("span").css({
             "transform":"rotate(180deg)",
@@ -216,20 +233,22 @@ $(document).ready(function(){
 });
 
 
-//AJAX//
-function SearchProjects(data,block){
-    $.ajax({
-        type:"POST",
-        url:"/Main/SearchProjects",
-        data:{searchOptionsJson:data},
-        success:function(result){
-            $(".projects-blocks_inner").html(result);
-        },
-        error:function(){
-            ErrorsMessage("Ошибка на сервере пробуйте позже");
+function SearchUserInit(){
+    $(".subscribe-button").click(function(){
+        let userName = $(this).val();
+        if($(this).hasClass("disabled-button")){
+            $(this).removeClass("disabled-button");
+            $(this).find('div').html("Подписаться");
+            UnSubscribe(userName);
         }
-    })
+        else{
+            $(this).addClass("disabled-button");
+            $(this).find('div').html("Подписано");
+            Subscribe(userName);
+        }
+    });
 }
+
 function SearchUsers(data,block){
     $.ajax({
         type:"POST",
@@ -237,6 +256,7 @@ function SearchUsers(data,block){
         data:{searchOptionsJson:data},
         success:function(result){
             $(".projects-blocks_inner").html(result);
+            SearchUserInit();
         },
         error:function(){
             ErrorsMessage("Ошибка на сервере пробуйте позже");

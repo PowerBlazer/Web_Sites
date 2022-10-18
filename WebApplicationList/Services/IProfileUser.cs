@@ -19,5 +19,6 @@ namespace WebApplicationList.Services
         Task<IEnumerable<ProjectViewModel>> GetProjectsUser(string id);
         Task<bool> SetSubsccribe(User user, User subscribeUser);
         Task<bool> DeleteSubscribe(User user, User subscribe);
+        Task<List<ProjectViewModel>> GetUserFavorites(User user);
     }
 }

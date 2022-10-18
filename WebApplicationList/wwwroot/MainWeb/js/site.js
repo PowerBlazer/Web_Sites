@@ -333,19 +333,7 @@ function SearchProjects(data,block){
         }
     })
 }
-function SearchUsers(data,block){
-    $.ajax({
-        type:"POST",
-        url:"/Main/SearchUsers",
-        data:{searchOptionsJson:data},
-        success:function(result){
-            $(".projects-blocks_inner").html(result);
-        },
-        error:function(){
-            ErrorsMessage("Ошибка на сервере пробуйте позже");
-        }
-    })
-}
+
 function GetProject(projectName){
     $.ajax({
         type:"POST",
@@ -376,7 +364,7 @@ function AddComment(text,idProject){
                 UpdateComments(idProject);
             }
             else{
-                ErrorMessage("Ошибка на сервере,пробуйте позже");
+                ErrorMessage("Больше 5 комментариев нельзя");
             }
         },
         error:function(){
@@ -412,7 +400,7 @@ function Like(projectId){
                 InitLikePanel();
             }
             else{
-                ErrorMessage("Ошибка на сервере пробуйте позже");
+               ErrorMessage("Уже лайкнуто");
             }
         },
         errror:function(){

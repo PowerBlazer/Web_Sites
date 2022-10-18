@@ -81,7 +81,6 @@ namespace WebApplicationList.Services.Models
                     likes = p.projectLikes.Count(),
                     views = p.projectViews.Count(),
 
-
                 }).Take(searchOptions.PageIndex).AsNoTracking();
 
             var result = searchOptions.SortType switch 
@@ -109,10 +108,11 @@ namespace WebApplicationList.Services.Models
                 searchOptions.PageIndex = 20;
             }
 
-            var request = _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%"))
+            string userNameOwner = _profileUser.GetUserName();
+
+            var request = _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%")&&p.UserName!=userNameOwner)
                     .Include(p => p.profileUserInfo)
-                    .Include(p => p.projects)
-                    .Include(p => p.projectLikes)
+                    .Include(p => p.projects).ThenInclude(p=>p.projectLikes)                  
                     .Include(p => p.usersProfile)
                     .Select(p => new ProfileUserViewModel
                     {
@@ -121,7 +121,6 @@ namespace WebApplicationList.Services.Models
                         LinkAvatar = p.LinkAvatar,
                         Profession = p.profileUserInfo!.Profession,
                         DateRegistration = p.DateRegistraition,
-                        countLikes = p.projectLikes.Count(),
                         countProjects = p.projects.Count(),
                         countSubscriber = p.subscribes.Count(),
                     })
@@ -133,6 +132,16 @@ namespace WebApplicationList.Services.Models
                 "date"=> await request.OrderByDescending(p=>p.DateRegistration).ToListAsync(),
                 _ => await request.OrderBy(p=>p.UserName).ToListAsync(),
             };
+
+            foreach(var item in result)
+            {
+                var likes = await _context.userProjects!
+                    .Where(p => p.user.UserName == item.UserName).AsNoTracking()
+                    .Select(p => p.projectLikes.Count()).ToListAsync();
+
+                item.signed = await GetSignedUser(item.UserName!);
+                item.countLikes = likes.Sum();
+            }
         
             return result;
         }
@@ -155,7 +164,7 @@ namespace WebApplicationList.Services.Models
                     projectDescription = p.Description,
                     addedTime = p.AddedTime,
                     projectTypes = p.Type,
-                    projectComments = p.projectComments,
+                    projectComments = p.projectComments.OrderByDescending(p=>p.date).ToList(),
                     likes = p.projectLikes.Count(),
                     views = p.projectViews.Count()
                 }).AsNoTracking().AsSplitQuery().FirstOrDefaultAsync();
@@ -213,10 +222,11 @@ namespace WebApplicationList.Services.Models
 
             return false;
         }
-        public async Task<int> GetNumberSubscribers(User user)
-        {
-           return await _context.subscribeUsers!.Where(p => p.user == user).CountAsync();
-        }
+
+        
+
+       
+
 
 
 

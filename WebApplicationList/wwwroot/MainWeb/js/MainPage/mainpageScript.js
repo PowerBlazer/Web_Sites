@@ -233,4 +233,33 @@ $(document).ready(function(){
 });
 
 
+function SearchUserInit(){
+    $(".subscribe-button").click(function(){
+        let userName = $(this).val();
+        if($(this).hasClass("disabled-button")){
+            $(this).removeClass("disabled-button");
+            $(this).find('div').html("Подписаться");
+            UnSubscribe(userName);
+        }
+        else{
+            $(this).addClass("disabled-button");
+            $(this).find('div').html("Подписано");
+            Subscribe(userName);
+        }
+    });
+}
 
+function SearchUsers(data,block){
+    $.ajax({
+        type:"POST",
+        url:"/Main/SearchUsers",
+        data:{searchOptionsJson:data},
+        success:function(result){
+            $(".projects-blocks_inner").html(result);
+            SearchUserInit();
+        },
+        error:function(){
+            ErrorsMessage("Ошибка на сервере пробуйте позже");
+        }
+    })
+}

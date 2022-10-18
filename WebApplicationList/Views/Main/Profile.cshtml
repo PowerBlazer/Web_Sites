@@ -7,10 +7,13 @@
 @section link{
     <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProfilePage/profilestyle.css">
     <link rel="stylesheet" type="text/css" href="~/MainWeb/icons-2/style.css">
-    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectUpload.css">
-    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectSettingsStyle.css">
-    <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProfilePage/profilesettings.css">
-    <link rel="stylesheet" href="~/iconExplorer/style.css">
+    @if(ViewBag.Privacy){
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectUpload.css">
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectSettingsStyle.css">
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProfilePage/profilesettings.css">
+        <link rel="stylesheet" href="~/iconExplorer/style.css">
+        <link rel="stylesheet" type="text/css" href="~/MainWeb/css/ProjectSetting/projectSettingPanelStyle.css">
+    }
 }
 
 <section>  
@@ -29,14 +32,18 @@
                     @{
                         if(string.IsNullOrEmpty(Model.Surname))
                         {
-                            <div class="profile-user-name">@Model.UserName!</div>
+                            <div class="profile-user-name">@Model.UserName</div>
                         }
                         else
                         {
-                            <div class="profile-user-name">@Model.Surname!</div>
+                            <div class="profile-user-name">@Model.Surname</div>
                         }
                     }
                     <span class="profile-email-user">@Model.Email</span>
+                    @if(!ViewBag.Privacy!){
+                        <button class="subscribe-button">Подписаться</button>
+                        <button class="message-button">Сообщение</button>
+                    }
                     <ul class="info-user-panel">
                         <li class="followers-count">
                             <span>Подписчики</span>
@@ -90,7 +97,6 @@
                             </ul>
                         </div>
                     }
-
                     <div class="data-registration">Дата регистрации @Model.DateRegistration.ToShortDateString()</div>
                 </div>
             </div>  
@@ -131,6 +137,9 @@
                             }>
                         <button type="button" class="menu-profile-item" id="add-project"><i class="icon-html-doc"></i>Добавить проект</button>
                         </div>
+                        <div class="menu-profile-item_inner">
+                            <button type="button" class="menu-profile-item" id="settingProjectbutton"><i class="icon-setting"></i>Настройки проектов</button>
+                        </div>
                     }           
                     
                 </div>
@@ -145,9 +154,7 @@
                     }>        
                 </div>
 
-                <div class="favorites-block-profile_inner" style="transform: translateX(-100%);">
-        
-                </div>
+                <div class="favorites-block-profile_inner" id="favorites-block" style="transform: translateX(-100%);"></div>
                 @if(ViewBag.Privacy){
                     <div class="settings-block-profile_inner" 
                     @if(ViewBag.Page=="settings")
@@ -252,7 +259,11 @@
                         </div>
                     </div>
                 }
-                
+                @if(ViewBag.Privacy){
+                <div class="setting-project-block_inner" id="project-list-setting" style="transform:translateX(-100%);">
+                    
+                </div>
+                }
                 </div>
             </div>
         </div>
@@ -268,7 +279,6 @@
                 <button class="blue-button blue-button-small" id="bind-link" value="">Сохранить</button>
                 <button class="blue-button blue-button-small" id="bind-modal-close" >Закрыть</button>
             </div>
-            
         </div>
     </div>
 }
@@ -280,7 +290,7 @@
 
 @section Scripts{
     <script src="~/MainWeb/js/ProfilePage/profilescript.js" asp-append-version="true"></script>
-    <script src="~/MainWeb/js/ProfilePage/projectscript.js" asp-append-version="true"></script>
+    <script src="~/MainWeb/js/ProjectSettingScripts/projectscript.js" asp-append-version="true"></script>
     @if(ViewBag.Privacy)
     {
         <script src="~/MainWeb/js/ProjectSettingScripts/projectSetting.js" asp-append-version="true"></script>
@@ -288,13 +298,14 @@
     }
     
     <script>
+        $(document).ready(function(){
+            GetProjects("@Model.UserName");
+            GetFavorites("@Model.UserName");
+        });
+        
         @if(ViewBag.Page=="settings")
         {
             @:InitSettings();
-        }
-        @if(ViewBag.Page=="projects"||ViewBag.Page is null)
-        {
-            @:InitProject();
         }
         @if(ViewBag.Page=="addproject")
         {

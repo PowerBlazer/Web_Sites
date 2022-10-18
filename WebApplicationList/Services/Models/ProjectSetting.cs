@@ -274,6 +274,13 @@ namespace WebApplicationList.Services.Models
                 throw new Exception("Проект не найден");
             }
 
+            var countCommentsInUser = await _context.projectComments!
+                .Where(p => p.user!.Id == user.Id).CountAsync();
+
+            if(countCommentsInUser > 5) {
+                return false;
+            }
+
             await _context.AddAsync(new ProjectComment
             {
                 user = user,
@@ -297,6 +304,14 @@ namespace WebApplicationList.Services.Models
             if (project is null)
             {
                 throw new Exception("Проект не найден");
+            }
+
+            int isTherLikeCount = await _context.projectLikes!
+                .Where(p => p.user == user && p.project == project).CountAsync();
+
+            if(isTherLikeCount != 0)
+            {
+                return false;
             }
 
             await _context.AddAsync(new ProjectLike

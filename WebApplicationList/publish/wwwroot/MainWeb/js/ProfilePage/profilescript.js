@@ -1,21 +1,27 @@
 
 $(document).ready(function(){
-    document.querySelector('#change-avatar-input').addEventListener('change',function (e) {
-        if(this.files.length>0){
-            if (window.FormData !== undefined){
-                var data = new FormData();
-                for (var x = 0; x < 1; x++) {
-                    data.append("file" + x, this.files[x]);
+    try{
+        document.querySelector('#change-avatar-input').addEventListener('change',function (e) {
+            if(this.files.length>0){
+                if (window.FormData !== undefined){
+                    var data = new FormData();
+                    for (var x = 0; x < 1; x++) {
+                        data.append("file" + x, this.files[x]);
+                    }
+                    if(ValidationAvatar(this.files[0])){
+                        SendAvatar(data);
+                    }
                 }
-                if(ValidationAvatar(this.files[0])){
-                    SendAvatar(data);
+                else{
+                    ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
                 }
             }
-            else{
-                ErrorMessage("Браузер не поддерживает загрузку файлов HTML5!");
-            }
-        }
-    });
+        });
+    }
+    catch{
+        
+    }
+    
 });
 
 $(document).ready(function(){

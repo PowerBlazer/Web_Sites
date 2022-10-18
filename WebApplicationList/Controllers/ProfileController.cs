@@ -174,26 +174,67 @@ namespace WebApplicationList.Controllers
         [HttpPost]
         public async Task<IActionResult> GetUserProjects(string login)
         {
-            User? user;
-
-            if (string.IsNullOrWhiteSpace(login))
+            if (string.IsNullOrEmpty(login))
             {
-                user = await _profileUser.GetUserAsync();           
+                return StatusCode(404);
             }
-            else
-            {               
-                user = await _profileUser.GetUserForLogin(login);
-            }
+
+            var user = await _profileUser.GetUserForLogin(login);
                
             if (user is null)
+            {
                 return StatusCode(404);
-            
-
+            }
+                
             var result = await _profileUser.GetProjectsUser(user.Id);
+
+            if (result.Count() == 0)
+            {
+                ViewBag.NullProjects = "У данного пользователя нету проектов";
+            }
 
             return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", result);
         }
+        [HttpPost]
+        public async Task<IActionResult> GetUserFavorites(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return StatusCode(404);
+            }
 
+            var user = await _profileUser.GetUserForLogin(userName);
+
+            if(user is null)
+            {
+                return StatusCode(404);
+            }
+
+            var projects = await _profileUser.GetUserFavorites(user);
+
+            if (projects.Count() == 0)
+            {
+                ViewBag.NullProjects = "Нету оцененных проектов";
+            }
+
+            return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", projects);
+
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetProjectElementsForSettings()
+        {
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                return StatusCode(404);
+            }
+
+            var projects = await _profileUser.GetProjectsUser(user.Id);
+
+            return PartialView("~/Views/Profile/Partials/ProjectsForSettings.cshtml",projects);
+        }
 
     }
 }
