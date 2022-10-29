@@ -1,6 +1,6 @@
 ﻿using WebApplicationList.Models.Enitity;
 
-namespace WebApplicationList.Models.MainSiteModels.ViewModels
+namespace WebApplicationList.Models.ViewModels
 {
     public class ProjectViewModel
     {    
@@ -17,6 +17,7 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public List<ProjectComment>? projectComments { get; set; }
         public int likes { get; set; }
         public int views { get; set; }
+        public int commentsValue { get; set; }
         public bool liked { get; set; }
         public bool signed { get; set; }
     }

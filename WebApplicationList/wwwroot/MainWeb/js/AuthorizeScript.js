@@ -147,9 +147,6 @@ function GetUserInfo(){
             $(".user-avatar_img").attr("src","/"+result.linkAvatar);
             $("#set-email").html(result.email);
         },
-        error:function(){
-            
-        },
     })
 }
 

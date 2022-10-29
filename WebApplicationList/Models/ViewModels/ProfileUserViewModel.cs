@@ -1,11 +1,10 @@
 ﻿using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
+using WebApplicationList.Models.ViewModels;
 
-namespace WebApplicationList.Models.MainSiteModels.ViewModels
+namespace WebApplicationList.Models.ViewModels
 {
     public class ProfileUserViewModel
     {    
-        //public ProfileUserInfo? userInfo { get; set; }
         public string? UserName { get; set; }
         public string? LinkAvatar { get; set; }
         public string? Email { get; set; }
@@ -16,11 +15,12 @@ namespace WebApplicationList.Models.MainSiteModels.ViewModels
         public string? Description { get; set; }
         public DateTime DateRegistration { get; set; }
         public int countProjects { get; set; }
-        public int countLikes { get; set; }
-        public int countViews { get; set; }
+        public List<int>? countLikes { get; set; } = new List<int>();
+        public List<int>? countViews { get; set; } = new List<int>();
         public int countSubscriber { get; set; }
         public int countSubscriptions { get; set; }
         public bool signed { get; set; }
+
         public IEnumerable<LinksProfile>? linksProfile { get; set; }
         public List<LinkType>? linkTypes { get; set; }
     }

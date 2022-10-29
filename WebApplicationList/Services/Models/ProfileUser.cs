@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 
 namespace WebApplicationList.Services.Models
 {
@@ -117,21 +116,13 @@ namespace WebApplicationList.Services.Models
                     linkTypes =  linkTypes,
                     countSubscriber = p.subscribes.Count(),
                     countSubscriptions = p.usersProfile.Count(),
-                    countProjects = p.projects.Count(),                   
-                }).AsNoTracking().FirstOrDefaultAsync();
+                    countProjects = p.projects.Count(),
+                    countViews = p.projects.Select(p=>p.projectViews.Count).ToList(),
+                    countLikes = p.projects.Select(p=>p.projectLikes.Count).ToList(),
 
-            var views = await _context.userProjects!
-                .Where(p => p.user == user)
-                .Include(p => p.projectViews)
-                .Select(p => p.projectViews.Count()).ToListAsync();
+                }).AsSplitQuery().AsNoTracking().FirstOrDefaultAsync();
 
-            var likes = await _context.userProjects!
-                .Where(p => p.user == user)
-                .Include(p => p.projectLikes)
-                .Select(p => p.projectLikes.Count()).ToListAsync();
-
-            result!.countViews = views.Sum();
-            result!.countLikes = likes.Sum();
+            result!.signed = await GetSignedUser(result.UserName!);
 
             return result;
         }
@@ -172,7 +163,7 @@ namespace WebApplicationList.Services.Models
         }
         public async Task<List<ProjectViewModel>> GetUserFavorites(User user)
         {
-            var result = await _context.projectLikes!.Where(p => p.user == user)
+            var result = await _context.projectLikes!.Where(p => p.user == user&& p.project != null)
                 .Include(p => p.project).ThenInclude(p=>p!.user)
                 .Select(p => new ProjectViewModel
                 {
@@ -184,6 +175,7 @@ namespace WebApplicationList.Services.Models
                     addedTime = p.project.AddedTime,
                     likes = p.project.projectLikes.Count(),
                     views = p.project.projectViews.Count(),
+
                 }).AsSplitQuery().AsNoTracking().ToListAsync();
 
             return result;
@@ -243,7 +235,6 @@ namespace WebApplicationList.Services.Models
         {
             return await _context.linksProfile!.Include(p => p.LinkType).Where(p => p.User!.Id == userId).ToListAsync();
         }
-
         public async Task<bool> SetSubsccribe(User user,User subscribeUser)
         {
             if(user is null|| subscribeUser is null)
@@ -299,7 +290,24 @@ namespace WebApplicationList.Services.Models
 
             return true;
         }
+        public async Task<bool> GetSignedUser(string userName)
+        {
+            var user = await GetUserAsync();
 
-       
+            if (user is null)
+            {
+                return false;
+            }
+
+            var result = await _context.subscribeUsers!
+                .Where(p => p.user == user && p.subscribe!.UserName == userName).CountAsync();
+
+            if (result > 0)
+                return true;
+
+            return false;
+        }
+
+
     }
 }

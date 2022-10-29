@@ -1,7 +1,8 @@
-﻿using WebApplicationList.Models.Enitity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplicationList.Models.MainSiteModels.ProfileModels
+namespace WebApplicationList.Models.Enitity
 {
+    [Table("LinksProfile")]
     public class LinksProfile
     {
         public int Id { get; set; }

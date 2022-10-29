@@ -1,4 +1,4 @@
-﻿namespace WebApplicationList.Models.MainSiteModels.ViewModels
+﻿namespace WebApplicationList.Models.ViewModels
 {
     public class UserViewModel
     {

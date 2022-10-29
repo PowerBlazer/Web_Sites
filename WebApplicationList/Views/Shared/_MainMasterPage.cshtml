@@ -7,7 +7,7 @@
         <title>@ViewData["Title"]</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="~/CommonStyle.css">
         <link rel="stylesheet" type="text/css" href="~/MainWeb/css/site.css">
@@ -27,9 +27,7 @@
                         </button>
                         <a href="~/Main" class="logotype">WebSites</a>
                         <ul class="menu-navigation">
-                            <li class="menu-nav-item active">
-                                <a href="~/Main">Главная</a>
-                            </li> 
+                            @await RenderSectionAsync("pages",required:true)
                         </ul>
                     </div>
                     @if(User.Identity!.IsAuthenticated)
@@ -37,9 +35,6 @@
                         <ul class="header-profile-navigation-panel">
                             <li class="nav-item">
                                 <a class="user-add-project" href="~/Profile?Page=addproject">Добавить проект</a>
-                            </li>
-                            <li class="nav-item">
-                                <img src="~/MainWeb/Images/message.svg" width="22">
                             </li>
                             <li class="nav-item">
                                 <button class="user-avatar" href="#">
@@ -71,9 +66,15 @@
             <li>
                 <a class="user-add-project" href="~/Profile?Page=addproject">Добавить проект</a>
             </li>
-            <li class="menu-nav-item active">
-                <a href="~/Main">Главная</a>
-            </li> 
+            <ul>
+                <li class="menu-nav-item">
+                    <a href="~/Main">Главная</a>
+                </li> 
+                <li class="menu-nav-item">
+                    <a href="~/Profile">Профиль</a>
+                </li> 
+            </ul>
+            
             @if(!User.Identity!.IsAuthenticated){
             <li>
                 <button class="sign-in">Вход</button>
@@ -185,9 +186,6 @@
                                 <li>
                                     <a href="~/Profile?Page=settings">Настройки</a>
                                 </li>
-                                <li>
-                                    <a href="#">Справка</a>
-                                </li>
                             </ul>
                         </li>
                         <li>
@@ -198,6 +196,7 @@
             </div>
         </div>
         }
+
         @*--------------------*@
 
         <footer>
@@ -214,7 +213,7 @@
         <script>
             @if(User.Identity!.IsAuthenticated){
                 @:InitAuthorizeScript();
-                @:CheckAuthorize();
+                //@:CheckAuthorize();
                 @:GetUserInfo();
             }
         </script>

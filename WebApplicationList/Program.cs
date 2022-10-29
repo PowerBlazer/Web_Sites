@@ -28,10 +28,10 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireUppercase = false;
 }).AddEntityFrameworkStores<ApplicationDb>();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromHours(1);
-});
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+//});
 
 builder.Services.AddScoped<IAuthorization, Authorization>()
     .AddScoped<IProfileUser, ProfileUser>()

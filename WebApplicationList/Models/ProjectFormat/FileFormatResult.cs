@@ -1,4 +1,4 @@
-﻿namespace WebApplicationList.Models.MainSiteModels.ProjectFormat
+﻿namespace WebApplicationList.Models.ProjectFormat
 {
     public class FileFormatResult
     {

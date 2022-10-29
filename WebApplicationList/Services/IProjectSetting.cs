@@ -1,5 +1,5 @@
 ﻿using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 
 namespace WebApplicationList.Services
 {
@@ -11,12 +11,15 @@ namespace WebApplicationList.Services
         Task<FileItem> GetContentFileAsync(string filePath);
         Task<bool> ChangeContentFile(FileItem fileItem);
         Task<bool> GetValidationProjectName(string projectName);
-        IEnumerable<FileItem> GetPagesProject(string username);
+        IEnumerable<FileItem> GetPagesProject(string username,string? projectName);
         List<string> FormattingFile(string path, string projectName, string userName);
         Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);
         Task<bool> AddComment(int projectId, User user, string text);
         Task<bool> SelectLike(int projectId, User user);
         Task<bool> DeleteLike(int projectId, User user);
-        Task SetViewProject(string projectName, User user);
+        Task SetView(string projectName, User user);
+        Task<bool> DeleteProject(string projectName, User user);
+        string GetPathProject(string projectName, string userName);
+        Task<ProjectOptions> GetProjectOptions(string projectName, User user);
     }
 }

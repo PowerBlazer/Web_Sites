@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EncodingText;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 using WebApplicationList.Services;
 
 
@@ -233,7 +234,71 @@ namespace WebApplicationList.Controllers
 
             var projects = await _profileUser.GetProjectsUser(user.Id);
 
+            if(projects.Count() == 0)
+            {
+                ViewBag.NullProjects = "Нету добавленных проектов";
+            }
+
             return PartialView("~/Views/Profile/Partials/ProjectsForSettings.cshtml",projects);
+        }
+        [HttpGet]
+        public IActionResult GetDeleteProjectConfirmPanel()
+        {
+            return PartialView("~/Views/Profile/Partials/DeleteProjectConfirmPanel.cshtml");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetFolderManagerProject(string projectName)
+        {
+            User user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                return StatusCode(404);
+            }
+
+            string projectPath = _projectSetting.GetPathProject(projectName, user.UserName);
+
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                return StatusCode(404);
+            }
+
+            var folderItems = await _projectSetting.GetExplorerItem(CustomEncoding.EncodeDecrypt(projectPath));
+
+            return PartialView("~/Views/Profile/Partials/FolderManagerProject.cshtml", folderItems);
+
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetFolderItems(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return StatusCode(404);
+            }
+
+            var folderItems = await _projectSetting.GetExplorerItem(path);
+
+            return PartialView("~/Views/Profile/Partials/FolderManagerProject.cshtml", folderItems);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetSettingPageProject(string projectName)
+        {
+            var user = await _profileUser.GetUserAsync();
+
+            if(user is null)
+            {
+                return StatusCode(404);
+            }
+
+            ProjectOptions? projectOptions = await _projectSetting.GetProjectOptions(projectName, user);
+
+            if(projectOptions is null)
+            {
+                return StatusCode(404);
+            }
+
+            return PartialView("~/Views/Profile/Partials/SettingsProject.cshtml",projectOptions);
         }
 
     }

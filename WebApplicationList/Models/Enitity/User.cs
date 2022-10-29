@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
-using WebApplicationList.Models.MainSiteModels.ProjectModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationList.Models.Enitity
 {
+    [Table("Users")]
     public class User : IdentityUser
     {
         public User() => LinkAvatar = "UserIcons/defaultAvatar.jpg";
@@ -11,7 +11,7 @@ namespace WebApplicationList.Models.Enitity
         public DateTime DateRegistraition { get; set; } = DateTime.Now;
 
         public ProfileUserInfo? profileUserInfo { get; set; }
-        public List<UserProject> projects { get; set; } = new List<UserProject>();
+        public List<Project> projects { get; set; } = new List<Project>();
         public List<LinksProfile> linksProfiles { get; set; } = new List<LinksProfile>();
         public List<ProjectComment> projectComments { get; set; } = new List<ProjectComment>();
         public List<ProjectLike> projectLikes { get; set; } = new List<ProjectLike>();

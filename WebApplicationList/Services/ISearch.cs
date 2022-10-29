@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationList.Models;
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 
 namespace WebApplicationList.Services
 {

@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
-using WebApplicationList.Models.MainSiteModels.ProjectModels;
 
 namespace WebApplicationList.ApplicationDataBase
 {
     public class ApplicationDb : IdentityDbContext<User>
     {
-        public DbSet<UserProject>? userProjects { get; set; }
+        public DbSet<Project>? userProjects { get; set; }
         public DbSet<ProfileUserInfo>? profileUserInfo { get; set; }        
         public DbSet<LinkType>? linksType { get; set; }
         public DbSet<LinksProfile>? linksProfile { get; set; }
@@ -67,10 +64,25 @@ namespace WebApplicationList.ApplicationDataBase
             builder.Entity<SubscribeUser>()
                 .HasOne(p=>p.subscribe)
                 .WithMany(p=>p.subscribes);
-                
-                
 
-           
+            builder.Entity<Project>()
+                .HasMany(p => p.projectViews)
+                .WithOne(p => p.project)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Project>()
+                .HasMany(p => p.projectLikes)
+                .WithOne(p => p.project)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Project>()
+               .HasMany(p => p.projectComments)
+               .WithOne(p => p.project)
+               .OnDelete(DeleteBehavior.Cascade);
+
+
+
+
 
 
 

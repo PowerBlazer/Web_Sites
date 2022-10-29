@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationList.Models.Enitity
 {
+    [Table("UserInfo")]
     public class ProfileUserInfo
     {
         [Key]

@@ -1,0 +1,65 @@
+﻿@using WebApplicationList.Models.ViewModels;
+@model ProjectOptions;
+
+<div class="setting-project-window">
+    <div class="header-panel">Настройка проекта @Model.Name
+        <button type="button" id="close-setting-project">
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+    <ul class="setting-project-panels">
+        <li class="name-project-panel">
+            <div class="header-text">Изменить название проекта</div>
+            <div class="input-panel">
+                <label>Название</label>
+                <input type="text" value="@Model.Name" id="project-name-setting">
+                <div class="error-message-setting"></div>
+            </div>
+        </li>
+        <li class="description-types-project-panel">
+            <div class="header-text">Изменить описание и типов проекта</div>
+            <div class="input-panel">
+                <label>Описание</label>
+                <textarea id="description-project-setting" placeholder="Description">@Model.Description</textarea>
+                <label>Типы</label>
+                <textarea id="types-project-setting" placeholder="Types">@Model.Types</textarea>
+            </div>
+        </li>
+        <li class="select-page-panel">
+            <div class="header-text">Изменить выбранную главную страницу</div>
+            <div class="input-panel">
+                <select id="main-load-page-select">
+                    @foreach (var item in Model.pagesProject!)
+                    {
+                        <option value="@item.Name">@item.Name</option>
+                    }
+                </select>
+                <div class="error-message-setting"></div>
+                <div class="generated-url-project-content"></div>
+            </div>
+        </li>
+        <li class="picture-image-panel">
+            <div class="header-text">Изменить изображение сайта</div>
+            <div class="input-panel">
+                <img src="~/@Model.ImagePath" alt="@Model.Name" width="300">
+                <input type="file" id="change-image-project" accept="image/png,image/jpeg" style="display:none;">
+                <label for="change-image-project">Загрузить изображение</label>
+            </div>
+            <div class="error-message-setting"></div>
+        </li>
+        <li class="formatting-pages-project-panel">
+            <div class="header-text">Форматирование страниц проекта (Beta)</div>
+            <div class="input-panel">
+                <select id="formatting-page-project">
+                @foreach (var item in Model.pagesProject!)
+                {
+                    <option value="@item.Name">@item.Name</option>
+                }
+                </select>
+            </div>
+             <div class="error-message-setting"></div>
+        </li>
+    </ul>
+    <button class="save-project" id="save-project-setting">Сохранить</button>
+</div>

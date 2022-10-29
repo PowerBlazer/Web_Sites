@@ -1,4 +1,4 @@
-﻿@using WebApplicationList.Models.MainSiteModels.ViewModels
+﻿@using WebApplicationList.Models.ViewModels
 @model IEnumerable<ProjectViewModel>
 @{
     ViewData["Title"] = "Главная";
@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="~/MainWeb/icons-2/style.css">
 }
 
+@section pages{
+    <li class="menu-nav-item active">
+        <a href="~/Main">Главная</a>
+    </li> 
+    <li class="menu-nav-item">
+        <a href="~/Profile">Профиль</a>
+    </li> 
+}
 <section>
     <div class="container">
         <div class="search-panel_inner">
@@ -69,7 +77,7 @@
                 </button>
                 <div class="listdown-block disabled-listdown">
                     <button value="popular" class="sort-listdowb-button">Самые популярные</button>
-                    <button value="viewed" class="sort-listdowb-button">Самые просматриваемые</button>
+                    <button value="views" class="sort-listdowb-button">Самые просматриваемые</button>
                     <button value="date" class="sort-listdowb-button">По дате добавления</button>
                     <button value="name" class="sort-listdowb-button">По именам</button>
                 </div>
@@ -102,6 +110,10 @@
                             <li>
                                 <i class="icon-heart"></i>
                                 <span>@item.likes</span>
+                            </li>
+                            <li>
+                                <img src="~/MainWeb/Images/comment.svg" width="17" height="17" alt="comment">
+                                <span>@item.commentsValue</span>
                             </li>
                         </ul>
                     </div>

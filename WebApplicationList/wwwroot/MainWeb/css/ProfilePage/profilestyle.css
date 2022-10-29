@@ -186,6 +186,11 @@ body{
     border-radius: 20px;
     transition: background-color .3s;
 }
+.avatar-profile-block div:nth-child(2) .disabled-button{
+    background-color: gray;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgb(190, 190, 190);
+}
 .avatar-profile-block div:nth-child(2) .message-button{
     width: 100%;
     font-weight: 600;
@@ -196,7 +201,7 @@ body{
     outline: 1px solid rgba(0, 0, 0, 0.1);
     background-color: white;
 }
-.avatar-profile-block div:nth-child(2) .subscribe-button:hover{
+.avatar-profile-block div:nth-child(2) .subscribe-button:not(.disabled-button):hover{
     background-color: #0041c3;
 }
 
@@ -489,6 +494,7 @@ body{
     display: flex;
     flex-direction: column;
 }
+
 
 
 @media(max-width:800px){

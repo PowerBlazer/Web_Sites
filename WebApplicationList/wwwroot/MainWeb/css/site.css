@@ -302,8 +302,13 @@ body>.menu-navigation{
     }
     .menu-nav-item{
         height: auto;
-        margin-top: 50px;
         padding: 0 20px;
+    }
+    .menu-navigation>ul{
+        margin-top: 50px;
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
     }
     .menu-navigation .active{
         border-bottom: none;

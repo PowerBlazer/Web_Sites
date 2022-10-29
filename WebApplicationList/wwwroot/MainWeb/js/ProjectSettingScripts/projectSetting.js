@@ -47,64 +47,12 @@ function LoadExplorer(){
             });
         });
     }
-    function OpenModalFileContent(){
-        ModalFileWindow.css({
-            "opacity":"1",
-            "visibility":"visible",
-        });
-        $("body").css("overflow","hidden");
-    }
-    function CloseModalFileContent(){
-        ModalFileWindow.css({
-            "opacity":"",
-            "visibility":"",
-        });
-        $("body").css("overflow","");
-    }
+    
     ReturnFirstExplorerButton.on('click',function(){
         $("#add-project").click();
     });
 
-    function InitModalFile(){
-
-        const CloseModalFile = $("#close-modal-filecontent");
-        const SenfFileContentButton = $("#send-file-content");
-        const FileContentTextArea = $("#file-content-input");
-
-        document.getElementById('file-content-input').addEventListener('keydown', function(e) {
-            if (e.key == 'Tab') {
-              e.preventDefault();
-              var start = this.selectionStart;
-              var end = this.selectionEnd;
-              this.value = this.value.substring(0, start) +
-                "\t" + this.value.substring(end);
-              this.selectionStart =
-                this.selectionEnd = start + 1;
-            }
-        });
-
-        $(document).keyup(function(e){
-            if(e.keyCode===27){
-                CloseModalFileContent();
-            }
-        })
     
-        $(document).mouseup( function(e){
-            if ( !$(".modal-check-window").is(e.target)
-                && $(".modal-check-window").has(e.target).length === 0 ) {
-                CloseModalFileContent();
-            }
-        });
-
-        function SendContentFile(){
-            var path = $(this).val();
-            var fileContent = FileContentTextArea.val();
-            ChangeContentFile(path,fileContent)
-        }
-
-        CloseModalFile.on('click',CloseModalFileContent);
-        SenfFileContentButton.on('click',SendContentFile);
-    }
 
     function InitSettings(){
         var _byteImage="";
@@ -134,7 +82,7 @@ function LoadExplorer(){
                 $("#error-message-name").html("Это поле не может быть пустым");
                 return;
             }
-            CheckValidationProjectName($(this).val());
+            CheckValidationProjectName($(this).val(),$("#error-message-name"));
         });
         ProjectNameInput.focus(function(){
             var labelElem = $(this).prev();
@@ -308,12 +256,6 @@ function LoadExplorer(){
         }
     }
     function InitResultFormattingPanel(){
-        $(document).mouseup(function(e){
-            if ( !$(".format-result-panel").is(e.target)
-                && $(".format-result-panel").has(e.target).length === 0) {
-                CloseModalFileContent();
-            }
-        });
         $("#close-modal-filecontent").on('click',CloseModalFileContent);
     }
 
@@ -334,40 +276,8 @@ function LoadExplorer(){
             }
         })
     }
-    function GetContentFile(path){
-        $.ajax({
-            type:"POST",
-            url:"/UserProject/GetFileContent",
-            data:{path:path},
-            success:function(result){
-                ResultFileContent.html(result);
-                OpenModalFileContent();
-                InitModalFile();
-            },
-            error:function(){
-                ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
-            }
-        })
-    }
-    function ChangeContentFile(path,content){
-        $.ajax({
-            type:"POST",
-            url:"/UserProject/ChangeContentFile",
-            data:{
-                content:content,
-                path:path,
-            },
-            success:function(result){
-                if(result){
-                    CloseModalFileContent();
-                    SuccessMessage("Успешно сохранено");
-                }
-                else{
-                    ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
-                }
-            },
-        });
-    }
+    
+    
     function GetSettings(){
         $.ajax({
             type:"POST",
@@ -378,24 +288,6 @@ function LoadExplorer(){
             },
             error:function(){
                 ErrorMessage("Оишбка на сервере, пробуйте позже");
-            }
-        })
-    }
-    function CheckValidationProjectName(projectName){
-        $.ajax({
-            type:"POST",
-            url:"/UserProject/GetValidationNameProject",
-            data:{projectName:projectName},
-            success:function(result){
-                if(!result){
-                    $("#error-message-name").html("Это имя занято,придумайте другое");
-                }
-                else{
-                    $("#error-message-name").html("");
-                }
-            },
-            error:function(){
-                ErrorMessage("Ошибка на сервере, пробуйте позже");
             }
         })
     }
@@ -444,5 +336,119 @@ function LoadExplorer(){
         })
     }
 
+}
+
+
+function ChangeContentFile(path,content){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/ChangeContentFile",
+        data:{
+            content:content,
+            path:path,
+        },
+        success:function(result){
+            if(result){
+                CloseModalFileContent();
+                SuccessMessage("Успешно сохранено");
+            }
+            else{
+                ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
+            }
+        },
+    });
+}
+function CheckValidationProjectName(projectName,element){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/GetValidationNameProject",
+        data:{projectName:projectName},
+        success:function(result){
+            if(!result){
+                element.html("Это имя занято,придумайте другое");
+            }
+            else{
+                element.html("");
+            }
+        },
+    })
+}
+
+function GetContentFile(path){
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/GetFileContent",
+        data:{path:path},
+        success:function(result){
+            $("#result-text-file").html(result);
+            OpenModalFileContent();
+            InitModalFile();
+        },
+        error:function(){
+            ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
+        }
+    })
+}
+
+function OpenModalFileContent(){
+    $(".modal-check-file").css({
+        "opacity":"1",
+        "visibility":"visible",
+    });
+    $("body").css("overflow","hidden");
+    
+}
+function CloseModalFileContent(){
+    if($(".modal-check-file").css("visibility")==="visible"){
+        $(".modal-check-file").css({
+            "opacity":"",
+            "visibility":"",
+        });
+        if($("#project-setting").css("visibility")!=="visible"){
+            $("body").css("overflow","");
+        }
+       
+    }
+}
+
+function InitModalFile(){
+
+    const CloseModalFile = $("#close-modal-filecontent");
+    const SenfFileContentButton = $("#send-file-content");
+    const FileContentTextArea = $("#file-content-input");
+
+    document.getElementById('file-content-input').addEventListener('keydown', function(e) {
+        if (e.key == 'Tab') {
+          e.preventDefault();
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+          this.value = this.value.substring(0, start) +
+            "\t" + this.value.substring(end);
+          this.selectionStart =
+            this.selectionEnd = start + 1;
+        }
+    });
+
+    $(document).keyup(function(e){
+        if(e.keyCode===27){
+            CloseModalFileContent();
+        }
+    })
+
+    $(document).mouseup( function(e){
+        if ( !$(".modal-check-window").is(e.target)
+            && $(".modal-check-window").has(e.target).length === 0 ) {
+            CloseModalFileContent();
+        }
+    });
+
+    function SendContentFile(){
+        var path = $(this).val();
+        var fileContent = FileContentTextArea.val();
+        ChangeContentFile(path,fileContent)
+    }
+
+    CloseModalFile.on('click',CloseModalFileContent);
+    SenfFileContentButton.on('click',SendContentFile);
 }
 

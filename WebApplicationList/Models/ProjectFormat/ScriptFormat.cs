@@ -1,11 +1,14 @@
-﻿namespace WebApplicationList.Models.MainSiteModels.ProjectFormat
+﻿namespace WebApplicationList.Models.ProjectFormat
 {
     public class ScriptFormat : IFormatType
     {
-        public FileFormatResult FormattingFile(List<string> fileLines,string pattern,string patternRepeat,string userName)
+        public FileFormatResult FormattingFile(List<string> fileLines,string userName,string projectName)
         {
             FileFormatResult fileResult = new FileFormatResult();
             List<string> changes = new List<string>();
+
+            string pattern = $"UserProjects/{userName}/{projectName}/";
+            string patternRepeat = $"UserProjects/{userName}";
 
             var images = fileLines.Where(p => p.Contains("<script")).ToList();
 

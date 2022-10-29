@@ -1,49 +1,194 @@
-.project-forsetting-panel{
+.project-forsetting-panel {
     width: 800px;
     display: flex;
     flex-direction: column;
-    gap:10px
+    gap: 10px
 }
-.project-forsetting-panel .project-item{
+
+.project-forsetting-panel .project-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 5px;
     border-bottom: 1px solid var(--button-color);
 }
-.project-forsetting-panel .project-item>span{
-    color:var(--main-text-color);
-    font-family: 'Roboro',sans-serif;
+
+.project-forsetting-panel .project-item .img-name-project span {
+    color: var(--main-text-color);
+    font-family: 'Roboro', sans-serif;
     font-size: 19px;
     letter-spacing: 1px;
 }
-.project-forsetting-panel .project-item .project-item_button-panel{
+
+.project-forsetting-panel .project-item .img-name-project {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.project-forsetting-panel .project-item .img-name-project>img {
+    width: 90px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.project-forsetting-panel .project-item .project-item_button-panel {
     display: flex;
     align-items: center;
     gap: 20px;
 }
-.project-item_button-panel .folder-manager-project{
+
+.project-item_button-panel .folder-manager-project-bt {
     position: relative;
 }
-.project-item_button-panel .folder-manager-project i{
+
+.project-item_button-panel .setting-project-bt {
+    position: relative;
+}
+
+.project-item_button-panel .delete-project-bt {
+    position: relative;
+}
+
+.project-item_button-panel .setting-project-bt i {
+    font-size: 22px;
+    color: var(--main-text-color);
+}
+
+.project-item_button-panel .folder-manager-project-bt i {
     color: var(--main-text-color);
     font-size: 22px;
 }
-.project-item_button-panel .folder-manager-project::before{
+
+.project-item_button-panel>button::before {
     transition: all .3s;
     opacity: 0;
-    content: "Файловый менеджер";
     position: absolute;
     padding: 10px;
     white-space: nowrap;
-    top: -45px;
     background-color: rgb(96, 90, 90);
     color: var(--main-text-color);
     font-size: 15px;
     visibility: hidden;
     border-radius: 3px;
 }
-.project-item_button-panel:hover .folder-manager-project::before{
+
+.project-item_button-panel .folder-manager-project-bt::before {
+    content: "Файловый менеджер";
+    top: -45px;
+}
+
+.project-item_button-panel .setting-project-bt::before {
+    content: "Настройки проекта";
+    top: -45px;
+}
+
+.project-item_button-panel .delete-project-bt::before {
+    content: "Удаление проекта";
+    top: -45px;
+}
+
+.project-item_button-panel>button:hover::before {
     opacity: 1;
     visibility: visible;
+}
+
+.modal-project-setting{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s;
+    overflow-y: auto;
+    z-index: 50;
+}
+.modal-project-setting .panel-delete{
+    background-color: white;
+    padding: 25px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: 'Roboto',sans-serif;
+    min-width: 400px;
+    height: min-content;
+}
+.modal-project-setting .panel-delete .header{
+    font-weight: 400;
+    font-size: 18px;
+}
+.modal-project-setting .panel-delete>span{
+    font-weight: 300;
+    font-size: 14px;
+}
+
+
+.modal-project-setting .panel-delete .panel-button{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 15px;
+    border-top: 1px solid rgba(141, 141, 141,0.4);
+    gap: 15px;
+}
+.modal-project-setting .panel-delete .panel-button>.cancel{
+    padding: 10px 15px;
+    border: 1px solid rgba(136, 136, 136,0.5);
+    border-radius: 5px;
+    font-size: 15px;
+}
+.modal-project-setting .panel-delete .panel-button>.confirm{
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 15px;
+    background-color: var(--button-color);
+    color: white;
+}
+/*---FolderManagerStyle---*/
+
+.folder-manager-window{
+    margin-top: 50px;
+    width: 900px;
+    height: max-content;
+    background-color: var(--main-back-color);
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-family: 'Roboto',sans-serif;
+    border-radius: 5px;
+}
+.folder-manager-window .header-manager{
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    padding:  15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.folder-manager-window .header-manager>button{
+    position: relative;
+    color: white;
+    padding: 0 15px;
+    width: 20px;
+    height: 20px;
+}
+.folder-manager-window .header-manager>button>span{
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+}
+.folder-manager-window .header-manager>button>span:nth-child(1){
+    transform: rotate(45deg);
+}
+.folder-manager-window .header-manager>button>span:nth-child(2){
+    transform: rotate(-45deg);
 }

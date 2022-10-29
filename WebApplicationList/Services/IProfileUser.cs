@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ProfileModels;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 
 namespace WebApplicationList.Services
 {

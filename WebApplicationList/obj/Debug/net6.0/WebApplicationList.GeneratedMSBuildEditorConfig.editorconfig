@@ -39,12 +39,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Profile/Partials/DeleteProjectConfirmPanel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQYXJ0aWFsc1xEZWxldGVQcm9qZWN0Q29uZmlybVBhbmVsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Profile/Partials/FolderManagerProject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQYXJ0aWFsc1xGb2xkZXJNYW5hZ2VyUHJvamVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Profile/Partials/ProjectsForSettings.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQYXJ0aWFsc1xQcm9qZWN0c0ZvclNldHRpbmdzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Profile/Partials/ProjectsView.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQYXJ0aWFsc1xQcm9qZWN0c1ZpZXcuY3NodG1s
+[D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Profile/Partials/SettingsProject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQYXJ0aWFsc1xTZXR0aW5nc1Byb2plY3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/GitHubProjects/Web_Sites/WebApplicationList/Views/Shared/_MainMasterPage.cshtml]

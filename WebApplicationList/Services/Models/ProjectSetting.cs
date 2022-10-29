@@ -1,13 +1,11 @@
 ﻿using WebApplicationList.ApplicationDataBase;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
-using WebApplicationList.Models.MainSiteModels.ProjectFormat;
-using WebApplicationList.Models;
+using WebApplicationList.Models.Enitity;
+using WebApplicationList.Models.ViewModels;
+using WebApplicationList.Models.ProjectFormat;
 using System.IO.Compression;
 using EncodingText;
-using WebApplicationList.Models.MainSiteModels.ProjectModels;
-using WebApplicationList.Models.Enitity;
 
 namespace WebApplicationList.Services.Models
 {
@@ -15,6 +13,8 @@ namespace WebApplicationList.Services.Models
     {
         private readonly ApplicationDb _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+
+        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
 
         public ProjectSetting(ApplicationDb applicationDb, IWebHostEnvironment webHostEnvironment)
         {
@@ -79,6 +79,8 @@ namespace WebApplicationList.Services.Models
             }
 
             Directory.CreateDirectory(projectPath);
+
+            
                       
             //Распаковка файлов      
             using (ZipArchive zipFile = new ZipArchive(fileStream, ZipArchiveMode.Read, false, Encoding.GetEncoding(866)))
@@ -96,7 +98,7 @@ namespace WebApplicationList.Services.Models
                 Files = await GetFilesAsync(Directory.EnumerateFiles(projectPath)),
                 Folders = await GetFilesAsync(Directory.EnumerateDirectories(projectPath)),
                 ProjectName = "temporary",   
-                CurrentPath = projectPath,
+                CurrentPath = CustomEncoding.EncodeDecrypt(projectPath),
             };
 
             return explorerResult;
@@ -105,12 +107,19 @@ namespace WebApplicationList.Services.Models
         {
             directoryPath = CustomEncoding.EncodeDecrypt(directoryPath);
 
+            var  folderItems = directoryPath.Split('\\').ToList();
+
+            var indexProjectName = folderItems.FindIndex(p=>p.Contains("UserProjects"))+2;
+
+            string projectName = folderItems[indexProjectName];
+
             var explorerResult = new ExplorerViewModel()
             {
                 Files = await GetFilesAsync(Directory.EnumerateFiles(directoryPath)),
                 Folders = await GetFilesAsync(Directory.EnumerateDirectories(directoryPath)),
                 ReturnPath = GetReturnPath(directoryPath), 
                 CurrentPath = directoryPath,
+                ProjectName = projectName,
             };
 
             return explorerResult;
@@ -162,9 +171,15 @@ namespace WebApplicationList.Services.Models
             return htmlcode;
 
         }
-        public IEnumerable<FileItem> GetPagesProject(string username)
+        public IEnumerable<FileItem> GetPagesProject(string username,string? projectName)
         {
-            string pathProject = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects",username,"temporary");
+            string pathProject = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", username, "temporary");
+
+            if (!string.IsNullOrEmpty(projectName))
+            {
+                pathProject = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", username, projectName);
+            }
+            
 
             var projectHtmlDocs = Directory.GetFiles(pathProject!, "*.html").ToList();
 
@@ -205,10 +220,7 @@ namespace WebApplicationList.Services.Models
             }
 
             path = CustomEncoding.EncodeDecrypt(path);
-
-            string pattern = $"UserProjects/{userName}/{projectName}/";
-            string patternRepeat = $"UserProjects/{userName}";
-            
+ 
             if(!File.Exists(path))
             {
                 throw new ArgumentNullException(path);
@@ -221,13 +233,14 @@ namespace WebApplicationList.Services.Models
                 new ImageFormat(), 
                 new ScriptFormat(),
                 new StyleFormat(),
+                new LinksFormat(),
             };
 
             List<string> changesLines = new List<string>();
 
             foreach(var item in formatTypes)
             {
-               var result = item.FormattingFile(fileLines!,pattern,patternRepeat,userName);
+               var result = item.FormattingFile(fileLines!,userName,projectName);
                fileLines = result.Result;
                changesLines = changesLines.Concat(result.Changes!).ToList();
             }
@@ -236,7 +249,7 @@ namespace WebApplicationList.Services.Models
 
             return changesLines;
         }
-        public async Task SetViewProject(string projectName, User user)
+        public async Task SetView(string projectName, User user)
         {
             var project = await _context.userProjects!.Where(p => p.Name == projectName).FirstOrDefaultAsync();
 
@@ -245,19 +258,32 @@ namespace WebApplicationList.Services.Models
                 return;
             }
 
-            var count = await _context.projectViews!
-                .Where(p => p.project!.Name == projectName && p.user!.Id == user.Id).CountAsync();
+            
 
-            if (count == 0)
+            await semaphoreSlim.WaitAsync();
+
+            try
             {
-                await _context.projectViews!.AddAsync(new ProjectView
-                {
-                    project = project,
-                    user = user,
-                });
+                var count = await _context.projectViews!
+                .Where(p => p.project!.Name == projectName && p.user == user).CountAsync();
 
-                await _context.SaveChangesAsync();
+                if (count == 0)
+                {
+                    await _context.projectViews!.AddAsync(new ProjectView
+                    {
+                        project = project,
+                        user = user,
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
             }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+
+            
 
         }
         public async Task<bool> AddComment(int projectId, User user, string text)
@@ -406,7 +432,7 @@ namespace WebApplicationList.Services.Models
 
             Directory.Move(projectPath, newProjectPath);
 
-            await _context.userProjects!.AddAsync(new UserProject
+            await _context.userProjects!.AddAsync(new Project
             {
                 Name = projectSettings.Name,
                 Description = projectSettings.Description,
@@ -419,6 +445,93 @@ namespace WebApplicationList.Services.Models
             await _context.SaveChangesAsync();
 
             return true;
+        }
+        public async Task<bool> DeleteProject(string projectName,User user)
+        {
+            if (string.IsNullOrEmpty(projectName))
+            {
+                return false;
+            }
+
+            var project = await _context.userProjects!
+                .Where(p => p.Name == projectName && p.user == user)
+                .Include(p=>p.projectViews)
+                .Include(p=>p.projectLikes)
+                .Include(p=>p.projectComments).FirstOrDefaultAsync();
+
+            if(project is null)
+            {
+                return false;
+            }
+
+             _context.userProjects!.RemoveRange(project);
+
+            string projectPath = Path.Combine(_webHostEnvironment.WebRootPath,
+                "UserProjects", user.UserName, projectName);
+
+            string projectImagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                "UserProjectImage",projectName)+".jpg";
+
+            if (File.Exists(projectImagePath))
+            {
+                File.Delete(projectImagePath);
+            }
+
+            
+
+            if (!Directory.Exists(projectPath))
+            {
+                return false;
+            }
+
+            Directory.Delete(projectPath, true);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+
+            
+        }
+        public string GetPathProject(string projectName,string userName)
+        {
+
+            if (string.IsNullOrEmpty(projectName) || string.IsNullOrEmpty(userName))
+            {
+                return string.Empty;
+            }
+
+            string path = Path.Combine(_webHostEnvironment.WebRootPath,"UserProjects",userName,projectName);
+
+            if (Directory.Exists(path)){
+                return path;
+            }
+
+            return string.Empty;
+        }
+        public async Task<ProjectOptions> GetProjectOptions(string projectName,User user)
+        {
+            ProjectOptions? projectOptions = await _context.userProjects!
+                .Where(p => p.user == user && p.Name == projectName)
+                .Select(p => new ProjectOptions
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    Types = p.Type,
+                    ImagePath = p.UrlImage,
+                    Url = p.Url,
+
+                }).FirstOrDefaultAsync();
+
+            if(projectOptions is null)
+            {
+                return null;
+            }
+
+            projectOptions.pagesProject = GetPagesProject(user.UserName, projectOptions.Name);
+
+            return projectOptions;
+
+
         }
        
 

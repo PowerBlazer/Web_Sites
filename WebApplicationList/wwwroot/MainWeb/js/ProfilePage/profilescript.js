@@ -91,6 +91,20 @@ $(document).ready(function(){
 
     $("#add-project").on('click',FirstStage);
 
+    $(".subscribe-button").click(function(){
+        let userName = $(this).val();
+        if($(this).hasClass("disabled-button")){
+            $(this).removeClass("disabled-button");
+            $(this).html("Подписаться");
+            UnSubscribe(userName);
+        }
+        else{
+            $(this).addClass("disabled-button");
+            $(this).html("Подписано");
+            Subscribe(userName);
+        }
+    });
+
 });
 
 function FirstStage(){

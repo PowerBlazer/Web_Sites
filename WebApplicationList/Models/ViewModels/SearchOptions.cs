@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace WebApplicationList.Models.MainSiteModels.ViewModels
+namespace WebApplicationList.Models.ViewModels
 {
     public class SearchOptions
     {

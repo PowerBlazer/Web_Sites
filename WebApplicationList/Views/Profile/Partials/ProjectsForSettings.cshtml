@@ -1,17 +1,31 @@
-﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+﻿@using WebApplicationList.Models.ViewModels;
 @model IEnumerable<ProjectViewModel>;
+@if(Model.Count()!=0){
 
 <ul class="project-forsetting-panel">
+    @foreach (var item in Model)
+    {
     <li class="project-item">
-        <span>ProjectName</span>
+        <div class="img-name-project">
+            <img src="~/@item.projectUrlImage" width="200" height="100" alt="img">
+            <span>@item.projectName</span>
+        </div>
         <div class="project-item_button-panel">
-            <button type="button" class="folder-manager-project">
+            <button type="button" value="@item.projectName" class="setting-project-bt">
+                <i class="icon-setting"></i>
+            </button>
+            <button type="button" value="@item.projectName" class="folder-manager-project-bt">
                 <i class="icon-folder-svgrepo-com-2"></i>
             </button>
-            <button type="button" class="delete-project">
+            <button type="button" value="@item.projectName" class="delete-project-bt">
                 <img src="~/MainWeb/Images/delete-ic.svg" width="25" height="25">
             </button>
         </div>
     </li>
+    }
 </ul>
+}
+else{
+    <div class="null-elements-text">@ViewBag.NullProjects</div>
+}
 

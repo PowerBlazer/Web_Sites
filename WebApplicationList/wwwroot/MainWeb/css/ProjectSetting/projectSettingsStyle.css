@@ -81,6 +81,7 @@
     font-family: Segoe Ui;
     font-weight: 400;
     font-size: 17px;
+    color: white;
 }
 
 .explorer-item button{
@@ -226,7 +227,7 @@
 .setting-name-project-block input{
     border: none;
     min-height: 35px;
-    min-width: 150px;
+    min-width: 400px;
     background-color: var(--main-text-color);
     padding: 5px 10px;
     font-size: 20px;
@@ -541,6 +542,176 @@
     border-radius: 5px;
     width: auto;
 }
+.description-modal-send-panel{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: flex-end;
+}
+.description-modal-send-panel>button{
+    color: white;
+    background-color: var(--button-color);
+    padding: 8px 17px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    border-radius: 3px;
+}
+.setting-project-window{
+    margin-top: 30px;
+    width: 700px;
+    height: auto;
+    background-color: white;
+    border-radius: 3px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.setting-project-window .header-panel{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Roboto',sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+.setting-project-window .header-panel>button{
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+}
+.setting-project-window .header-panel>button span{
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: black;
+}
+.setting-project-window .header-panel>button>span:nth-child(1){
+    rotate: 45deg;
+}
+.setting-project-window .header-panel>button>span:nth-child(2){
+    rotate: -45deg;
+}
+.setting-project-window>.setting-project-panels{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.setting-project-window>.setting-project-panels>li{
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+.setting-project-window>.setting-project-panels>li>.input-panel{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 5px;
+}
+.setting-project-window>.setting-project-panels .header-text{
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 18px;
+}
+.setting-project-window>.setting-project-panels
+>li:not(.picture-image-panel)>.input-panel>label{
+    font-size: 16px;
+    font-weight: 500;
+    color: grey;   
+}
+.setting-project-window>.setting-project-panels>
+li>.input-panel textarea{
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 3px;
+    font-size: 17px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+    max-height: 200px;
+}
+.setting-project-window>.setting-project-panels>
+li>.input-panel textarea:hover{
+    border: 1px solid var(--button-color);
+}
+.setting-project-window>.setting-project-panels>
+li>.input-panel textarea:focus{
+    border: 1px solid var(--button-color);
+}
+
+.setting-project-window .name-project-panel>.input-panel>input{
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 3px;
+    font-size: 17px;
+    font-family: inherit;
+}
+.setting-project-window .name-project-panel>.input-panel>input:focus{
+    border:1px solid var(--button-color);
+}
+.setting-project-window .name-project-panel>.input-panel>input:hover{
+    border:1px solid var(--button-color);
+}
+
+.setting-project-window .picture-image-panel>.input-panel>img{
+    object-fit: cover;
+    object-position: center center;
+    width: 300px;
+    height: 150px;
+}
+.setting-project-window .picture-image-panel>.input-panel>label{
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    white-space: nowrap;
+    background-color: var(--button-color);
+    color: white;
+    width: min-content;
+    padding: 10px 15px;
+    border-radius: 3px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: background-color .3s;
+}
+.setting-project-window .picture-image-panel>.input-panel>label:hover{
+    background-color: var(--button-hover-color);
+}
+.setting-project-window
+.input-panel>select{
+    outline: none;
+    border: 1px solid rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 3px;
+    max-width: 150px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.setting-project-window 
+.input-panel>select:hover{
+    border: 1px solid var(--button-color);
+}
+.setting-project-window 
+.input-panel>select:focus{
+   border: 1px solid var(--button-color);
+}
+.setting-project-window .save-project{
+    white-space: nowrap;
+    padding: 10px 15px;
+    border-radius: 3px;
+    color: white;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: var(--button-color);
+}
+.setting-project-window .error-message-setting{
+    font-size: 15px;
+    font-weight: 300;
+    color: red;
+}
+
 
 
 

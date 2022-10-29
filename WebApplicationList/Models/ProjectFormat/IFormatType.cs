@@ -1,7 +1,7 @@
-﻿namespace WebApplicationList.Models.MainSiteModels.ProjectFormat
+﻿namespace WebApplicationList.Models.ProjectFormat
 {
     public interface IFormatType
     {
-        FileFormatResult FormattingFile(List<string> fileLines,string pattern,string patternRepeat,string userName);
+        FileFormatResult FormattingFile(List<string> fileLines,string userName,string projectName);
     }
 }

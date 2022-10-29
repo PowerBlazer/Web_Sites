@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 using WebApplicationList.Services;
 
 namespace WebApplicationList.Controllers
@@ -86,7 +86,7 @@ namespace WebApplicationList.Controllers
 
             if (user is not null)
             {
-                await projectSetting.SetViewProject(projectName, user);
+                await projectSetting.SetView(projectName, user);
             }
 
             var result = await _searchService.GetProjectPresentation(projectName);

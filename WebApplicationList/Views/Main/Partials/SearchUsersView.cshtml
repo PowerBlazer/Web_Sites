@@ -1,4 +1,4 @@
-﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+﻿@using WebApplicationList.Models.ViewModels;
 @model IEnumerable<ProfileUserViewModel>;
 
 @foreach (var item in Model)
@@ -27,7 +27,7 @@
         </a>
         <ul class="user-profile-info">
             <li>
-                <div>@item.countLikes</div>
+                <div>@item.countLikes!.Sum()</div>
                 <span>Оценки</span>
             </li>
             <li>

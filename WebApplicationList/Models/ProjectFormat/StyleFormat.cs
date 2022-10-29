@@ -1,20 +1,23 @@
-﻿namespace WebApplicationList.Models.MainSiteModels.ProjectFormat
+﻿namespace WebApplicationList.Models.ProjectFormat
 {
     public class StyleFormat : IFormatType
     {
-        public FileFormatResult FormattingFile(List<string> fileLines, string pattern,string patternRepeat,string userName)
+        public FileFormatResult FormattingFile(List<string> fileLines,string userName,string projectName)
         {
             FileFormatResult fileResult = new FileFormatResult();
             List<string> changes = new List<string>();
 
-            var images = fileLines.Where(p => p.Contains("<link")&& p.Contains("css/")||p.Contains(".css")).ToList();
+            string pattern = $"UserProjects/{userName}/{projectName}/";
+            string patternRepeat = $"UserProjects/{userName}";
 
-            foreach (var image in images)
+            var styles = fileLines.Where(p => p.Contains("<link")&& p.Contains("css/")||p.Contains(".css")).ToList();
+
+            foreach (var style in styles)
             {
-                if (image.Contains("href=\""))
+                if (style.Contains("href=\""))
                 {
-                    int lineIndex = fileLines.FindIndex(s => s.Contains(image));
-                    string road = image.Substring(image.IndexOf("href=\"") + "href=\"".Length);
+                    int lineIndex = fileLines.FindIndex(s => s.Contains(style));
+                    string road = style.Substring(style.IndexOf("href=\"") + "href=\"".Length);
                     road = road.Remove(road.IndexOf("\""));
 
                     if (!road.Contains(pattern))
@@ -29,14 +32,14 @@
 
                             string newRoad = road.Replace(roadProjectName, newRoadProjectName);
 
-                            string result = image.Replace(road, newRoad);
+                            string result = style.Replace(road, newRoad);
                             
                             fileLines[lineIndex] = result;
                             changes.Add(result.Substring(result.IndexOf("<")));
                         }
                         else
                         {
-                            string result = image.Replace(road, pattern + road);
+                            string result = style.Replace(road, pattern + road);
                             fileLines[lineIndex] = result;
                             changes.Add(result.Substring(result.IndexOf("<")));
                         }

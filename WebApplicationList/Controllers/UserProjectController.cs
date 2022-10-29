@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.Enitity;
+using WebApplicationList.Models.ViewModels;
 using WebApplicationList.Services;
 
 namespace WebApplicationList.Controllers
@@ -136,10 +137,8 @@ namespace WebApplicationList.Controllers
         {
            var user = await _profileUser.GetUserAsync();
 
-
-           var result = _projectSetting.GetPagesProject(user.UserName);
+           var result = _projectSetting.GetPagesProject(user.UserName,string.Empty);
           
-           
            return PartialView("~/Views/UserProject/Partials/Settings.cshtml",result);
         }
         [HttpPost]
@@ -214,7 +213,22 @@ namespace WebApplicationList.Controllers
 
             return await _projectSetting.DeleteLike(projectId, user);
         }
+        [HttpPost]
+        public async Task<bool> DeleteProject(string projectName)
+        {
+            User user = await _profileUser.GetUserAsync();
 
+            if(user is null)
+            {
+                return false;
+            }
+
+            return await _projectSetting.DeleteProject(projectName, user);
+            
+        }
+        
+
+        
 
 
         private async Task<bool> CheckValidationPath(string path)

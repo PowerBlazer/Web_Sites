@@ -1,7 +1,16 @@
-﻿@using WebApplicationList.Models.MainSiteModels.ViewModels;
+﻿@using WebApplicationList.Models.ViewModels;
 @model ProfileUserViewModel
 @{
     ViewData["Title"] = "Настройки";
+}
+
+@section pages{
+    <li class="menu-nav-item">
+        <a href="~/Main">Главная</a>
+    </li> 
+    <li class="menu-nav-item active">
+        <a href="~/Profile">Профиль</a>
+    </li> 
 }
 
 @section link{
@@ -41,8 +50,12 @@
                     }
                     <span class="profile-email-user">@Model.Email</span>
                     @if(!ViewBag.Privacy!){
-                        <button class="subscribe-button">Подписаться</button>
-                        <button class="message-button">Сообщение</button>
+                        @if(Model.signed){
+                            <button class="subscribe-button disabled-button" value="@Model.UserName">Подписано</button>
+                        }
+                        else{
+                        <button class="subscribe-button" value="@Model.UserName">Подписаться</button>
+                        }
                     }
                     <ul class="info-user-panel">
                         <li class="followers-count">
@@ -51,7 +64,7 @@
                         </li>
                         <li class="followers-count">
                             <span>Оценки</span>
-                           @Model.countLikes
+                           @Model.countLikes!.Sum()
                         </li>
                         <li class="followers-count">
                             <span>Подписки</span>
@@ -59,7 +72,7 @@
                         </li>
                         <li class="followers-count">
                             <span>Просмотры проектов</span>
-                            @Model.countViews
+                            @Model.countViews!.Sum()
                         </li>
                     </ul>
 
@@ -281,12 +294,18 @@
             </div>
         </div>
     </div>
+
+    <div class="modal-project-setting" id="project-setting">
+        
+    </div>
+
+    <div class="modal-check-file" id="result-text-file">
+
+    </div>
 }
 
 
-<div class="modal-check-file" id="result-text-file">
 
-</div>
 
 @section Scripts{
     <script src="~/MainWeb/js/ProfilePage/profilescript.js" asp-append-version="true"></script>
@@ -302,7 +321,7 @@
             GetProjects("@Model.UserName");
             GetFavorites("@Model.UserName");
         });
-        
+
         @if(ViewBag.Page=="settings")
         {
             @:InitSettings();
@@ -311,6 +330,7 @@
         {
             @:FirstStage();
         }
+        
     </script>
 }
 

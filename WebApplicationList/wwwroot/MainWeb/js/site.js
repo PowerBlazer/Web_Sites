@@ -209,7 +209,6 @@ function OpenNotification(){
 }
 
 function InitModalProjectInfo(){
-    $(".open-project-info").click(OpenModalProject);
     $(".close-modal").click(CloseModalProject);
     $(document).mouseup(function(e){
         if(!$("#project-content").is(e.target) && $("#project-content").has(e.target).length === 0&&
@@ -240,12 +239,15 @@ function OpenModalProject(){
 }
 
 function CloseModalProject(){
-    $(".modal-project-info").css({
-        "visibility":"",
-        "opacity":"",
-    });
-    $("#project-content").html("");
-    $('body').css("overflow","")
+
+    if($(".modal-project-info").css("visibility")==="visible"){
+        $(".modal-project-info").css({
+            "visibility":"",
+            "opacity":"",
+        });
+        $("#project-content").html("");
+        $('body').css("overflow","");
+    }
 }
 
 function InitModalProject(){
@@ -273,7 +275,6 @@ function InitModalProject(){
         let text = $("#comment").val();
 
         AddComment(text,idProject);
-
     });
 
     $(".subscribe-user").click(function(){
@@ -289,6 +290,8 @@ function InitModalProject(){
             Subscribe(userName);
         }
     });
+
+    
     InitLikePanel();
 }
 
@@ -340,7 +343,7 @@ function GetProject(projectName){
         url:"/Main/GetProjectInfo",
         data:{projectName:projectName},
         success:function(result){
-            $(".load-animation").css({"visibility":"hidden",});
+            $(".load-animation").css({"visibility":"hidden"});
             $("#project-content").html(result);
             InitModalProject();
         },

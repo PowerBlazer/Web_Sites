@@ -1,9 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿
 using Microsoft.EntityFrameworkCore;
 using WebApplicationList.ApplicationDataBase;
 using WebApplicationList.Models.Enitity;
-using WebApplicationList.Models.MainSiteModels.ViewModels;
+using WebApplicationList.Models.ViewModels;
 
 namespace WebApplicationList.Services.Models
 {
@@ -11,6 +10,7 @@ namespace WebApplicationList.Services.Models
     {
         private readonly ApplicationDb _context;
         private readonly IProfileUser _profileUser;
+        
         public SearchRepository(ApplicationDb context, IProfileUser profileUser)
         {
             _context = context;
@@ -23,6 +23,7 @@ namespace WebApplicationList.Services.Models
                 .Include(p=>p.user)
                 .Include(p=>p.projectLikes)
                 .Include(p=>p.projectViews)
+                .Include(p=>p.projectComments)
                 .Select(p => new ProjectViewModel
                 {
                     userName = p.user!.UserName,
@@ -31,8 +32,10 @@ namespace WebApplicationList.Services.Models
                     projectUrl = p.Url,
                     projectUrlImage = p.UrlImage,
                     addedTime = p.AddedTime,
-                    likes = p.projectLikes.Count(),
-                    views = p.projectViews.Count(),
+                    likes = p.projectLikes.Count,
+                    views = p.projectViews.Count,
+                    commentsValue = p.projectComments.Count,
+
                 }).AsSplitQuery().AsNoTracking().Take(20).ToListAsync();
 
             return projects;
@@ -81,20 +84,26 @@ namespace WebApplicationList.Services.Models
                     likes = p.projectLikes.Count(),
                     views = p.projectViews.Count(),
 
-                }).Take(searchOptions.PageIndex).AsNoTracking();
+                }).AsNoTracking().AsSplitQuery();
 
-            var result = searchOptions.SortType switch 
+            return searchOptions.SortType switch 
             {
-                "name"=> await request.OrderBy(p=>p.projectName).ToListAsync(),
+                "name"=> await request.OrderBy(p=>p.projectName)
+                    .Take(searchOptions.PageIndex).ToListAsync(),
                    
-                "date"=> await request.OrderByDescending(p=>p.addedTime).ToListAsync(),
+                "date"=> await request.OrderByDescending(p=>p.addedTime)
+                    .Take(searchOptions.PageIndex).ToListAsync(),
 
-                "popular" => await request.OrderByDescending(p=>p.projectId).ToListAsync(),
+                "popular" => await request.OrderByDescending(p=>p.likes)
+                    .Take(searchOptions.PageIndex).ToListAsync(),
 
-                _ => await request.OrderByDescending(p => p.projectId).ToListAsync(),
+                "views" => await request.OrderByDescending(p=>p.views)
+                    .Take(searchOptions.PageIndex).ToListAsync(),
+
+                _ => await request.OrderByDescending(p => p.projectId)
+                    .Take(searchOptions.PageIndex).ToListAsync(),
             };
 
-            return result; 
         }
         public async Task<IEnumerable<ProfileUserViewModel>> GetUsersApplyFilters(SearchOptions searchOptions)
         {
@@ -110,9 +119,9 @@ namespace WebApplicationList.Services.Models
 
             string userNameOwner = _profileUser.GetUserName();
 
-            var request = _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%")&&p.UserName!=userNameOwner)
+            var users = await _context.Users.Where(p => EF.Functions.Like(p.UserName, $"%{searchOptions.Text}%")&&p.UserName!=userNameOwner)
                     .Include(p => p.profileUserInfo)
-                    .Include(p => p.projects).ThenInclude(p=>p.projectLikes)                  
+                    .Include(p => p.projects).ThenInclude(p=>p.projectLikes)             
                     .Include(p => p.usersProfile)
                     .Select(p => new ProfileUserViewModel
                     {
@@ -122,25 +131,35 @@ namespace WebApplicationList.Services.Models
                         Profession = p.profileUserInfo!.Profession,
                         DateRegistration = p.DateRegistraition,
                         countProjects = p.projects.Count(),
-                        countSubscriber = p.subscribes.Count(),
+                        countSubscriber = p.subscribes.Count(),   
+                        countLikes = p.projects.Select(p=>p.projectLikes.Count).ToList(),
+                        countViews = p.projects.Select(p => p.projectViews.Count).ToList()
                     })
-                    .Take(searchOptions.PageIndex).AsNoTracking().AsSplitQuery();
+                    .AsNoTracking().AsSplitQuery().ToListAsync();
+
+            
 
             var result = searchOptions.SortType switch
             {
-                "name" => await request.OrderBy(p=>p.UserName).ToListAsync(),
-                "date"=> await request.OrderByDescending(p=>p.DateRegistration).ToListAsync(),
-                _ => await request.OrderBy(p=>p.UserName).ToListAsync(),
+                "name" => users.OrderBy(p=>p.UserName)
+                    .Take(searchOptions.PageIndex).ToList(),
+
+                "date"=> users.OrderByDescending(p=>p.DateRegistration)
+                    .Take(searchOptions.PageIndex).ToList(),
+
+                "popular" => users.OrderByDescending(p=>p.countLikes!.Sum())
+                    .Take(searchOptions.PageIndex).ToList(),
+
+                "views" => users.OrderByDescending(p=>p.countViews!.Sum())
+                    .Take(searchOptions.PageIndex).ToList(),
+
+                _ => users.OrderBy(p=>p.UserName)
+                    .Take(searchOptions.PageIndex).ToList(),
             };
 
             foreach(var item in result)
             {
-                var likes = await _context.userProjects!
-                    .Where(p => p.user.UserName == item.UserName).AsNoTracking()
-                    .Select(p => p.projectLikes.Count()).ToListAsync();
-
                 item.signed = await GetSignedUser(item.UserName!);
-                item.countLikes = likes.Sum();
             }
         
             return result;
@@ -167,6 +186,7 @@ namespace WebApplicationList.Services.Models
                     projectComments = p.projectComments.OrderByDescending(p=>p.date).ToList(),
                     likes = p.projectLikes.Count(),
                     views = p.projectViews.Count()
+
                 }).AsNoTracking().AsSplitQuery().FirstOrDefaultAsync();
 
             project!.liked = await GetLikedProject(project.projectId);
@@ -222,14 +242,6 @@ namespace WebApplicationList.Services.Models
 
             return false;
         }
-
-        
-
-       
-
-
-
-
 
     }
 }
