@@ -10,7 +10,7 @@ namespace WebApplicationList.Services
         Task<ExplorerViewModel> GetExplorerItem(string directoryPath);
         Task<FileItem> GetContentFileAsync(string filePath);
         Task<bool> ChangeContentFile(FileItem fileItem);
-        Task<bool> GetValidationProjectName(string projectName);
+        Task<bool> GetValidationProjectName(string projectName,int? id);
         IEnumerable<FileItem> GetPagesProject(string username,string? projectName);
         List<string> FormattingFile(string path, string projectName, string userName);
         Task<bool> SaveProject(ProjectSettingsViewModel projectSettings,User user);
@@ -21,5 +21,6 @@ namespace WebApplicationList.Services
         Task<bool> DeleteProject(string projectName, User user);
         string GetPathProject(string projectName, string userName);
         Task<ProjectOptions> GetProjectOptions(string projectName, User user);
+        Task<bool> UpdateProjectOptions(ProjectOptions projectOption, User user);
     }
 }

@@ -347,7 +347,11 @@ function GetProject(projectName){
             $("#project-content").html(result);
             InitModalProject();
         },
-        error:function(){
+        error:function(error){
+            if(error.status===404){
+                ErrorMessage(error.responseText);
+            }
+
             CloseModalProject();
             ErrorsMessage("Ошибка на сервере , пробуйте позже");
         }
@@ -370,7 +374,12 @@ function AddComment(text,idProject){
                 ErrorMessage("Больше 5 комментариев нельзя");
             }
         },
-        error:function(){
+        error:function(error){
+            if(error.status===400){
+                ErrorMessage(error.responseText);
+                return;
+            }
+
             ErrorMessage("Ошибка на сервере,пробуйте позже");
         }
     })

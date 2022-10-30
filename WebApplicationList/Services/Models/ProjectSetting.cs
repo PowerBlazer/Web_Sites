@@ -13,13 +13,17 @@ namespace WebApplicationList.Services.Models
     {
         private readonly ApplicationDb _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private ILogger _logger;
 
         private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
 
-        public ProjectSetting(ApplicationDb applicationDb, IWebHostEnvironment webHostEnvironment)
+        public ProjectSetting(ApplicationDb applicationDb, IWebHostEnvironment webHostEnvironment,
+            ILogger<ProjectSetting> logger)
         {
             _context = applicationDb;
             _webHostEnvironment = webHostEnvironment;
+            _logger = logger;
+
         }
 
         public async Task<bool> ChangeContentFile(FileItem fileItem)
@@ -195,21 +199,33 @@ namespace WebApplicationList.Services.Models
 
             return fileItems;
         }
-        public async Task<bool> GetValidationProjectName(string projectName)
+        public async Task<bool> GetValidationProjectName(string projectName,int? id)
         {
             if(string.IsNullOrWhiteSpace(projectName)||projectName=="temporary")
             {
                 return false;
             }
 
-            var countResult = await _context.userProjects!.Where(p => p.Name == projectName).CountAsync();
+            
+            var result = await _context.userProjects!.Where(p => p.Name == projectName).FirstOrDefaultAsync();
 
-            if (countResult > 0)
+            if(id is not null)
             {
-                return false;
+                var projectNameResult = await _context.userProjects!.Where(p => p.Id == id)
+                    .Select(p => p.Name).FirstOrDefaultAsync();
+
+                if(projectName == projectNameResult)
+                {
+                    return true;
+                }
             }
 
-            return true;
+            if(result is null)
+            {
+                return true;
+            }
+
+            return false;
         }
         public List<string> FormattingFile(string path,string projectName,string userName)
         {
@@ -514,6 +530,7 @@ namespace WebApplicationList.Services.Models
                 .Where(p => p.user == user && p.Name == projectName)
                 .Select(p => new ProjectOptions
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     Types = p.Type,
@@ -533,8 +550,92 @@ namespace WebApplicationList.Services.Models
 
 
         }
+        public async Task<bool> UpdateProjectOptions(ProjectOptions projectOption,User user)
+        {
+             Project? project = await _context.userProjects!
+                .Where(p => p.user == user && p.Id == projectOption.Id).FirstOrDefaultAsync();
+
+            if (project is null)
+            {
+                return false;
+            }
+
+            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                    "UserProjectsImage", $"{project.Name}.jpg");
+
+            string newImagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                    "UserProjectsImage", $"{projectOption.Name}.jpg");
+
+            if (projectOption.Image is not null)
+            { 
+                if (File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
+                }
+
+                try
+                {
+                    using (FileStream fileStream = new FileStream(newImagePath, FileMode.Create,FileAccess.Write))
+                    {
+                        await projectOption.Image.OpenReadStream().CopyToAsync(fileStream);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+
+                    return false;
+                }
+            }
+
+            string projectPath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", user.UserName, project.Name!);
+            string newProjectPath = Path.Combine(_webHostEnvironment.WebRootPath, "UserProjects", user.UserName, projectOption.Name!);
+
+            if (!Directory.Exists(projectPath))
+            {
+                return false;
+            }
+
+            if(project.Name != projectOption.Name)
+            {
+                Directory.Move(projectPath, newProjectPath);
+                File.Move(imagePath, newImagePath);
+            }
+
+            if (projectOption.SelectedPage!.Contains(".html"))
+            {
+                projectOption.SelectedPage = projectOption.SelectedPage
+                    .Remove(projectOption.SelectedPage.IndexOf("."));
+            }
+
+            project.Name = projectOption.Name;
+            project.Description = projectOption.Description;
+            project.Type = projectOption.Types;
+            project.Url = $"?Site={projectOption.Name}&page={projectOption.SelectedPage}";
+            project.UrlImage = $"UserProjectsImage/{projectOption.Name}.jpg";
+
+            _context.userProjects!.Update(project);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return false;
+            }
+
+
+
+
+        }
        
 
+       
         private async Task<List<FileItem>> GetFilesAsync(IEnumerable<string> paths)
         {
             var files = new List<FileItem>();

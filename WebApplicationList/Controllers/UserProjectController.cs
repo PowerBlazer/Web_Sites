@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Text.Json;
 using WebApplicationList.Models.Enitity;
 using WebApplicationList.Models.ViewModels;
@@ -31,7 +32,7 @@ namespace WebApplicationList.Controllers
             return View((object)result);
         }
         [HttpPost]
-        public async Task<bool> AddComment(string text,int projectId)
+        public async Task<IActionResult> AddComment(string text,int projectId)
         {
             var user = await _profileUser.GetUserAsync();
 
@@ -40,7 +41,12 @@ namespace WebApplicationList.Controllers
                 throw new Exception("Пользователь не найден");
             }
 
-            return await _projectSetting.AddComment(projectId, user, text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return BadRequest("Поле не может быть пустым");
+            }
+
+            return Ok(await _projectSetting.AddComment(projectId, user, text));
         }
         [HttpPost]
         public async Task<IActionResult> GetExplorer()
@@ -130,7 +136,7 @@ namespace WebApplicationList.Controllers
         [HttpPost]
         public async Task<bool> GetValidationNameProject(string projectName)
         {
-            return await _projectSetting.GetValidationProjectName(projectName);
+            return await _projectSetting.GetValidationProjectName(projectName, null);
         }
         [HttpPost]
         public async Task<IActionResult> GetSettingsProject()
@@ -167,7 +173,7 @@ namespace WebApplicationList.Controllers
 
             try
             {
-                ProjectSettingsViewModel? projectSettings = JsonSerializer.Deserialize<ProjectSettingsViewModel>(jsonProjectSettingVM);
+                ProjectSettingsViewModel? projectSettings = System.Text.Json.JsonSerializer.Deserialize<ProjectSettingsViewModel>(jsonProjectSettingVM);
 
                 var user = await _profileUser.GetUserAsync();
 
@@ -225,6 +231,70 @@ namespace WebApplicationList.Controllers
 
             return await _projectSetting.DeleteProject(projectName, user);
             
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProjectOptions()
+        {
+            User? user = await _profileUser.GetUserAsync(); 
+
+            if(user is null)
+            {
+                return Unauthorized();
+            }
+            
+            string projectOptionJson = Request.Form["projectOptions"].FirstOrDefault()!;
+
+            if(projectOptionJson is null|| string.IsNullOrEmpty(projectOptionJson))
+            {
+                return StatusCode(404);
+            }
+
+            try
+            {
+                ProjectOptions projectOptions = JsonConvert.DeserializeObject<ProjectOptions>(projectOptionJson);
+
+                if(!await _projectSetting.GetValidationProjectName(projectOptions.Name!,projectOptions.Id))
+                {
+                    return BadRequest("Такое имя уже существует");
+                }
+
+                if (string.IsNullOrWhiteSpace(projectOptions.Name))
+                {
+                    return BadRequest("Название не может быть пустым");
+                }
+
+                if (Request.Form.Files.Count > 0)
+                {
+                    projectOptions.Image = Request.Form.Files[0];
+
+                    if(projectOptions.Image.Length> 15728640)
+                    {
+                        return BadRequest("Файл превышает допустимый размер");
+                    }
+
+                    if(!(projectOptions.Image.ContentType == "image/png" ||
+                        projectOptions.Image.ContentType == "image/jpeg"))
+                    {
+                        return BadRequest("Файл имеет не допустимый формат");
+                    }
+
+
+                }
+
+                if(await _projectSetting.UpdateProjectOptions(projectOptions, user))
+                {
+                    return Ok("Успешно сохранено");
+                }
+                else
+                {
+                    return BadRequest("При сохранение произошла ошибка , попробуйте позже");
+                }
+
+            }
+            catch
+            {
+                return StatusCode(505);
+            }
         }
         
 

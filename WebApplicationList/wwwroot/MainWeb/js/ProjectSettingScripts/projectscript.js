@@ -94,38 +94,70 @@ function ProjectElementsForSettingsPanel(){
         const listDownLoadPage = $("#main-load-page-select");
         const listDownFormattingPage = $("#formatting-page-project");
 
+
         const inputImage = $("#change-image-project");
 
+        const formattinButton = $("#formatting-button");
         const saveProjectButton  = $("#save-project-setting");
 
         projectNameInput.blur(function(){
             let projectName = $(this).val();
             let errorBlock = $(this).parent().find(".error-message-setting");
-
-            CheckValidationProjectName(projectName,errorBlock);
+            errorBlock.html("");
+            if($(this).data("currentname")!==projectName){
+                CheckValidationProjectName(projectName,errorBlock);
+            }
         });
 
         inputImage.change(function(){
+            var reader = new FileReader();
 
-
-            let format = this.files[0].name.split('.');
-            let size =  this.files[0].size;
-
-            if((format[1]==="jpg"||format[1]==="png")&& size<15728640){
-               // let data = new FormData();
-                //data.append(this.files[0]);
-                console.log("123");
-            }
-            else{
-                ErrorMessage("Файл превышает допустимый размер или имеет не похоящий формат");
+            reader.onload = function(){
+                $("#project-image-setting").attr('src',this.result);
             }
 
-
-            
+            reader.readAsDataURL(this.files[0]);
         });
 
         saveProjectButton.click(function(){
 
+            let data = new FormData();
+
+            if(inputImage[0].files.length !== 0){
+                let format = inputImage[0].files[0].name.split('.');
+                let size =  inputImage[0].files[0].size;
+
+                if((format[1]==="jpg"||format[1]==="png")&&size<15728640){
+                    data.append("file",inputImage[0].files[0]);
+                }
+                else{
+                    ErrorMessage("Файл превышает допустимый размер или имеет не похоящий формат");
+                    return;
+                }
+            }
+
+            if(projectNameInput.parent()
+            .find('.error-message-setting').html().length!==0){
+                ErrorMessage("Такое имя уже существует");
+                return;
+            }
+
+            if(projectNameInput.val().lenght===0){
+                ErrorMessage("Название не может быть пустым");
+                return;
+            }
+
+            let projectOptions = {
+                Id:saveProjectButton.val(),
+                Name:projectNameInput.val(),
+                SelectedPage:$("#main-load-page-select option:selected").text(),
+                Description:projectDescriptionInput.val(),
+                Types:projectTypesInput.val(),
+            }  
+
+            data.append("projectOptions",JSON.stringify(projectOptions));
+
+            UpdateProject(data);
         });
 
         listDownLoadPage.change(function(){
@@ -137,24 +169,55 @@ function ProjectElementsForSettingsPanel(){
                 errorBlock.html("Укажите название проекта")
                 return;
             }
+
+
         });
 
-        listDownFormattingPage.change(function(){
+        formattinButton.click(function(){
             let errorBlock = $(this).parent().find(".error-message-setting");
 
             errorBlock.html("");
-
             if(projectNameInput.val().length === 0){
                 errorBlock.html("Укажите название проекта")
                 return;
             }
+
+        
+            let selectedPage = $("#formatting-page-project option:selected").val();
+
+            FormattingFile(selectedPage,projectNameInput.val());
         });
 
     }
 
-    function UpdateProjectImage(){
+   function UpdateProject(data){
+    StartAnimation();
+    $.ajax({
+        type:"POST",
+        contentType: false,
+        processData: false,
+        url:"/UserProject/UpdateProjectOptions",
+        data:data,
+        success: function(result){
+            SuccessMessage(result);
+            StopAnimation();
+            CloseModal();
+            setTimeout(location.reload(),2000);
+        },
+        error:function(error){
+            if(error.status===400){
+                ErrorMessage(error.responseText);
+            }
 
-    }
+            if(error.status === 500){
+                ErrorMessage("Ошибка на сервере попробуйте позже");
+            }
+
+            StopAnimation();
+           
+        }
+    })
+   }
 
     function GetDeleteProjectConfirmPanel(projectName){
         $.ajax({
@@ -173,6 +236,8 @@ function ProjectElementsForSettingsPanel(){
             }
         })
     }
+
+    
 
 
     function DeleteProjectAjax(projectName){

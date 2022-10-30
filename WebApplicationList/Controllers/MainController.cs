@@ -91,6 +91,11 @@ namespace WebApplicationList.Controllers
 
             var result = await _searchService.GetProjectPresentation(projectName);
 
+            if(result is null)
+            {
+                return NotFound("Сайт не найден");
+            }
+
             return PartialView("~/Views/Main/Partials/ProjectInfo.cshtml", result);
         }
         [HttpPost]

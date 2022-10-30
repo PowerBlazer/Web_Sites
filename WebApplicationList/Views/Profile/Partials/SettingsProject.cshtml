@@ -13,7 +13,7 @@
             <div class="header-text">Изменить название проекта</div>
             <div class="input-panel">
                 <label>Название</label>
-                <input type="text" value="@Model.Name" id="project-name-setting">
+                <input type="text" data-currentname="@Model.Name" value="@Model.Name" id="project-name-setting">
                 <div class="error-message-setting"></div>
             </div>
         </li>
@@ -42,7 +42,7 @@
         <li class="picture-image-panel">
             <div class="header-text">Изменить изображение сайта</div>
             <div class="input-panel">
-                <img src="~/@Model.ImagePath" alt="@Model.Name" width="300">
+                <img src="~/@Model.ImagePath" id="project-image-setting" alt="@Model.Name" width="300">
                 <input type="file" id="change-image-project" accept="image/png,image/jpeg" style="display:none;">
                 <label for="change-image-project">Загрузить изображение</label>
             </div>
@@ -54,12 +54,15 @@
                 <select id="formatting-page-project">
                 @foreach (var item in Model.pagesProject!)
                 {
-                    <option value="@item.Name">@item.Name</option>
+                    <option value="@item.Path">@item.Name</option>
                 }
                 </select>
             </div>
-             <div class="error-message-setting"></div>
+            <div class="error-message-setting"></div>
+            <button class="formatting-start-button" id="formatting-button">Форматировать</button>
         </li>
     </ul>
-    <button class="save-project" id="save-project-setting">Сохранить</button>
+    <div class="save-project-panel">
+        <button type="button" class="save-project" value="@Model.Id" id="save-project-setting">Сохранить</button>
+    </div>
 </div>

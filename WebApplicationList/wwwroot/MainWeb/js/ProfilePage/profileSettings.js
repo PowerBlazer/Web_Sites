@@ -24,13 +24,12 @@ function InitSettings(){
 
 function GetValuesInput(){
     const DescriptionBlock = $("#description-content");
-    const SurnameBlock = $("#surname-rename");  
     const YearBlock = $("#year-rename");
     const ProfessionBlock = $("#proffesion-rename");
     const HeaderDescriptionBlock = $("#header-description-input");
 
     var profileUserInfo = {
-        Surname:SurnameBlock.val(),
+        Surname:"",
         Year:parseInt(YearBlock.val()),
         Profession:ProfessionBlock.val(),
         HeaderDescription:HeaderDescriptionBlock.val(),

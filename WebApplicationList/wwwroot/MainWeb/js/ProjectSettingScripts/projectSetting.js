@@ -255,9 +255,7 @@ function LoadExplorer(){
 
         }
     }
-    function InitResultFormattingPanel(){
-        $("#close-modal-filecontent").on('click',CloseModalFileContent);
-    }
+
 
    
 
@@ -291,29 +289,7 @@ function LoadExplorer(){
             }
         })
     }
-    function FormattingFile(path,projectName){
-        StartAnimation();
-        $.ajax({
-            type:"POST",
-            url:"/UserProject/FormattingFile",
-            data:{
-                path:path,
-                projectName:projectName,
-            },
-            success:function(result){
-                StopAnimation();
-                SuccessMessage("Успешно отформатировано")
-                ResultFileContent.html(result);
-                OpenModalFileContent();
-                InitResultFormattingPanel();
-            },
-            error:function(){
-                StopAnimation();
-                ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
-            }
-
-        })
-    }
+    
     function SaveProjectAjax(projectSettingVM){
         StartAnimation();
         $.ajax({
@@ -337,6 +313,30 @@ function LoadExplorer(){
     }
 
 }
+function FormattingFile(path,projectName){
+    StartAnimation();
+    $.ajax({
+        type:"POST",
+        url:"/UserProject/FormattingFile",
+        data:{
+            path:path,
+            projectName:projectName,
+        },
+        success:function(result){
+            StopAnimation();
+            SuccessMessage("Успешно отформатировано")
+            $("#result-text-file").html(result);
+            OpenModalFileContent();
+            $("#close-modal-filecontent").on('click',CloseModalFileContent);
+        },
+        error:function(){
+            StopAnimation();
+            ErrorMessage("Ошибка на сервере ,пробуйте позже еще раз");
+        }
+
+    })
+}
+
 
 
 function ChangeContentFile(path,content){

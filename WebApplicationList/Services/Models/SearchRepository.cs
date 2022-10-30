@@ -189,8 +189,13 @@ namespace WebApplicationList.Services.Models
 
                 }).AsNoTracking().AsSplitQuery().FirstOrDefaultAsync();
 
-            project!.liked = await GetLikedProject(project.projectId);
-            project!.signed = await GetSignedUser(project.userName!);
+            if(project is not null)
+            {
+                project!.liked = await GetLikedProject(project.projectId);
+                project!.signed = await GetSignedUser(project.userName!);
+            }
+
+            
 
             return project;
         }

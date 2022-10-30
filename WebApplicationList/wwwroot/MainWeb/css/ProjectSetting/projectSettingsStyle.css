@@ -696,6 +696,10 @@ li>.input-panel textarea:focus{
 .input-panel>select:focus{
    border: 1px solid var(--button-color);
 }
+.setting-project-window .save-project-panel{
+    display: flex;
+    justify-content: flex-end;
+}
 .setting-project-window .save-project{
     white-space: nowrap;
     padding: 10px 15px;
@@ -705,11 +709,29 @@ li>.input-panel textarea:focus{
     font-weight: 500;
     font-size: 16px;
     background-color: var(--button-color);
+
+}
+.setting-project-window .save-project:hover{
+    background-color: var(--button-hover-color);
 }
 .setting-project-window .error-message-setting{
     font-size: 15px;
     font-weight: 300;
     color: red;
+}
+.setting-project-window .formatting-pages-project-panel .formatting-start-button{
+    white-space: nowrap;
+    padding: 10px 15px;
+    width: min-content;
+    border-radius: 3px;
+    color: white;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: var(--button-color);
+}
+.setting-project-window .formatting-pages-project-panel .formatting-start-button:hover{
+    background-color: var(--button-hover-color);
 }
 
 

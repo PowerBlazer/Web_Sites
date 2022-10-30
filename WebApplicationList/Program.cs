@@ -12,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 string? connection = builder.Configuration.GetConnectionString("LocalConnection");
 
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 builder.Services.AddDbContext<ApplicationDb>(options => options.UseSqlServer(connection!, sqlServerOptionsAction: sqlServerOptions =>
 {
     sqlServerOptions.EnableRetryOnFailure(
@@ -37,6 +42,7 @@ builder.Services.AddScoped<IAuthorization, Authorization>()
     .AddScoped<IProfileUser, ProfileUser>()
     .AddScoped<IProjectSetting, ProjectSetting>()
     .AddTransient<ISearch, SearchRepository>();
+    
     
 // Add services to the container.
 builder.Services.AddControllersWithViews();

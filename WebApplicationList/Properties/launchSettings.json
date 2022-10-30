@@ -2,11 +2,10 @@
   "profiles": {
     "WebApplicationList": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "hotReloadEnabled": true,
+      "hotReloadEnabled": false,
       "applicationUrl": "https://localhost:7097;http://localhost:5097",
       "dotnetRunMessages": true,
       "nativeDebugging": false
