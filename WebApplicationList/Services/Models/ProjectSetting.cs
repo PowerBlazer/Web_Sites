@@ -635,7 +635,6 @@ namespace WebApplicationList.Services.Models
         }
        
 
-       
         private async Task<List<FileItem>> GetFilesAsync(IEnumerable<string> paths)
         {
             var files = new List<FileItem>();

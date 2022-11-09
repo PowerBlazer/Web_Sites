@@ -50,11 +50,13 @@
                     }
                     <span class="profile-email-user">@Model.Email</span>
                     @if(!ViewBag.Privacy!){
-                        @if(Model.signed){
-                            <button class="subscribe-button disabled-button" value="@Model.UserName">Подписано</button>
-                        }
-                        else{
-                        <button class="subscribe-button" value="@Model.UserName">Подписаться</button>
+                        @if(User!.Identity!.IsAuthenticated){
+                             @if(Model.signed){
+                                <button class="subscribe-button disabled-button" value="@Model.UserName">Подписано</button>
+                            }
+                            else{
+                                <button class="subscribe-button" value="@Model.UserName">Подписаться</button>
+                            }
                         }
                     }
                     <ul class="info-user-panel">

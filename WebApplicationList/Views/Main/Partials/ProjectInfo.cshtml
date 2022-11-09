@@ -8,13 +8,15 @@
         <div class="project-name">@Model.projectName</div>
         <div class="links">
             <a href="~/Profile?userName=@Model.userName">@Model.userName</a>
-            @if(Model.signed)
-            {
-                <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="">Подписано</button>
-            }
-            else
-            {
-                <button type="button" class="subscribe-user" value="@Model.userName" id="">Подписаться</button>
+            @if(User.Identity!.IsAuthenticated){
+                @if(Model.signed)
+                {
+                    <button type="button" class="subscribe-user disabled-button" value="@Model.userName" id="">Подписано</button>
+                }
+                else
+                {
+                    <button type="button" class="subscribe-user" value="@Model.userName" id="">Подписаться</button>
+                }
             }
         </div>
     </div>

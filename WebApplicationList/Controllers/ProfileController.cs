@@ -22,6 +22,7 @@ namespace WebApplicationList.Controllers
 
         [HttpGet]
         [Route("Profile")]
+        [AllowAnonymous]
         public async Task<IActionResult> ProfilePage(string page,string userName)
         {
             User? user = default;
@@ -172,6 +173,7 @@ namespace WebApplicationList.Controllers
 
             return false;
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GetUserProjects(string login)
         {
@@ -196,6 +198,7 @@ namespace WebApplicationList.Controllers
 
             return PartialView("~/Views/Main/Partials/SearchProjectView.cshtml", result);
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GetUserFavorites(string userName)
         {
